@@ -1,9 +1,8 @@
 //
 //  AppDelegate.swift
-//  OKKLineSwift
 //
-//  Created by SHB on 2016/11/3.
-//  Copyright © 2016年 Herb. All rights reserved.
+//  Created by Herb on 2016/11/3.
+//  Copyright © 2016年 OK Inc. All rights reserved.
 //
 
 import UIKit
