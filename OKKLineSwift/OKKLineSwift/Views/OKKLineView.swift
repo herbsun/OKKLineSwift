@@ -17,7 +17,6 @@ class OKKLineView: UIView {
     
     private var contentView: UIView!
 
-    
     private var mainView: OKKLineMainView!
     private var mainViewH: CGFloat = 0.0
     private var mainSegmentView: OKSegmentView!
@@ -31,6 +30,7 @@ class OKKLineView: UIView {
     private var accessorySegmentView: OKSegmentView!
 
     private var lastScale: CGFloat = 1.0
+    private var lastPanPoint: CGPoint?
     private var lastOffsetIndex: Int?
     
     /// 开始draw的数组下标
@@ -42,28 +42,6 @@ class OKKLineView: UIView {
             return count > configuration.klineModels.count ? configuration.klineModels.count : count
         }
     }
-    
-
-//        {
-//        get {
-//
-//            var index = configuration.klineModels.count - drawCount - 1
-//            let offsetIndex = Int(totalOffsetX / (configuration.klineSpace + configuration.klineWidth))
-//            index -= offsetIndex
-//            
-////            if let lastOffsetX = lastOffsetX {
-////            }
-//            
-//            index = index > 0 ? index : 0
-//            
-//            index =  index > (configuration.klineModels.count - 1) ? configuration.klineModels.count - drawCount - 1 : index
-//            
-//            return index
-//        }
-//        set(newValue) {
-//            self.drawStartIndex = newValue
-//        }
-//    }
     
     // MARK: - LifeCycle
 
@@ -141,8 +119,6 @@ class OKKLineView: UIView {
         
         fetchDrawModels()
         
-        
-        
 //        if lastest {
 //            //设置contentOffset
 //            let klineViewWidth = CGFloat(configuration.klineModels.count) * (configuration.klineWidth + configuration.klineSpace) + 10
@@ -152,8 +128,8 @@ class OKKLineView: UIView {
         
         mainView.drawMainView()
 
-//        volumeView.startXPosition = startXPosition
-//        volumeView.drawVolumeView()
+        
+        volumeView.drawVolumeView()
 //        accessoryView.drawAccessoryView()
     }
     
@@ -239,13 +215,47 @@ class OKKLineView: UIView {
     /// - Parameter recognizer: UIPanGestureRecognizer
     @objc
     private func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
+
+        switch recognizer.state {
+        case .began:
+            lastPanPoint = recognizer.location(in: recognizer.view)
+        case .changed:
+            
+            let location = recognizer.location(in: recognizer.view)
+            let klineUnit = configuration.klineWidth + configuration.klineSpace
+
+            if abs(location.x - lastPanPoint!.x) < klineUnit {
+                return
+            }
+            
+            lastOffsetIndex = Int((location.x - lastPanPoint!.x) / klineUnit)
+            
+            drawKLineView(false)
+            // 记录上次点
+            lastPanPoint = location
+            
+        case .ended:
+            
+            lastOffsetIndex = nil
+            lastPanPoint = nil
+
+        default: break
+        }
+ 
         
         // 偏移量
-        let offsetX = recognizer.translation(in: recognizer.view).x * configuration.klineDamping
-        // 偏移个数
-        lastOffsetIndex = Int(offsetX / (configuration.klineSpace + configuration.klineWidth))
-        drawKLineView(false)
-        lastOffsetIndex = nil
+//        let location = recognizer.location(in: recognizer.view)
+//        print("location --- \(location)")
+//        let translationX = recognizer.translation(in: recognizer.view).x
+//        print("translationX --- \(translationX)")
+//        
+//        var offsetX = translationX * configuration.klineDamping
+//        offsetX *= configuration.klineWidth
+//        
+//        // 偏移个数
+//        lastOffsetIndex = Int(offsetX / (configuration.klineSpace + configuration.klineWidth))
+//        drawKLineView(false)
+//        lastOffsetIndex = nil
 //        recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
         
     }

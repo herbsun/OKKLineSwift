@@ -12,8 +12,6 @@ import CoreGraphics
 class OKKLineVolumeView: UIView {
 
     // MARK: - Property
-    public var startXPosition: CGFloat = 0.0
-    
     private let configuration = OKConfiguration.shared
     private var drawVolumePositionModels = [OKVolumePositionModel]()
     private var klineColors = [CGColor]()
@@ -88,7 +86,9 @@ class OKKLineVolumeView: UIView {
 
         for (idx, klineModel) in configuration.drawKLineModels.enumerated() {
             
-            let xPosition = startXPosition + CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace)
+            let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
+                configuration.klineWidth * 0.5 + configuration.klineSpace
+            
             var yPosition = abs(bounds.height - CGFloat((klineModel.volume - minVolume)) / unitValue)
             if abs(yPosition - bounds.height) < 0.5 {
                 yPosition = bounds.height - 1
