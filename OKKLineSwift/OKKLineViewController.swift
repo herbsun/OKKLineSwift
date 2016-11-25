@@ -14,9 +14,12 @@ class OKKLineViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.klineView = OKKLineView()
-        self.view.addSubview(self.klineView)
-        self.klineView.snp.makeConstraints { (make) in
+        klineView = OKKLineView()
+        klineView.doubleTapHandle = { () -> Void in
+            self.dismiss(animated: true, completion: nil)
+        }
+        view.addSubview(self.klineView)
+        klineView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         fetchData()
@@ -54,7 +57,7 @@ class OKKLineViewController: UIViewController {
                         let model = OKKLineModel(coinType: .BTC, date: data[0], volume: data[5], open: data[1], close: data[4], high: data[2], low: data[3])
                         OKConfiguration.shared.klineModels.append(model)
                     }
-                    self.klineView.drawKLineView(lastest: true)
+                    self.klineView.drawKLineView(true)
                 }
                 
                 

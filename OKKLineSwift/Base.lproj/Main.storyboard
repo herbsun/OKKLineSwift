@@ -37,16 +37,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aei-KP-DjW">
-                                <rect key="frame" x="147" y="301" width="112" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="OKKLineSwift"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aei-KP-DjW">
+                                <rect key="frame" x="140.5" y="318.5" width="94" height="30"/>
+                                <state key="normal" title="OKKLineSwift">
+                                    <color key="titleColor" red="0.047353896771731852" green="0.12495909644398173" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="showKLine" destination="eyB-Tv-Vos" eventType="touchUpInside" id="EG3-PM-jbB"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.48767468944099379" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="aei-KP-DjW" firstAttribute="centerX" secondItem="2Uw-av-u0u" secondAttribute="centerX" id="AVb-l5-scE"/>
+                            <constraint firstItem="aei-KP-DjW" firstAttribute="centerY" secondItem="2Uw-av-u0u" secondAttribute="centerY" id="cuK-O5-dxb"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="pgo-72-4qN"/>
                 </viewController>

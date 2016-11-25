@@ -110,6 +110,8 @@ public final class OKConfiguration {
     var klineWidth: CGFloat = 5.0
     /// 上下影线宽度
     var klineShadowLineWidth: CGFloat = 1.0
+    /// k线阻尼 (阻尼系数越大, 滑动越快)
+    var klineDamping: CGFloat = 0.09
     /// k线最大宽度
     var klineMaxWidth: CGFloat = 20.0
     /// k线最小宽度

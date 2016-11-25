@@ -11,7 +11,8 @@ import UIKit
 class OKKLineView: UIView {
     
     // MARK: - Property
-
+    public var doubleTapHandle: (() -> Void)?
+    
     private let configuration = OKConfiguration.shared
     
     private var contentView: UIView!
@@ -29,9 +30,11 @@ class OKKLineView: UIView {
     private var accessoryViewH: CGFloat = 0.0
     private var accessorySegmentView: OKSegmentView!
 
-    private var pinchStartIndex: Int = 0
-    private var lastOffsetIndex: Int = 0
+    private var lastScale: CGFloat = 1.0
+    private var lastOffsetIndex: Int?
     
+    /// 开始draw的数组下标
+    private var drawStartIndex: Int?
     /// draw的个数
     private var drawCount: Int {
         get {
@@ -40,8 +43,7 @@ class OKKLineView: UIView {
         }
     }
     
-    /// 开始draw的数组下标
-    private var drawStartIndex: Int = -1
+
 //        {
 //        get {
 //
@@ -135,7 +137,7 @@ class OKKLineView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func drawKLineView(lastest: Bool) {
+    public func drawKLineView(_ initialize: Bool = true) {
         
         fetchDrawModels()
         
@@ -158,75 +160,68 @@ class OKKLineView: UIView {
     /// 获取需要绘制的模型
     private func fetchDrawModels() {
         // 展示的个数
-
-        if drawStartIndex < 0 {
+        
+        if drawStartIndex == nil {
             drawStartIndex = configuration.klineModels.count - drawCount - 1
         }
         
-        drawStartIndex -= lastOffsetIndex
-        
-        drawStartIndex = drawStartIndex > 0 ? drawStartIndex : 0
-        if drawStartIndex > configuration.klineModels.count - drawCount - 1 {
-            drawStartIndex = configuration.klineModels.count - drawCount - 1
+        if lastOffsetIndex != nil {
+            drawStartIndex! -= lastOffsetIndex!
         }
 
-        var startIndex: Int = drawStartIndex
-        
-//        if pinchStartIndex > 0 {
-//            startIndex = pinchStartIndex
-//            drawStartIndex = pinchStartIndex
-//            pinchStartIndex = -1
-//
-//        }
-        
+        drawStartIndex! = drawStartIndex! > 0 ? drawStartIndex! : 0
+        if drawStartIndex! > configuration.klineModels.count - drawCount - 1 {
+            drawStartIndex! = configuration.klineModels.count - drawCount - 1
+        }
+
         configuration.drawKLineModels.removeAll()
         
-        configuration.drawKLineModels = (configuration.klineModels as NSArray).subarray(with: NSMakeRange(drawStartIndex, drawCount)) as! [OKKLineModel]
-//        if startIndex < configuration.klineModels.count {
-//            
-//            if (startIndex + drawCount) <= configuration.klineModels.count {
-//                configuration.drawKLineModels = (configuration.klineModels as NSArray).subarray(with: NSMakeRange(startIndex, drawCount)) as! [OKKLineModel]
-//                
-//            } else {
-//                configuration.drawKLineModels = (configuration.klineModels as NSArray).subarray(with: NSMakeRange(startIndex, configuration.klineModels.count - startIndex)) as! [OKKLineModel]
-//            }
-//        }
+        configuration.drawKLineModels = (configuration.klineModels as NSArray).subarray(with: NSMakeRange(drawStartIndex! > 0 ? drawStartIndex! : 0, drawCount)) as! [OKKLineModel]
     }
     
     // MARK: - 手势事件
     // MARK: 捏合手势
+    
+    /// 捏合手势
+    /// 内 -> 外: recognizer.scale 递增, 且recognizer.scale > 1.0
+    /// 外 -> 内: recognizer.scale 递减, 且recognizer.scale < 1.0
+    /// - Parameter recognizer: UIPinchGestureRecognizer
     @objc
-    private func pinchAction(_ sender: UIPinchGestureRecognizer) {
+    private func pinchAction(_ recognizer: UIPinchGestureRecognizer) {
         
-//        var lastScale: CGFloat = 1.0
-//        let difValue = sender.scale - lastScale
-//        
-//        if abs(difValue) > configuration.klineScale {
-//            
-//            let lastKLineWidth: CGFloat = configuration.klineWidth
-//            
-//            configuration.klineWidth = configuration.klineWidth * (difValue > 0 ?
-//                (1 + configuration.klineScaleFactor) : (1 - configuration.klineScaleFactor))
-//            lastScale = sender.scale
-//
-//            if sender.numberOfTouches == 2 {
-//                let pinchPoint1 = sender.location(ofTouch: 0, in: contentView)
-//                let pinchPoint2 = sender.location(ofTouch: 1, in: contentView)
-//                
-//                let centerPoint = CGPoint(x: (pinchPoint1.x + pinchPoint2.x) * 0.5,
-//                                          y: (pinchPoint1.y + pinchPoint2.y) * 0.5)
-//                
-//                let oldOffsetCount = abs(centerPoint.x - lastOffset) /
-//                    (configuration.klineSpace + lastKLineWidth)
-//                
-//                let newOffsetCount = abs(centerPoint.x - lastOffset) /
-//                    (configuration.klineSpace + configuration.klineWidth)
-//                
-//                pinchStartIndex = drawStartIndex + Int(oldOffsetCount - newOffsetCount)
-//                
-//            }
-//            drawKLineView(lastest: false)
-//        }
+        let difValue = recognizer.scale - lastScale
+        
+        if abs(difValue) > configuration.klineScale {
+
+            let lastKLineWidth: CGFloat = configuration.klineWidth
+            let newKLineWidth: CGFloat = configuration.klineWidth * (difValue > 0 ?
+                (1 + configuration.klineScaleFactor) : (1 - configuration.klineScaleFactor))
+            
+            // 超过限制 不在绘制
+            if newKLineWidth > configuration.klineMaxWidth || newKLineWidth < configuration.klineMinWidth {
+                return
+            }
+        
+            configuration.klineWidth = newKLineWidth
+            lastScale = recognizer.scale
+
+            if recognizer.numberOfTouches == 2 {
+                
+                let pinchPoint1 = recognizer.location(ofTouch: 0, in: recognizer.view)
+                let pinchPoint2 = recognizer.location(ofTouch: 1, in: recognizer.view)
+
+                let centerPoint = CGPoint(x: (pinchPoint1.x + pinchPoint2.x) * 0.5,
+                                          y: (pinchPoint1.y + pinchPoint2.y) * 0.5)
+                
+                let lastOffsetCount = Int(centerPoint.x / (configuration.klineSpace + lastKLineWidth))
+                let newOffsetCount = Int(centerPoint.x / (configuration.klineSpace + configuration.klineWidth))
+                
+                lastOffsetIndex = newOffsetCount - lastOffsetCount
+                
+            }
+            drawKLineView(false)
+            lastOffsetIndex = nil
+        }
     }
     
     // MARK: 长按手势
@@ -235,37 +230,30 @@ class OKKLineView: UIView {
         
         
     }
-    
-    // MARK: 双击手势
-    @objc
-    private func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
-        
-    }
 
     // MARK: 移动手势
-    // 左 -> 右 : x递增, x > 0
-    // 右 -> 左 : x递减, x < 0
+
+    /// 移动手势
+    /// 左 -> 右 : x递增, x > 0
+    /// 右 -> 左 : x递减, x < 0
+    /// - Parameter recognizer: UIPanGestureRecognizer
     @objc
     private func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
         
         // 偏移量
-        var offsetX = recognizer.translation(in: recognizer.view).x
-        if (offsetX > 100) {
-            offsetX = offsetX / 2;
-        } else if (offsetX > 50) {
-            offsetX = offsetX / 4;
-        } else {
-            offsetX = offsetX / 8;
-        }
-        
-        // 偏移几个
+        let offsetX = recognizer.translation(in: recognizer.view).x * configuration.klineDamping
+        // 偏移个数
         lastOffsetIndex = Int(offsetX / (configuration.klineSpace + configuration.klineWidth))
-
-        drawKLineView(lastest: false)
-    
+        drawKLineView(false)
+        lastOffsetIndex = nil
 //        recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
-//        lastOffsetX = nil
         
+    }
+    
+    // MARK: 双击手势
+    @objc
+    private func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
+        doubleTapHandle?()
     }
  
     /*
