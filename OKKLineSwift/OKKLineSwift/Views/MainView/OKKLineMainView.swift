@@ -15,32 +15,22 @@ class OKKLineMainView: UIView {
     // MARK: - Property
     private let configuration = OKConfiguration.shared
     private var drawPositionModels = [OKKLinePositionModel]()
-    private var assistScrollView: UIScrollView!
     private var assistInfoLabel: UILabel!
+    
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        assistScrollView = UIScrollView()
-        assistScrollView.showsVerticalScrollIndicator = false
-        assistScrollView.showsHorizontalScrollIndicator = false
-        assistScrollView.bounces = false
-        addSubview(assistScrollView)
-        assistScrollView.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(configuration.mainTopAssistViewHeight)
-        }
-        
-        assistInfoLabel = UILabel()
-        assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
-        assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
-        assistScrollView.addSubview(assistInfoLabel)
-        assistInfoLabel.snp.makeConstraints { (make) in
-            make.top.leading.equalToSuperview()
-            make.height.equalTo(assistScrollView.snp.height)
-            make.width.equalTo(0)
-        }
+//        assistInfoLabel = UILabel()
+//        assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
+//        assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
+//        addSubview(assistInfoLabel)
+//        assistInfoLabel.snp.makeConstraints { (make) in
+//            make.top.leading.trailing.equalToSuperview()
+//            make.height.equalTo(configuration.mainTopAssistViewHeight)
+////            make.width.equalTo(0)
+//        }
         
     }
     
@@ -205,35 +195,30 @@ class OKKLineMainView: UIView {
         let highStr = String(format: "%.2f", model.high)
         let lowStr = String(format: "%.2f", model.low)
         
-        let string = dateStr + openStr + closeStr + highStr + lowStr
+        let string = openStr + closeStr + highStr + lowStr
 
-//        let width = string.stringSize(maxSize: CGSize(width: CGFloat.greatestFiniteMagnitude,
-//                                                      height: configuration.mainTopAssistViewHeight),
-//                                      fontSize: 10).width
+        let dateAttrs: [String : Any] = [
+            NSForegroundColorAttributeName : UIColor.red,
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+
+        
         let attrs: [String : Any] = [
             NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
             NSFontAttributeName : configuration.assistTextFont
         ]
         
-        let attrString = NSAttributedString(string: string, attributes: attrs)
+        let dateAttrsString =  NSMutableAttributedString(string: dateStr, attributes: dateAttrs)
         
-        let width = attrString.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude,
-                                                         height: configuration.mainTopAssistViewHeight),
-                                            options: [.usesLineFragmentOrigin],
-                                            context: nil).size.width + 5
+        let assistAttrsString = NSAttributedString(string: string, attributes: attrs)
         
-        assistInfoLabel.attributedText = attrString
+        dateAttrsString.append(assistAttrsString)
         
-        assistScrollView.contentSize = CGSize(width: width,
-                                              height: configuration.mainTopAssistViewHeight)
-        
-        assistInfoLabel.snp.updateConstraints { (make) in
-            make.width.equalTo(width)
-        }
-        
-
-        
+        dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
+//        dateAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 100))
+//        assistInfoLabel.attributedText = NSAttributedString(string: string, attributes: attrs)
     }
+    
     // MARK: - Private
     
     /// 获取位置模型
@@ -264,11 +249,8 @@ class OKKLineMainView: UIView {
             
         }
         
-        lowest *= 0.9999
-        highest *= 1.0001
-        
-//        CGFloat yUnitValue = (_maxPrice - _minPrice) / (maxFrameY - minFrameY);
-//        yPosition = (maxFrameY - (timeLineModel.price - _minPrice) / yUnitValue);
+//        lowest *= 0.9999
+//        highest *= 1.0001
         
         let maxY = bounds.height - configuration.mainTopAssistViewHeight
         let unitValue = (highest - lowest) / Double((maxY - configuration.mainTopAssistViewHeight))

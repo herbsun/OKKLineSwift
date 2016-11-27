@@ -15,11 +15,32 @@ class OKKLineVolumeView: UIView {
     private let configuration = OKConfiguration.shared
     private var drawVolumePositionModels = [OKVolumePositionModel]()
     private var klineColors = [CGColor]()
+    private var assistScrollView: UIScrollView!
+    private var assistInfoLabel: UILabel!
     
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        assistScrollView = UIScrollView()
+        assistScrollView.showsVerticalScrollIndicator = false
+        assistScrollView.showsHorizontalScrollIndicator = false
+        assistScrollView.bounces = false
+        addSubview(assistScrollView)
+        assistScrollView.snp.makeConstraints { (make) in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(configuration.mainTopAssistViewHeight)
+        }
+        
+        assistInfoLabel = UILabel()
+        assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
+        assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
+        assistScrollView.addSubview(assistInfoLabel)
+        assistInfoLabel.snp.makeConstraints { (make) in
+            make.top.leading.equalToSuperview()
+            make.height.equalTo(assistScrollView.snp.height)
+            make.width.equalTo(0)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,6 +60,10 @@ class OKKLineVolumeView: UIView {
         guard drawVolumePositionModels.count > 0 else {
             return
         }
+        
+        // 绘制指标数据
+        drawVolumeAssistView(model: configuration.drawKLineModels.last!)
+
 
         for (idx, positionModel) in drawVolumePositionModels.enumerated() {
             
@@ -57,6 +82,29 @@ class OKKLineVolumeView: UIView {
         setNeedsDisplay()
     }
     
+    public func drawVolumeAssistView(model: OKKLineModel?) {
+        
+        guard let model = model else { return }
+        
+        let volumeStr = String(format: "%.2f", model.volume)
+        
+        let string = "VOLUME  " + volumeStr
+        
+        let attrs: [String : Any] = [
+            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        assistInfoLabel.attributedText = NSAttributedString(string: string, attributes: attrs)
+        assistInfoLabel.sizeToFit()
+        
+        assistScrollView.contentSize = CGSize(width: assistInfoLabel.bounds.width,
+                                              height: configuration.volumeTopViewHeight)
+        
+        assistInfoLabel.snp.updateConstraints { (make) in
+            make.width.equalTo(assistInfoLabel.bounds.width)
+        }
+    }
+    
     // MARK: - Private
     
     private func fetchDrawVolumePositionModels() {
@@ -64,10 +112,12 @@ class OKKLineVolumeView: UIView {
         var minVolume = configuration.drawKLineModels[0].volume
         var maxVolume = configuration.drawKLineModels[0].volume
         
+        klineColors.removeAll()
+        
         for (idx, klineModel) in configuration.drawKLineModels.enumerated() {
             
             // 决定K线颜色
-            let strokeColor = klineModel.open < klineModel.close ? configuration.increaseColor : configuration.decreaseColor
+            let strokeColor = klineModel.open > klineModel.close ? configuration.increaseColor : configuration.decreaseColor
             klineColors.append(strokeColor)
             
             if klineModel.volume < minVolume {

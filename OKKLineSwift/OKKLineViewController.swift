@@ -22,7 +22,12 @@ class OKKLineViewController: UIViewController {
         klineView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        fetchData()
+        
+        let timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fetchData), userInfo: nil, repeats: true)
+        
+        
+        
+        timer.fire()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -39,6 +44,7 @@ class OKKLineViewController: UIViewController {
         return .landscape
     }
     
+    @objc
     func fetchData() {
         let param = ["type" : "5min",
                      "symbol" : "okcoincnbtccny",

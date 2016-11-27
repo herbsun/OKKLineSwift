@@ -24,12 +24,3 @@ extension String {
         return rect.size
     }
 }
-
-//extension NSAttributedString {
-//    
-//    func attributedStringSize(maxSize: CGSize, fontSize: CGFloat) -> CGSize {
-//        
-//        
-//        boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], context: nil)
-//    }
-//}

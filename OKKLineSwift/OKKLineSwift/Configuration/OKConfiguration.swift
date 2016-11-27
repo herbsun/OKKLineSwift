@@ -66,9 +66,9 @@ public final class OKConfiguration {
     /// 主图图表的背景色
     var mainViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
     /// 成交量视图背景色
-    var volumeViewBgColor: CGColor = UIColor.orange.cgColor//UIColor(hexRGB: 0x181C20).cgColor
+    var volumeViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
     /// 指标视图背景色
-    var accessoryViewBgColor: CGColor = UIColor.red.cgColor//UIColor(hexRGB: 0x181C20).cgColor
+    var accessoryViewBgColor: CGColor = UIColor.gray.cgColor//UIColor(hexRGB: 0x181C20).cgColor
     
     /// 辅助视图背景色(e.g. 日期的背景色)
     var assistViewBgColor: CGColor = UIColor(hexRGB: 0x1D2227).cgColor

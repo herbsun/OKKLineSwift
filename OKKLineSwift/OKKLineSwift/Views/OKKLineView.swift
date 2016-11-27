@@ -241,23 +241,6 @@ class OKKLineView: UIView {
 
         default: break
         }
- 
-        
-        // 偏移量
-//        let location = recognizer.location(in: recognizer.view)
-//        print("location --- \(location)")
-//        let translationX = recognizer.translation(in: recognizer.view).x
-//        print("translationX --- \(translationX)")
-//        
-//        var offsetX = translationX * configuration.klineDamping
-//        offsetX *= configuration.klineWidth
-//        
-//        // 偏移个数
-//        lastOffsetIndex = Int(offsetX / (configuration.klineSpace + configuration.klineWidth))
-//        drawKLineView(false)
-//        lastOffsetIndex = nil
-//        recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
-        
     }
     
     // MARK: 双击手势

@@ -21,6 +21,8 @@ class ViewController: UIViewController {
     }
     @IBAction func showKLine() {
         
+//        OKConfiguration.shared.mainViewBgColor = UIColor.randomColor().cgColor
+        
         let klineVC = OKKLineViewController()
         klineVC.modalTransitionStyle = .crossDissolve
         present(klineVC, animated: true, completion: nil)
