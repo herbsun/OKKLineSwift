@@ -60,7 +60,8 @@ class OKKLineViewController: UIViewController {
                     OKConfiguration.shared.klineModels.removeAll()
                     for data in datas {
                         
-                        let model = OKKLineModel(coinType: .BTC, date: data[0], volume: data[5], open: data[1], close: data[4], high: data[2], low: data[3])
+                        let model = OKKLineModel(date: data[0], volume: data[5], open: data[1], close: data[4], high: data[2], low: data[3])
+                        
                         OKConfiguration.shared.klineModels.append(model)
                     }
                     self.klineView.drawKLineView(true)
