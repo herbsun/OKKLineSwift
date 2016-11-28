@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-struct OKKLinePositionModel {
+class OKKLinePositionModel {
     
     /// 开盘点
     var openPoint: CGPoint
@@ -20,11 +20,14 @@ struct OKKLinePositionModel {
     /// 最低点
     var lowPoint: CGPoint
     
-    init(openPoint: CGPoint, closePoint: CGPoint, highPoint: CGPoint, lowPoint: CGPoint) {
+    var MA5Point: CGPoint?
+    
+    init(openPoint: CGPoint, closePoint: CGPoint, highPoint: CGPoint, lowPoint: CGPoint, MA5Point: CGPoint?) {
         self.openPoint = openPoint
         self.closePoint = closePoint
         self.highPoint = highPoint
         self.lowPoint = lowPoint
+        self.MA5Point = MA5Point
     }
     
 }

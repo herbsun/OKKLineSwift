@@ -16,22 +16,16 @@ class OKKLineMainView: UIView {
     private let configuration = OKConfiguration.shared
     private var drawPositionModels = [OKKLinePositionModel]()
     private var assistInfoLabel: UILabel!
+    private var lastDrawDatePoint: CGPoint = CGPoint.zero
+    private let dateAttributes: [String : Any] = [
+        NSForegroundColorAttributeName : UIColor(cgColor: OKConfiguration.shared.assistTextColor),
+        NSFontAttributeName : OKConfiguration.shared.assistTextFont
+    ]
     
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-//        assistInfoLabel = UILabel()
-//        assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
-//        assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
-//        addSubview(assistInfoLabel)
-//        assistInfoLabel.snp.makeConstraints { (make) in
-//            make.top.leading.trailing.equalToSuperview()
-//            make.height.equalTo(configuration.mainTopAssistViewHeight)
-////            make.width.equalTo(0)
-//        }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -42,6 +36,7 @@ class OKKLineMainView: UIView {
         super.draw(rect)
 
         let ctx = UIGraphicsGetCurrentContext()
+        let path = CGMutablePath()
         // 背景色
         ctx?.clear(rect)
         ctx?.setFillColor(configuration.mainViewBgColor)
@@ -60,12 +55,10 @@ class OKKLineMainView: UIView {
                                 height: configuration.mainBottomAssistViewHeight)
         ctx?.fill(assistRect)
         
-        var lastDrawDatePoint = CGPoint.zero
         
-        let dateAttributes: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
-            NSFontAttributeName : configuration.assistTextFont
-        ]
+        lastDrawDatePoint = CGPoint.zero
+        
+        
         
         // 绘制指标数据
         drawAssistView(model: configuration.drawKLineModels.last!)
@@ -74,8 +67,6 @@ class OKKLineMainView: UIView {
         case .KLine: // K线模式
 
             for (idx, positionModel) in drawPositionModels.enumerated() {
-                
-                let klineModel: OKKLineModel = configuration.drawKLineModels[idx]
                 
                 // 决定K线颜色
                 let strokeColor = positionModel.openPoint.y < positionModel.closePoint.y ?
@@ -89,87 +80,68 @@ class OKKLineMainView: UIView {
                 // 画上下影线
                 ctx?.setLineWidth(configuration.klineShadowLineWidth)
                 ctx?.strokeLineSegments(between: [positionModel.highPoint, positionModel.lowPoint])
-                
+ 
                 // 画日期
-                let date = Date(timeIntervalSince1970: klineModel.date/1000)
-                let dateString = configuration.dateFormatter.string(from: date)
-                
-                let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: configuration.mainBottomAssistViewHeight)
-                
-                let dateWidth: CGFloat = dateString.stringSize(maxSize: size, fontSize: 11.0).width
-                
-                let drawDatePoint = CGPoint(x: positionModel.closePoint.x - dateWidth * 0.5,
-                                            y: bounds.height - configuration.mainBottomAssistViewHeight)
-                
-                if drawDatePoint.x < 0 || (drawDatePoint.x + dateWidth) > bounds.width {
-                    continue
-                }
-                
-                if lastDrawDatePoint.equalTo(CGPoint.zero) ||
-                    abs(drawDatePoint.x - lastDrawDatePoint.x) > (dateWidth * 2) {
-                
-                    //(dateString as NSString).draw(at: drawDatePoint, withAttributes: dateAttributes)
-                    let rect = CGRect(x: drawDatePoint.x,
-                                      y: drawDatePoint.y,
-                                      width: dateWidth,
-                                      height: configuration.mainBottomAssistViewHeight)
-                    
-                    (dateString as NSString).draw(in: rect, withAttributes: dateAttributes)
-                    lastDrawDatePoint = drawDatePoint
-                }
+                drawDateLine(klineModel: configuration.drawKLineModels[idx],
+                             positionModel: positionModel)
             }
             
+            // 画指标线
+            let lineBrush = OKLineBrush(context: ctx, positionModels: drawPositionModels)
+            lineBrush.draw()
+            
+
         case .timeLine: // 分时线模式
             
             for (idx, positionModel) in drawPositionModels.enumerated() {
-                
-                let klineModel: OKKLineModel = configuration.drawKLineModels[idx]
-                
-                // 决定K线颜色
-                let strokeColor = positionModel.openPoint.y < positionModel.closePoint.y ?
-                    configuration.increaseColor : configuration.decreaseColor
-                ctx?.setStrokeColor(strokeColor)
                 
                 // 画线
                 ctx?.setLineWidth(configuration.realtimeLineWidth)
                 ctx?.setStrokeColor(configuration.realtimeLineColor)
                 if idx == 0 { // 处理第一个点
-                    ctx?.move(to: positionModel.closePoint)
+                    path.move(to: positionModel.closePoint)
                 } else {
-                    ctx?.addLine(to: positionModel.closePoint)
+                    path.addLine(to: positionModel.closePoint)
                 }
                 
                 // 画日期
-                let date = Date(timeIntervalSince1970: klineModel.date/1000)
-                let dateString = configuration.dateFormatter.string(from: date)
-                
-                let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: configuration.mainBottomAssistViewHeight)
-                
-                let dateWidth: CGFloat = dateString.stringSize(maxSize: size, fontSize: 11.0).width
-                
-                let drawDatePoint = CGPoint(x: positionModel.closePoint.x - dateWidth * 0.5,
-                                            y: bounds.height - configuration.mainBottomAssistViewHeight)
-                
-                if drawDatePoint.x < 0 || (drawDatePoint.x + dateWidth) > bounds.width {
-                    continue
-                }
-                
-                if lastDrawDatePoint.equalTo(CGPoint.zero) ||
-                    abs(drawDatePoint.x - lastDrawDatePoint.x) > (dateWidth * 2) {
-                    
-                    //(dateString as NSString).draw(at: drawDatePoint, withAttributes: dateAttributes)
-                    let rect = CGRect(x: drawDatePoint.x,
-                                      y: drawDatePoint.y,
-                                      width: dateWidth,
-                                      height: configuration.mainBottomAssistViewHeight)
-                    
-                    (dateString as NSString).draw(in: rect, withAttributes: dateAttributes)
-                    lastDrawDatePoint = drawDatePoint
-                }
+                drawDateLine(klineModel: configuration.drawKLineModels[idx],
+                             positionModel: positionModel)
             }
-            ctx?.strokePath()
-            
+          
         default: break
+        }
+        ctx?.addPath(path)
+        ctx?.strokePath()
+    }
+    
+    private func drawDateLine(klineModel: OKKLineModel, positionModel: OKKLinePositionModel) {
+        
+        let date = Date(timeIntervalSince1970: klineModel.date/1000)
+        let dateString = configuration.dateFormatter.string(from: date)
+        
+        let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: configuration.mainBottomAssistViewHeight)
+        
+        let dateWidth: CGFloat = dateString.stringSize(maxSize: size, fontSize: 11.0).width
+        
+        let drawDatePoint = CGPoint(x: positionModel.closePoint.x - dateWidth * 0.5,
+                                    y: bounds.height - configuration.mainBottomAssistViewHeight)
+        
+        if drawDatePoint.x < 0 || (drawDatePoint.x + dateWidth) > bounds.width {
+            return
+        }
+        
+        if lastDrawDatePoint.equalTo(CGPoint.zero) ||
+            abs(drawDatePoint.x - lastDrawDatePoint.x) > (dateWidth * 2) {
+            
+            //(dateString as NSString).draw(at: drawDatePoint, withAttributes: dateAttributes)
+            let rect = CGRect(x: drawDatePoint.x,
+                              y: drawDatePoint.y,
+                              width: dateWidth,
+                              height: configuration.mainBottomAssistViewHeight)
+            
+            (dateString as NSString).draw(in: rect, withAttributes: dateAttributes)
+            lastDrawDatePoint = drawDatePoint
         }
     }
     
@@ -235,7 +207,7 @@ class OKKLineMainView: UIView {
         var lowest = firstModel.low
         var highest = firstModel.high
         
-        for (idx, model) in configuration.drawKLineModels.enumerated() {
+        for (_, model) in configuration.drawKLineModels.enumerated() {
             
             if model.low < lowest {
                 lowest = model.low
@@ -245,8 +217,26 @@ class OKKLineMainView: UIView {
                 highest = model.high
             }
             
-            // TODO: MA指标计算
+            if let ma5 = model.MA5 {
+                if ma5 > highest {
+                    highest = ma5
+                }
+                
+                if ma5 < lowest {
+                    lowest = ma5
+                }
+            }
             
+//            if idx >= 4 {
+//                // TODO: 指标计算
+//                if model.MA5 > highest {
+//                    highest = model.MA5
+//                }
+//                
+//                if model.MA5 < lowest {
+//                    lowest = model.MA5
+//                }
+//            }
         }
         
 //        lowest *= 0.9999
@@ -266,14 +256,24 @@ class OKKLineMainView: UIView {
             let closePoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.close - lowest) / unitValue)))
             let hightPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.high - lowest) / unitValue)))
             let lowPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.low - lowest) / unitValue)))
+            // TODO: 坐标转换
+            var MA5Point: CGPoint? = nil
+//            if idx >= 4 {
+//                MA5Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.MA5 - lowest) / unitValue)))
+//            }
+            if let ma5 = model.MA5 {
+                MA5Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma5 - lowest) / unitValue)))
+            }
             
             let positionModel = OKKLinePositionModel(openPoint: openPoint,
                                                      closePoint: closePoint,
                                                      highPoint: hightPoint,
-                                                     lowPoint: lowPoint)
+                                                     lowPoint: lowPoint,
+                                                     MA5Point: MA5Point)
             
             drawPositionModels.append(positionModel)
-            // TODO: MA坐标转换
+            
+            
         }
         
     }

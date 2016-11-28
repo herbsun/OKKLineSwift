@@ -87,9 +87,9 @@ public final class OKConfiguration {
     var longPressLineColor: CGColor = UIColor(hexRGB: 0xE1E2E6).cgColor
     
     /// MA颜色
-    var ma7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var ma30Color: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
-    
+    var MA7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var MA30Color: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
+    var MALineWidth: CGFloat = 0.8
     /// 时间线
     var timeLineType: OKTimeLineType = .realTime
     /// k线的间隔
@@ -110,8 +110,6 @@ public final class OKConfiguration {
     var klineWidth: CGFloat = 5.0
     /// 上下影线宽度
     var klineShadowLineWidth: CGFloat = 1.0
-    /// k线阻尼 (阻尼系数越大, 滑动越快)
-    var klineDamping: CGFloat = 0.09
     /// k线最大宽度
     var klineMaxWidth: CGFloat = 20.0
     /// k线最小宽度

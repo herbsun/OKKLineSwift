@@ -8,6 +8,21 @@
 
 import UIKit
 
+protocol OKDescriptable {
+    func propertyDescription() -> String
+}
+
+extension OKDescriptable {
+    func propertyDescription() -> String {
+        let strings = Mirror(reflecting: self).children.flatMap { "\($0.label!): \($0.value)" }
+        var string = ""
+        for str in strings {
+            string += str + "\n"
+        }
+        return string
+    }
+}
+
 /// k线类型
 enum OKKLineDataType: Int {
     case BTC
@@ -16,13 +31,11 @@ enum OKKLineDataType: Int {
     case other
 }
 
-class OKKLineModel {
+class OKKLineModel: OKDescriptable {
     
     var klineDataType: OKKLineDataType
     // 日期
     var date: Double
-    /// 成交量
-    var volume: Double
     /// 开盘价
     var open: Double
     /// 收盘价
@@ -31,10 +44,10 @@ class OKKLineModel {
     var high: Double
     /// 最低价
     var low: Double
+    /// 成交量
+    var volume: Double
     
     // MARK: - 指标
-    /// 该model以及之前所有成交量之和
-    var sumVolume: Double = 0.0
     /// 该model以及之前所有开盘价之和
     var sumOpen: Double = 0.0
     /// 该model以及之前所有收盘价之和
@@ -43,9 +56,11 @@ class OKKLineModel {
     var sumHigh: Double = 0.0
     /// 该model以及之前所有最低价之和
     var sumLow: Double = 0.0
+    /// 该model以及之前所有成交量之和
+    var sumVolume: Double = 0.0
     
     // MARK: MA - MA(N) = (C1+C2+……CN) / N, C:收盘价
-    var MA5: Double = 0.0
+    var MA5: Double?
     var MA7: Double = 0.0
     var MA10: Double = 0.0
     var MA12: Double = 0.0
@@ -99,22 +114,25 @@ class OKKLineModel {
     /// J = 3K － 2D
     var KDJ_J: Double = 0.0
     
+    // MARK: - BOLL
+    var BOOL_MB: Double = 0.0
+    var BOOL_UP: Double = 0.0
+    var BOOL_DN: Double = 0.0
+    
     init(klineDataType: OKKLineDataType = .BTC,
          date: Double,
-         volume: Double,
          open: Double,
          close: Double,
          high: Double,
-         low: Double) {
+         low: Double,
+         volume: Double) {
         
         self.klineDataType = klineDataType
         self.date = date
-        self.volume = volume
         self.open = open
         self.close = close
         self.high = high
         self.low = low
+        self.volume = volume
     }
 }
-
-

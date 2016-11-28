@@ -153,9 +153,10 @@ class OKKLineView: UIView {
         configuration.drawKLineModels.removeAll()
         
         configuration.drawKLineModels = (configuration.klineModels as NSArray).subarray(with: NSMakeRange(drawStartIndex! > 0 ? drawStartIndex! : 0, drawCount)) as! [OKKLineModel]
-        
-//        configuration.drawKLineModels = OKKLineTool.handleKLineModels(klineModels: configuration.drawKLineModels)
-        
+//        for model in configuration.drawKLineModels {
+//            
+//            print(model.propertyDescription())
+//        }
     }
     
     // MARK: - 手势事件

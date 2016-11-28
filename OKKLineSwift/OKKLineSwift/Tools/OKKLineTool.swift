@@ -15,46 +15,46 @@ class OKKLineTool {
         var models = [OKKLineModel]()
         
         for (idx, model) in klineModels.enumerated() {
-            
+                        
             if idx == 0 {
                 // 处理第一个数据
-                model.sumVolume = model.volume
                 model.sumOpen = model.open
                 model.sumClose = model.close
                 model.sumHigh = model.high
                 model.sumLow = model.low
-                model.MA5 = model.close
-                model.MA7 = model.close
-                model.MA10 = model.close
-                model.MA12 = model.close
-                model.MA20 = model.close
-                model.MA26 = model.close
-                model.MA30 = model.close
-                model.MA60 = model.close
-                model.MA5_VOLUME = model.volume
-                model.MA7_VOLUME = model.volume
-                model.MA10_VOLUME = model.volume
-                model.MA12_VOLUME = model.volume
-                model.MA20_VOLUME = model.volume
-                model.MA26_VOLUME = model.volume
-                model.MA30_VOLUME = model.volume
-                model.MA60_VOLUME = model.volume
-                model.EMA5 = model.close
-                model.EMA7 = model.close
-                model.EMA10 = model.close
-                model.EMA12 = model.close
-                model.EMA20 = model.close
-                model.EMA26 = model.close
-                model.EMA30 = model.close
-                model.EMA60 = model.close
-                model.EMA5_VOLUME = model.volume
-                model.EMA7_VOLUME = model.volume
-                model.EMA10_VOLUME = model.volume
-                model.EMA12_VOLUME = model.volume
-                model.EMA20_VOLUME = model.volume
-                model.EMA26_VOLUME = model.volume
-                model.EMA30_VOLUME = model.volume
-                model.EMA60_VOLUME = model.volume
+                model.sumVolume = model.volume
+                model.MA5 = nil
+                model.MA7 = 0.0
+                model.MA10 = 0.0
+                model.MA12 = 0.0
+                model.MA20 = 0.0
+                model.MA26 = 0.0
+                model.MA30 = 0.0
+                model.MA60 = 0.0
+                model.MA5_VOLUME = 0.0
+                model.MA7_VOLUME = 0.0
+                model.MA10_VOLUME = 0.0
+                model.MA12_VOLUME = 0.0
+                model.MA20_VOLUME = 0.0
+                model.MA26_VOLUME = 0.0
+                model.MA30_VOLUME = 0.0
+                model.MA60_VOLUME = 0.0
+                model.EMA5 = 0.0
+                model.EMA7 = 0.0
+                model.EMA10 = 0.0
+                model.EMA12 = 0.0
+                model.EMA20 = 0.0
+                model.EMA26 = 0.0
+                model.EMA30 = 0.0
+                model.EMA60 = 0.0
+                model.EMA5_VOLUME = 0.0
+                model.EMA7_VOLUME = 0.0
+                model.EMA10_VOLUME = 0.0
+                model.EMA12_VOLUME = 0.0
+                model.EMA20_VOLUME = 0.0
+                model.EMA26_VOLUME = 0.0
+                model.EMA30_VOLUME = 0.0
+                model.EMA60_VOLUME = 0.0
                 
                 model.DIF = model.EMA12 - model.EMA26
                 model.DEA = model.DIF * 0.2
@@ -70,12 +70,12 @@ class OKKLineTool {
                 
                 let previousModel = klineModels[idx - 1]
                 
-                model.sumVolume += previousModel.sumVolume
-                model.sumOpen += previousModel.sumOpen
-                model.sumClose += previousModel.sumClose
-                model.sumHigh += previousModel.sumHigh
-                model.sumLow += previousModel.sumLow
-                model.MA5 = handleMA(day: 5, model: model, index: idx, models: klineModels)
+                model.sumOpen = previousModel.sumOpen + model.open
+                model.sumClose = previousModel.sumClose + model.close
+                model.sumHigh = previousModel.sumHigh + model.high
+                model.sumLow = previousModel.sumLow + model.low
+                model.sumVolume = previousModel.sumVolume + model.volume
+                model.MA5 = handleMA5(day: 5, model: model, index: idx, models: klineModels)
                 model.MA7 = handleMA(day: 7, model: model, index: idx, models: klineModels)
                 model.MA10 = handleMA(day: 10, model: model, index: idx, models: klineModels)
                 model.MA12 = handleMA(day: 12, model: model, index: idx, models: klineModels)
@@ -92,22 +92,22 @@ class OKKLineTool {
                 model.MA30_VOLUME = handleMA_VOLUME(day: 30, model: model, index: idx, models: klineModels)
                 model.MA60_VOLUME = handleMA_VOLUME(day: 60, model: model, index: idx, models: klineModels)
 
-                model.EMA5 = handleEMA(day: 5, model: model, previousEMA: previousModel.EMA5)
-                model.EMA7 = handleEMA(day: 7, model: model, previousEMA: previousModel.EMA7)
-                model.EMA10 = handleEMA(day: 10, model: model, previousEMA: previousModel.EMA10)
-                model.EMA12 = handleEMA(day: 12, model: model, previousEMA: previousModel.EMA12)
-                model.EMA20 = handleEMA(day: 20, model: model, previousEMA: previousModel.EMA20)
-                model.EMA26 = handleEMA(day: 26, model: model, previousEMA: previousModel.EMA26)
-                model.EMA30 = handleEMA(day: 30, model: model, previousEMA: previousModel.EMA30)
-                model.EMA60 = handleEMA(day: 60, model: model, previousEMA: previousModel.EMA60)
-                model.EMA5_VOLUME = handleEMA_VOLUME(day: 5, model: model, previousEMA_VOLUME: previousModel.EMA5_VOLUME)
-                model.EMA7_VOLUME = handleEMA_VOLUME(day: 7, model: model, previousEMA_VOLUME: previousModel.EMA7_VOLUME)
-                model.EMA10_VOLUME = handleEMA_VOLUME(day: 10, model: model, previousEMA_VOLUME: previousModel.EMA10_VOLUME)
-                model.EMA12_VOLUME = handleEMA_VOLUME(day: 12, model: model, previousEMA_VOLUME: previousModel.EMA12_VOLUME)
-                model.EMA20_VOLUME = handleEMA_VOLUME(day: 20, model: model, previousEMA_VOLUME: previousModel.EMA20_VOLUME)
-                model.EMA26_VOLUME = handleEMA_VOLUME(day: 26, model: model, previousEMA_VOLUME: previousModel.EMA26_VOLUME)
-                model.EMA30_VOLUME = handleEMA_VOLUME(day: 30, model: model, previousEMA_VOLUME: previousModel.EMA30_VOLUME)
-                model.EMA60_VOLUME = handleEMA_VOLUME(day: 60, model: model, previousEMA_VOLUME: previousModel.EMA60_VOLUME)
+                model.EMA5 = handleEMA(day: 5, model: model, index: idx, previousEMA: previousModel.EMA5)
+                model.EMA7 = handleEMA(day: 7, model: model, index: idx, previousEMA: previousModel.EMA7)
+                model.EMA10 = handleEMA(day: 10, model: model, index: idx, previousEMA: previousModel.EMA10)
+                model.EMA12 = handleEMA(day: 12, model: model, index: idx, previousEMA: previousModel.EMA12)
+                model.EMA20 = handleEMA(day: 20, model: model, index: idx, previousEMA: previousModel.EMA20)
+                model.EMA26 = handleEMA(day: 26, model: model, index: idx, previousEMA: previousModel.EMA26)
+                model.EMA30 = handleEMA(day: 30, model: model, index: idx, previousEMA: previousModel.EMA30)
+                model.EMA60 = handleEMA(day: 60, model: model, index: idx, previousEMA: previousModel.EMA60)
+                model.EMA5_VOLUME = handleEMA_VOLUME(day: 5, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA5_VOLUME)
+                model.EMA7_VOLUME = handleEMA_VOLUME(day: 7, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA7_VOLUME)
+                model.EMA10_VOLUME = handleEMA_VOLUME(day: 10, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA10_VOLUME)
+                model.EMA12_VOLUME = handleEMA_VOLUME(day: 12, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA12_VOLUME)
+                model.EMA20_VOLUME = handleEMA_VOLUME(day: 20, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA20_VOLUME)
+                model.EMA26_VOLUME = handleEMA_VOLUME(day: 26, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA26_VOLUME)
+                model.EMA30_VOLUME = handleEMA_VOLUME(day: 30, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA30_VOLUME)
+                model.EMA60_VOLUME = handleEMA_VOLUME(day: 60, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA60_VOLUME)
                 
                 model.DIF = model.EMA12 - model.EMA26
                 model.DEA = model.DIF * 0.2 + previousModel.DEA * 0.8
@@ -119,43 +119,69 @@ class OKKLineTool {
                 model.KDJ_D = handleKDJ_D(model: model, previousModel: nil)
                 model.KDJ_J = handleKDJ_J(model: model)
             }
+            
+            
             models.append(model)
         }
         
         return models
     }
     
-    private class func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double {
-        if index == day {
+    private class func handleMA5(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
+        if index < (day - 1) {
+            return nil
+        }
+        else if index == (day - 1) {
             return model.sumClose / Double(day)
-        } else if index > day {
+        }
+        else {
             return (model.sumClose - models[index - day].sumClose) / Double(day)
-        } else {
+        }
+    }
+    
+    private class func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double {
+        if index < (day - 1) {
             return 0.0
+        }
+        else if index == (day - 1) {
+            return model.sumClose / Double(day)
+        }
+        else {
+            return (model.sumClose - models[index - day].sumClose) / Double(day)
         }
     }
     
     private class func handleMA_VOLUME(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double {
-        if index == day {
-            return model.sumVolume / Double(day)
-        } else if index > day {
-            return (model.sumVolume - models[index - day].sumVolume) / Double(day)
-        } else {
+        if index < (day - 1) {
             return 0.0
+        }
+        else if index == (day - 1) {
+            return model.sumVolume / Double(day)
+        }
+        else {
+            return (model.sumVolume - models[index - day].sumVolume) / Double(day)
         }
     }
     
-    private class func handleEMA(day: Int, model: OKKLineModel, previousEMA: Double) -> Double {
-        return Double((day - 1) / (day + 1)) * previousEMA + Double(2 / (day + 1)) * model.close
+    private class func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double) -> Double {
+        if index < (day - 1) {
+            return 0.0
+        } else {
+            return Double(day - 1) / Double(day + 1) * previousEMA + 2 / Double(day + 1) * model.close
+        }
     }
     
-    private class func handleEMA_VOLUME(day: Int, model: OKKLineModel, previousEMA_VOLUME: Double) -> Double {
-        return Double((day - 1) / (day + 1)) * previousEMA_VOLUME + Double(2 / (day + 1)) * model.volume
+    private class func handleEMA_VOLUME(day: Int, model: OKKLineModel, index: Int, previousEMA_VOLUME: Double) -> Double {
+        if index < (day - 1) {
+            return 0.0
+        } else {
+            return Double(day - 1) / Double(day + 1) * previousEMA_VOLUME + 2 / Double(day + 1) * model.volume
+        }
     }
     
     private class func handleMinPriceOfNineClock(index: Int, models: [OKKLineModel]) -> Double {
         var minValue = models[index].low
-        let startIndex = index < 9 ? 0 : (index - 9 - 1)
+        let startIndex = index < 9 ? 0 : (index - (9 - 1))
 
         for i in startIndex..<index {
             if models[i].low < minValue {
@@ -167,7 +193,7 @@ class OKKLineTool {
     
     private class func handleMaxPriceOfNineClock(index: Int, models: [OKKLineModel]) -> Double {
         var maxValue = models[index].high
-        let startIndex = index < 9 ? 0 : (index - 9 - 1)
+        let startIndex = index < 9 ? 0 : (index - (9 - 1))
         
         for i in startIndex..<index {
             if models[i].high < maxValue {
