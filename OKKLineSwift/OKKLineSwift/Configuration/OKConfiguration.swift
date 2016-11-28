@@ -16,7 +16,7 @@ enum OKKLineType: Int {
 }
 
 /// 指标种类
-enum OKIndexLineType: String {
+enum OKIndexType: String {
     case MA
     case EMA
     case MACD
@@ -105,7 +105,7 @@ public final class OKConfiguration {
     /// 主图底部时间线信息高度
     var mainBottomAssistViewHeight: CGFloat = 15.0
     /// 主图分时线宽度
-    var realtimeLineWidth: CGFloat = 0.5
+    var realtimeLineWidth: CGFloat = 1.0
     /// k线图主体宽度
     var klineWidth: CGFloat = 5.0
     /// 上下影线宽度
@@ -121,7 +121,7 @@ public final class OKConfiguration {
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
     /// 主图指标类型
-    var mainIndexType: OKIndexLineType = .MA
+    var mainIndexType: OKIndexType = .MA
     
     // MARK: - 成交量图(volume)
     
@@ -134,7 +134,7 @@ public final class OKConfiguration {
     /// 成交量图分时线宽度
     var volumeLineWidth: CGFloat = 0.5
     /// 成交量指标类型
-    var volumeIndexType: OKIndexLineType = .MA
+    var volumeIndexType: OKIndexType = .MA
     
     // MARK: - 指标图(accessory)
     
@@ -147,7 +147,7 @@ public final class OKConfiguration {
     /// 指标图分时线宽度
     var accessoryLineWidth: CGFloat = 0.5
     /// 辅助图指标类型
-    var accessoryIndexType: OKIndexLineType = .MA
+    var accessoryIndexType: OKIndexType = .MA
  
     // MARK: - SegmentView
     var  showSegmentView: Bool = true

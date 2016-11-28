@@ -15,7 +15,6 @@ class OKKLineMainView: UIView {
     // MARK: - Property
     private let configuration = OKConfiguration.shared
     private var drawPositionModels = [OKKLinePositionModel]()
-    private var assistInfoLabel: UILabel!
     private var lastDrawDatePoint: CGPoint = CGPoint.zero
     private let dateAttributes: [String : Any] = [
         NSForegroundColorAttributeName : UIColor(cgColor: OKConfiguration.shared.assistTextColor),
@@ -35,12 +34,11 @@ class OKKLineMainView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        let ctx = UIGraphicsGetCurrentContext()
-        let path = CGMutablePath()
+        let context = UIGraphicsGetCurrentContext()
         // 背景色
-        ctx?.clear(rect)
-        ctx?.setFillColor(configuration.mainViewBgColor)
-        ctx?.fill(rect)
+        context?.clear(rect)
+        context?.setFillColor(configuration.mainViewBgColor)
+        context?.fill(rect)
         
         // 没有数据 不绘制
         guard drawPositionModels.count > 0 else {
@@ -48,12 +46,12 @@ class OKKLineMainView: UIView {
         }
         
         // 设置日期背景色
-        ctx?.setFillColor(configuration.assistViewBgColor)
+        context?.setFillColor(configuration.assistViewBgColor)
         let assistRect = CGRect(x: 0,
                                 y: frame.height - configuration.mainBottomAssistViewHeight,
                                 width: frame.width,
                                 height: configuration.mainBottomAssistViewHeight)
-        ctx?.fill(assistRect)
+        context?.fill(assistRect)
         
         
         lastDrawDatePoint = CGPoint.zero
@@ -71,48 +69,47 @@ class OKKLineMainView: UIView {
                 // 决定K线颜色
                 let strokeColor = positionModel.openPoint.y < positionModel.closePoint.y ?
                     configuration.increaseColor : configuration.decreaseColor
-                ctx?.setStrokeColor(strokeColor)
+                context?.setStrokeColor(strokeColor)
                 
                 // 画开盘-收盘
-                ctx?.setLineWidth(configuration.klineWidth)
-                ctx?.strokeLineSegments(between: [positionModel.openPoint, positionModel.closePoint])
+                context?.setLineWidth(configuration.klineWidth)
+                context?.strokeLineSegments(between: [positionModel.openPoint, positionModel.closePoint])
                 
                 // 画上下影线
-                ctx?.setLineWidth(configuration.klineShadowLineWidth)
-                ctx?.strokeLineSegments(between: [positionModel.highPoint, positionModel.lowPoint])
+                context?.setLineWidth(configuration.klineShadowLineWidth)
+                context?.strokeLineSegments(between: [positionModel.highPoint, positionModel.lowPoint])
  
                 // 画日期
                 drawDateLine(klineModel: configuration.drawKLineModels[idx],
                              positionModel: positionModel)
             }
-            
-            // 画指标线
-            let lineBrush = OKLineBrush(context: ctx, positionModels: drawPositionModels)
-            lineBrush.draw()
-            
-
+        
         case .timeLine: // 分时线模式
+            // 画线
+            context?.setLineWidth(configuration.realtimeLineWidth)
+            context?.setStrokeColor(configuration.realtimeLineColor)
             
             for (idx, positionModel) in drawPositionModels.enumerated() {
                 
-                // 画线
-                ctx?.setLineWidth(configuration.realtimeLineWidth)
-                ctx?.setStrokeColor(configuration.realtimeLineColor)
                 if idx == 0 { // 处理第一个点
-                    path.move(to: positionModel.closePoint)
+                    context?.move(to: positionModel.closePoint)
                 } else {
-                    path.addLine(to: positionModel.closePoint)
+                    context?.addLine(to: positionModel.closePoint)
                 }
                 
                 // 画日期
                 drawDateLine(klineModel: configuration.drawKLineModels[idx],
                              positionModel: positionModel)
             }
-          
+            context?.strokePath()
+
         default: break
         }
-        ctx?.addPath(path)
-        ctx?.strokePath()
+        
+        // 画指标线
+        let lineBrush = OKLineBrush(context: context, positionModels: drawPositionModels)
+        lineBrush.draw()
+        
     }
     
     private func drawDateLine(klineModel: OKKLineModel, positionModel: OKKLinePositionModel) {
@@ -187,8 +184,6 @@ class OKKLineMainView: UIView {
         dateAttrsString.append(assistAttrsString)
         
         dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
-//        dateAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 100))
-//        assistInfoLabel.attributedText = NSAttributedString(string: string, attributes: attrs)
     }
     
     // MARK: - Private
@@ -226,17 +221,6 @@ class OKKLineMainView: UIView {
                     lowest = ma5
                 }
             }
-            
-//            if idx >= 4 {
-//                // TODO: 指标计算
-//                if model.MA5 > highest {
-//                    highest = model.MA5
-//                }
-//                
-//                if model.MA5 < lowest {
-//                    lowest = model.MA5
-//                }
-//            }
         }
         
 //        lowest *= 0.9999
@@ -258,9 +242,7 @@ class OKKLineMainView: UIView {
             let lowPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.low - lowest) / unitValue)))
             // TODO: 坐标转换
             var MA5Point: CGPoint? = nil
-//            if idx >= 4 {
-//                MA5Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.MA5 - lowest) / unitValue)))
-//            }
+
             if let ma5 = model.MA5 {
                 MA5Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma5 - lowest) / unitValue)))
             }
