@@ -13,6 +13,7 @@ import CoreGraphics
 class OKKLineMainView: UIView {
     
     // MARK: - Property
+    private var assistLabel: UILabel!
     private let configuration = OKConfiguration.shared
     private var drawPositionModels = [OKKLinePositionModel]()
     private var lastDrawDatePoint: CGPoint = CGPoint.zero
@@ -25,6 +26,12 @@ class OKKLineMainView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        assistLabel = UILabel()
+        addSubview(assistLabel)
+        assistLabel.snp.makeConstraints { (make) in
+            make.top.leading.trailing.equalTo(0)
+            make.height.equalTo(configuration.mainTopAssistViewHeight)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -55,8 +62,6 @@ class OKKLineMainView: UIView {
         
         
         lastDrawDatePoint = CGPoint.zero
-        
-        
         
         // 绘制指标数据
         drawAssistView(model: configuration.drawKLineModels.last!)
@@ -106,12 +111,21 @@ class OKKLineMainView: UIView {
         default: break
         }
         
-        // 画指标线
         let lineBrush = OKLineBrush(context: context, positionModels: drawPositionModels)
-        lineBrush.draw()
+        for indexType in configuration.mainIndexType {
+            // 画指标线
+            lineBrush.indexType = indexType
+            lineBrush.draw()
+        }
         
     }
     
+    
+    /// 画时间线
+    ///
+    /// - Parameters:
+    ///   - klineModel: 数据模型
+    ///   - positionModel: 位置模型
     private func drawDateLine(klineModel: OKKLineModel, positionModel: OKKLinePositionModel) {
         
         let date = Date(timeIntervalSince1970: klineModel.date/1000)
@@ -150,27 +164,43 @@ class OKKLineMainView: UIView {
         setNeedsDisplay()
     }
     
+    /// 绘制辅助说明视图
+    ///
+    /// - Parameter model: 绘制的模型 如果为nil 取当前画得最后一个模型
     public func drawAssistView(model: OKKLineModel?) {
         
-        guard let model = model else { return }
+        guard configuration.drawKLineModels.count > 0 else { return }
         
-        let date = Date(timeIntervalSince1970: model.date/1000)
+        let drawModel = model == nil ? configuration.drawKLineModels.last! : model!
+        
+        let date = Date(timeIntervalSince1970: drawModel.date/1000)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        let dateStr = formatter.string(from: date) + "  "
+        let dateStr = formatter.string(from: date) + " "
         
-        let openStr = String(format: "%.2f", model.open)
-        let closeStr = String(format: "%.2f", model.close)
-        let highStr = String(format: "%.2f", model.high)
-        let lowStr = String(format: "%.2f", model.low)
+        let openStr = String(format: "开: %.2f ", drawModel.open)
+        let highStr = String(format: "高: %.2f ", drawModel.high)
+        let lowStr = String(format: "低: %.2f ", drawModel.low)
+        let closeStr = String(format: "收: %.2f ", drawModel.close)
         
-        let string = openStr + closeStr + highStr + lowStr
+        var string = openStr + highStr + lowStr + closeStr
+        
+        if let ma5 = drawModel.MA5 {
+            string += String(format: "MA5: %.2f ", ma5)
+        }
+        
+        if let ma12 = drawModel.MA12 {
+            string += String(format: "MA12: %.2f ", ma12)
+        }
+        
+        if let ma26 = drawModel.MA26 {
+            string += String(format: "MA26: %.2f ", ma26)
+        }
 
         let dateAttrs: [String : Any] = [
             NSForegroundColorAttributeName : UIColor.red,
             NSFontAttributeName : configuration.assistTextFont
         ]
-
         
         let attrs: [String : Any] = [
             NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
@@ -183,7 +213,10 @@ class OKKLineMainView: UIView {
         
         dateAttrsString.append(assistAttrsString)
         
-        dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
+//        dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
+//        dateAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
+        assistLabel.attributedText = dateAttrsString
+
     }
     
     // MARK: - Private
@@ -201,7 +234,7 @@ class OKKLineMainView: UIView {
         
         var lowest = firstModel.low
         var highest = firstModel.high
-        
+        // 求最大最小值
         for (_, model) in configuration.drawKLineModels.enumerated() {
             
             if model.low < lowest {
@@ -219,6 +252,25 @@ class OKKLineMainView: UIView {
                 
                 if ma5 < lowest {
                     lowest = ma5
+                }
+            }
+            
+            if let ma12 = model.MA12 {
+                if ma12 > highest {
+                    highest = ma12
+                }
+                
+                if ma12 < lowest {
+                    lowest = ma12
+                }
+            }
+            if let ma26 = model.MA26 {
+                if ma26 > highest {
+                    highest = ma26
+                }
+                
+                if ma26 < lowest {
+                    lowest = ma26
                 }
             }
         }
@@ -241,22 +293,30 @@ class OKKLineMainView: UIView {
             let hightPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.high - lowest) / unitValue)))
             let lowPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.low - lowest) / unitValue)))
             // TODO: 坐标转换
-            var MA5Point: CGPoint? = nil
+            var MA5Point: CGPoint?
+            var MA12Point: CGPoint?
+            var MA26Point: CGPoint?
 
             if let ma5 = model.MA5 {
                 MA5Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma5 - lowest) / unitValue)))
+            }
+            if let ma12 = model.MA12 {
+                MA12Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma12 - lowest) / unitValue)))
+            }
+            if let ma26 = model.MA26 {
+                MA26Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma26 - lowest) / unitValue)))
             }
             
             let positionModel = OKKLinePositionModel(openPoint: openPoint,
                                                      closePoint: closePoint,
                                                      highPoint: hightPoint,
-                                                     lowPoint: lowPoint,
-                                                     MA5Point: MA5Point)
+                                                     lowPoint: lowPoint)
+            positionModel.MA5Point = MA5Point
+            positionModel.MA12Point = MA12Point
+            positionModel.MA26Point = MA26Point
             
             drawPositionModels.append(positionModel)
             
-            
         }
-        
     }
 }

@@ -23,40 +23,8 @@ class OKKLineTool {
                 model.sumHigh = model.high
                 model.sumLow = model.low
                 model.sumVolume = model.volume
-                model.MA5 = nil
-                model.MA7 = 0.0
-                model.MA10 = 0.0
-                model.MA12 = 0.0
-                model.MA20 = 0.0
-                model.MA26 = 0.0
-                model.MA30 = 0.0
-                model.MA60 = 0.0
-                model.MA5_VOLUME = 0.0
-                model.MA7_VOLUME = 0.0
-                model.MA10_VOLUME = 0.0
-                model.MA12_VOLUME = 0.0
-                model.MA20_VOLUME = 0.0
-                model.MA26_VOLUME = 0.0
-                model.MA30_VOLUME = 0.0
-                model.MA60_VOLUME = 0.0
-                model.EMA5 = 0.0
-                model.EMA7 = 0.0
-                model.EMA10 = 0.0
-                model.EMA12 = 0.0
-                model.EMA20 = 0.0
-                model.EMA26 = 0.0
-                model.EMA30 = 0.0
-                model.EMA60 = 0.0
-                model.EMA5_VOLUME = 0.0
-                model.EMA7_VOLUME = 0.0
-                model.EMA10_VOLUME = 0.0
-                model.EMA12_VOLUME = 0.0
-                model.EMA20_VOLUME = 0.0
-                model.EMA26_VOLUME = 0.0
-                model.EMA30_VOLUME = 0.0
-                model.EMA60_VOLUME = 0.0
                 
-                model.DIF = model.EMA12 - model.EMA26
+                model.DIF = handleDIF(model: model)
                 model.DEA = model.DIF * 0.2
                 model.MACD = (model.DIF - model.DEA) * 2
                 model.minPriceOfNineClock = model.low
@@ -75,7 +43,8 @@ class OKKLineTool {
                 model.sumHigh = previousModel.sumHigh + model.high
                 model.sumLow = previousModel.sumLow + model.low
                 model.sumVolume = previousModel.sumVolume + model.volume
-                model.MA5 = handleMA5(day: 5, model: model, index: idx, models: klineModels)
+                
+                model.MA5 = handleMA(day: 5, model: model, index: idx, models: klineModels)
                 model.MA7 = handleMA(day: 7, model: model, index: idx, models: klineModels)
                 model.MA10 = handleMA(day: 10, model: model, index: idx, models: klineModels)
                 model.MA12 = handleMA(day: 12, model: model, index: idx, models: klineModels)
@@ -109,7 +78,7 @@ class OKKLineTool {
                 model.EMA30_VOLUME = handleEMA_VOLUME(day: 30, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA30_VOLUME)
                 model.EMA60_VOLUME = handleEMA_VOLUME(day: 60, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA60_VOLUME)
                 
-                model.DIF = model.EMA12 - model.EMA26
+                model.DIF = handleDIF(model: model)
                 model.DEA = model.DIF * 0.2 + previousModel.DEA * 0.8
                 model.MACD = (model.DIF - model.DEA) * 2
                 model.minPriceOfNineClock = handleMinPriceOfNineClock(index: idx, models: klineModels)
@@ -120,14 +89,13 @@ class OKKLineTool {
                 model.KDJ_J = handleKDJ_J(model: model)
             }
             
-            
             models.append(model)
         }
         
         return models
     }
     
-    private class func handleMA5(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
+    private class func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
         if index < (day - 1) {
             return nil
         }
@@ -139,21 +107,9 @@ class OKKLineTool {
         }
     }
     
-    private class func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double {
+    private class func handleMA_VOLUME(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
         if index < (day - 1) {
-            return 0.0
-        }
-        else if index == (day - 1) {
-            return model.sumClose / Double(day)
-        }
-        else {
-            return (model.sumClose - models[index - day].sumClose) / Double(day)
-        }
-    }
-    
-    private class func handleMA_VOLUME(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double {
-        if index < (day - 1) {
-            return 0.0
+            return nil
         }
         else if index == (day - 1) {
             return model.sumVolume / Double(day)
@@ -163,20 +119,36 @@ class OKKLineTool {
         }
     }
     
-    private class func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double) -> Double {
+    private class func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double?) -> Double? {
         if index < (day - 1) {
-            return 0.0
+            return nil
         } else {
-            return Double(day - 1) / Double(day + 1) * previousEMA + 2 / Double(day + 1) * model.close
+            if previousEMA != nil {
+                return Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close
+            } else {
+                return 2 / Double(day + 1) * model.close
+            }
         }
     }
     
-    private class func handleEMA_VOLUME(day: Int, model: OKKLineModel, index: Int, previousEMA_VOLUME: Double) -> Double {
+    private class func handleEMA_VOLUME(day: Int, model: OKKLineModel, index: Int, previousEMA_VOLUME: Double?) -> Double? {
         if index < (day - 1) {
-            return 0.0
+            return nil
         } else {
-            return Double(day - 1) / Double(day + 1) * previousEMA_VOLUME + 2 / Double(day + 1) * model.volume
+            if previousEMA_VOLUME != nil {
+                return Double(day - 1) / Double(day + 1) * previousEMA_VOLUME! + 2 / Double(day + 1) * model.volume
+            } else {
+                return 2 / Double(day + 1) * model.volume
+            }
         }
+    }
+    
+    private class func handleDIF(model: OKKLineModel) -> Double {
+        guard let ema12 = model.EMA12,
+            let ema26 = model.EMA26 else {
+            return 0.0
+        }
+        return ema12 - ema26
     }
     
     private class func handleMinPriceOfNineClock(index: Int, models: [OKKLineModel]) -> Double {

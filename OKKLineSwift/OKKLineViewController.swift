@@ -22,12 +22,11 @@ class OKKLineViewController: UIViewController {
         klineView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+//        let timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fetchData), userInfo: nil, repeats: true)
         
-        let timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fetchData), userInfo: nil, repeats: true)
+        fetchData()
         
-        
-        
-        timer.fire()
+//        timer.fire()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,8 +50,8 @@ class OKKLineViewController: UIViewController {
                      "size" : "300"]
         Just.post("https://www.btc123.com/kline/klineapi", params: param, asyncCompletionHandler: { (result) -> Void in
             
-            print(result)
-            DispatchQueue.main.async(execute: { 
+//            print(result)
+            DispatchQueue.main.async(execute: {
                 
                 if result.ok {
                     let resultData = result.json as! [String : Any]

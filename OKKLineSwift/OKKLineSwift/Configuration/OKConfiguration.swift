@@ -17,8 +17,10 @@ enum OKKLineType: Int {
 
 /// 指标种类
 enum OKIndexType: String {
-    case MA
-    case EMA
+    case MA5, MA7, MA10, MA12, MA20, MA26, MA30, MA60, MA_OTHER
+    case MA5_VOLUME, MA7_VOLUME, MA10_VOLUME, MA12_VOLUME, MA20_VOLUME, MA26_VOLUME, MA30_VOLUME, MA60_VOLUME, MA_VOLUME_OTHER
+    case EMA5, EMA7, EMA10, EMA12, EMA20, EMA26, EMA30, EMA60, EMA_OTHER
+    case EMA5_VOLUME, EMA7_VOLUME, EMA10_VOLUME, EMA12_VOLUME, EMA20_VOLUME, EMA26_VOLUME, EMA30_VOLUME, EMA60_VOLUME, EMA_VOLUME_OTHER
     case MACD
     case KDJ
     case BOLL
@@ -85,10 +87,18 @@ public final class OKConfiguration {
     var realtimeLineColor: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
     /// 长按辅助线颜色
     var longPressLineColor: CGColor = UIColor(hexRGB: 0xE1E2E6).cgColor
+    /// 长按辅助线宽度
+    var longPressLineWidth: CGFloat = 0.8
     
     /// MA颜色
+    var MA5Color: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
     var MA7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var MA10Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var MA12Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var MA20Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var MA26Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
     var MA30Color: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
+    var MA60Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
     var MALineWidth: CGFloat = 0.8
     /// 时间线
     var timeLineType: OKTimeLineType = .realTime
@@ -120,8 +130,8 @@ public final class OKConfiguration {
     var klineScaleFactor: CGFloat = 0.03
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
-    /// 主图指标类型
-    var mainIndexType: OKIndexType = .MA
+    /// 主图指标类型数组
+    var mainIndexType: [OKIndexType] = [.MA5, .MA12, .MA26]
     
     // MARK: - 成交量图(volume)
     
@@ -134,7 +144,7 @@ public final class OKConfiguration {
     /// 成交量图分时线宽度
     var volumeLineWidth: CGFloat = 0.5
     /// 成交量指标类型
-    var volumeIndexType: OKIndexType = .MA
+    var volumeIndexType: [OKIndexType] = [.MA5_VOLUME, .MA12_VOLUME, .MA26_VOLUME]
     
     // MARK: - 指标图(accessory)
     
@@ -147,12 +157,11 @@ public final class OKConfiguration {
     /// 指标图分时线宽度
     var accessoryLineWidth: CGFloat = 0.5
     /// 辅助图指标类型
-    var accessoryIndexType: OKIndexType = .MA
+    var accessoryIndexType: [OKIndexType] = [.MACD]
  
     // MARK: - SegmentView
     var  showSegmentView: Bool = true
-    
-    
+
 }
 
 /// 皮肤主题

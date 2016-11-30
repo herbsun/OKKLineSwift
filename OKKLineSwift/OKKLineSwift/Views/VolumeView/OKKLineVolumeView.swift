@@ -109,6 +109,10 @@ class OKKLineVolumeView: UIView {
     
     private func fetchDrawVolumePositionModels() {
         
+        if configuration.drawKLineModels.count <= 0 {
+            return
+        }
+        
         var minVolume = configuration.drawKLineModels[0].volume
         var maxVolume = configuration.drawKLineModels[0].volume
         

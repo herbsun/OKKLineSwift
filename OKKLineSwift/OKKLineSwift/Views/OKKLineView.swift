@@ -29,6 +29,8 @@ class OKKLineView: UIView {
     private var accessoryViewH: CGFloat = 0.0
     private var accessorySegmentView: OKSegmentView!
 
+    private var indicatorView: UIView!
+    
     private var lastScale: CGFloat = 1.0
     private var lastPanPoint: CGPoint?
     private var lastOffsetIndex: Int?
@@ -105,6 +107,16 @@ class OKKLineView: UIView {
             make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.accessoryScale)
         }
         
+        indicatorView = UIView()
+        indicatorView.isHidden = true
+        indicatorView.backgroundColor = UIColor(cgColor: configuration.longPressLineColor)
+        addSubview(indicatorView)
+        indicatorView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.top.equalTo(configuration.mainTopAssistViewHeight)
+            make.width.equalTo(configuration.longPressLineWidth)
+            make.leading.equalTo(0)
+        }
     }
     
     override func layoutSubviews() {
@@ -208,7 +220,43 @@ class OKKLineView: UIView {
     @objc
     private func longPressAction(_ recognizer: UILongPressGestureRecognizer) {
         
-        
+        if recognizer.state == .began || recognizer.state == .changed {
+            
+            let location = recognizer.location(in: recognizer.view)
+            let offsetCount = Int(location.x / (configuration.klineWidth + configuration.klineSpace))
+            
+            let previousOffset = (CGFloat(offsetCount) - 0.5) * (configuration.klineWidth + configuration.klineSpace)
+            let nextOffset = (CGFloat(offsetCount + 1) - 0.5) * (configuration.klineWidth + configuration.klineSpace)
+            
+            /// 显示竖线
+            indicatorView.isHidden = false
+            var drawModel: OKKLineModel?
+            if abs(previousOffset - location.x) < abs(nextOffset - location.x) {
+                
+                indicatorView.snp.updateConstraints({ (make) in
+                    make.leading.equalTo(previousOffset)
+                })
+                
+                if configuration.drawKLineModels.count > offsetCount {
+                    drawModel = configuration.drawKLineModels[offsetCount]
+                }
+
+            } else {
+                indicatorView.snp.updateConstraints({ (make) in
+                    make.leading.equalTo(nextOffset)
+                })
+                if configuration.drawKLineModels.count > offsetCount {
+                    drawModel = configuration.drawKLineModels[offsetCount + 1]
+                }
+            }
+            
+            mainView.drawAssistView(model: drawModel)
+            
+        } else if recognizer.state == .ended {
+            // 隐藏竖线
+            indicatorView.isHidden = true
+            mainView.drawAssistView(model: nil)
+        }
     }
 
     // MARK: 移动手势
