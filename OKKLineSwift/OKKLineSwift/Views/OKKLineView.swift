@@ -139,8 +139,6 @@ class OKKLineView: UIView {
 //        }
         
         mainView.drawMainView()
-
-        
         volumeView.drawVolumeView()
 //        accessoryView.drawAccessoryView()
     }
@@ -251,11 +249,13 @@ class OKKLineView: UIView {
             }
             
             mainView.drawAssistView(model: drawModel)
+            volumeView.drawVolumeAssistView(model: drawModel)
             
         } else if recognizer.state == .ended {
             // 隐藏竖线
             indicatorView.isHidden = true
             mainView.drawAssistView(model: nil)
+            volumeView.drawVolumeAssistView(model: nil)
         }
     }
 

@@ -9,12 +9,30 @@
 import Foundation
 import CoreGraphics
 
-struct OKVolumePositionModel {
+class OKVolumePositionModel {
     
     /// 开始点
     var startPoint: CGPoint
     /// 结束点
     var endPoint: CGPoint
+    
+    var MA5_VOLUMEPoint: CGPoint?
+    var MA7_VOLUMEPoint: CGPoint?
+    var MA10_VOLUMEPoint: CGPoint?
+    var MA12_VOLUMEPoint: CGPoint?
+    var MA20_VOLUMEPoint: CGPoint?
+    var MA26_VOLUMEPoint: CGPoint?
+    var MA30_VOLUMEPoint: CGPoint?
+    var MA60_VOLUMEPoint: CGPoint?
+    
+    var EMA5_VOLUMEPoint: CGPoint?
+    var EMA7_VOLUMEPoint: CGPoint?
+    var EMA10_VOLUMEPoint: CGPoint?
+    var EMA12_VOLUMEPoint: CGPoint?
+    var EMA20_VOLUMEPoint: CGPoint?
+    var EMA26_VOLUMEPoint: CGPoint?
+    var EMA30_VOLUMEPoint: CGPoint?
+    var EMA60_VOLUMEPoint: CGPoint?
     
     init(startPoint: CGPoint, endPoint: CGPoint) {
         self.startPoint = startPoint

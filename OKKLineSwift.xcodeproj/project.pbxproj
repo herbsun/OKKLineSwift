@@ -10,6 +10,7 @@
 		F61AC7A21DEC8E1B0038EBFB /* OKKLineTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61AC7A11DEC8E1B0038EBFB /* OKKLineTool.swift */; };
 		F61AC7A61DEC8EBB0038EBFB /* OKLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61AC7A51DEC8EBB0038EBFB /* OKLineBrush.swift */; };
 		F61F7B491DEED78C00CF758D /* OKLCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61F7B481DEED78C00CF758D /* OKLCommon.swift */; };
+		F61F7B4B1DEEF32600CF758D /* OKMALineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61F7B4A1DEEF32600CF758D /* OKMALineBrush.swift */; };
 		F64722801DCB2E4F00D03295 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F647227F1DCB2E4F00D03295 /* AppDelegate.swift */; };
 		F64722821DCB2E4F00D03295 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64722811DCB2E4F00D03295 /* ViewController.swift */; };
 		F64722851DCB2E4F00D03295 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F64722831DCB2E4F00D03295 /* Main.storyboard */; };
@@ -67,6 +68,7 @@
 		F61AC7A11DEC8E1B0038EBFB /* OKKLineTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineTool.swift; sourceTree = "<group>"; };
 		F61AC7A51DEC8EBB0038EBFB /* OKLineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKLineBrush.swift; sourceTree = "<group>"; };
 		F61F7B481DEED78C00CF758D /* OKLCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKLCommon.swift; sourceTree = "<group>"; };
+		F61F7B4A1DEEF32600CF758D /* OKMALineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMALineBrush.swift; sourceTree = "<group>"; };
 		F647227C1DCB2E4F00D03295 /* OKKLineSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OKKLineSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F647227F1DCB2E4F00D03295 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F64722811DCB2E4F00D03295 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				F61AC7A11DEC8E1B0038EBFB /* OKKLineTool.swift */,
+				F61F7B4A1DEEF32600CF758D /* OKMALineBrush.swift */,
 				F61AC7A51DEC8EBB0038EBFB /* OKLineBrush.swift */,
 			);
 			path = Tools;
@@ -401,6 +404,7 @@
 				F6BD1B771DD08A7C00EA5DE6 /* OKSegmentView.swift in Sources */,
 				F69C706C1DCC822600BDB414 /* OKConfiguration.swift in Sources */,
 				F6BD1BAE1DD0991500EA5DE6 /* ConstraintMakerExtendable.swift in Sources */,
+				F61F7B4B1DEEF32600CF758D /* OKMALineBrush.swift in Sources */,
 				F6BD1B751DD08A6D00EA5DE6 /* OKKLineAccessoryView.swift in Sources */,
 				F6BD1B7A1DD0977D00EA5DE6 /* OKKLineMainView.swift in Sources */,
 				F61AC7A61DEC8EBB0038EBFB /* OKLineBrush.swift in Sources */,

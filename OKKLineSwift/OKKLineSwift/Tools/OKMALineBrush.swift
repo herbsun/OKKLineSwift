@@ -1,23 +1,21 @@
 //
-//  OKLineBrush.swift
+//  OKMALineBrush.swift
 //  OKKLineSwift
 //
-//  Created by SHB on 2016/11/29.
+//  Created by SHB on 2016/11/30.
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
 import UIKit
-import CoreGraphics
 
-class OKLineBrush {
+class OKMALineBrush {
     
-    public var indexType: OKIndexType = .MA5
-    public var positionModels: [OKKLinePositionModel]?
-    
+    public var indexType: OKIndexType = .MA5_VOLUME
+    public var positionModels: [OKVolumePositionModel]?
     
     private var context: CGContext?
     
-    init(indexType: OKIndexType = .MA5, context: CGContext?, positionModels: [OKKLinePositionModel]?) {
+    init(indexType: OKIndexType = .MA5, context: CGContext?, positionModels: [OKVolumePositionModel]?) {
         self.context = context
         self.positionModels = positionModels
         self.indexType = indexType
@@ -27,7 +25,7 @@ class OKLineBrush {
         
         guard let positionModels = positionModels,
             let context = context else {
-            return
+                return
         }
         
         context.setLineWidth(OKConfiguration.shared.MALineWidth)
@@ -60,24 +58,17 @@ class OKLineBrush {
             var drawPoint: CGPoint?
             
             switch indexType {
-            case .MA5:          drawPoint = positionModel.MA5Point
             case .MA5_VOLUME:   drawPoint = positionModel.MA5_VOLUMEPoint
-            case .MA7:          drawPoint = positionModel.MA7Point
             case .MA7_VOLUME:   drawPoint = positionModel.MA7_VOLUMEPoint
-            case .MA10:         drawPoint = positionModel.MA10Point
             case .MA10_VOLUME:  drawPoint = positionModel.MA10_VOLUMEPoint
-            case .MA12:         drawPoint = positionModel.MA12Point
             case .MA12_VOLUME:  drawPoint = positionModel.MA12_VOLUMEPoint
-            case .MA20:         drawPoint = positionModel.MA20Point
             case .MA20_VOLUME:  drawPoint = positionModel.MA20_VOLUMEPoint
-            case .MA26:         drawPoint = positionModel.MA26Point
             case .MA26_VOLUME:  drawPoint = positionModel.MA26_VOLUMEPoint
-            case .MA30:         drawPoint = positionModel.MA30Point
             case .MA30_VOLUME:  drawPoint = positionModel.MA30_VOLUMEPoint
-            case .MA60:         drawPoint = positionModel.MA60Point
             case .MA60_VOLUME:  drawPoint = positionModel.MA60_VOLUMEPoint
             default: break
             }
+            
             
             if drawPoint != nil {
                 if firstValueIndex == nil {
@@ -91,7 +82,7 @@ class OKLineBrush {
                 }
             }
         }
-    
+        
         context.strokePath()
     }
 }

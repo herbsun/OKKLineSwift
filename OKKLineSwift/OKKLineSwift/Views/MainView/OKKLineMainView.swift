@@ -112,7 +112,7 @@ class OKKLineMainView: UIView {
         }
         
         let lineBrush = OKLineBrush(context: context, positionModels: drawPositionModels)
-        for indexType in configuration.mainIndexType {
+        for indexType in configuration.mainIndexTypes {
             // 画指标线
             lineBrush.indexType = indexType
             lineBrush.draw()
@@ -278,8 +278,9 @@ class OKKLineMainView: UIView {
 //        lowest *= 0.9999
 //        highest *= 1.0001
         
+        let drawHeight = bounds.height - configuration.mainTopAssistViewHeight - configuration.mainTopAssistViewHeight
+        let unitValue = (highest - lowest) / Double(drawHeight)
         let maxY = bounds.height - configuration.mainTopAssistViewHeight
-        let unitValue = (highest - lowest) / Double((maxY - configuration.mainTopAssistViewHeight))
         
         drawPositionModels.removeAll()
         

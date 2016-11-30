@@ -131,7 +131,7 @@ public final class OKConfiguration {
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
     /// 主图指标类型数组
-    var mainIndexType: [OKIndexType] = [.MA5, .MA12, .MA26]
+    var mainIndexTypes: [OKIndexType] = [.MA5, .MA12, .MA26]
     
     // MARK: - 成交量图(volume)
     
@@ -144,7 +144,7 @@ public final class OKConfiguration {
     /// 成交量图分时线宽度
     var volumeLineWidth: CGFloat = 0.5
     /// 成交量指标类型
-    var volumeIndexType: [OKIndexType] = [.MA5_VOLUME, .MA12_VOLUME, .MA26_VOLUME]
+    var volumeIndexTypes: [OKIndexType] = [.MA5_VOLUME, .MA12_VOLUME, .MA26_VOLUME]
     
     // MARK: - 指标图(accessory)
     
