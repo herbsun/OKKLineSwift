@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-class OKKLinePositionModel {
+class OKKLinePositionModel: OKDescriptable {
     
     /// 开盘点
     var openPoint: CGPoint

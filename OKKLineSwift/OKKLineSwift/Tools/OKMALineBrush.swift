@@ -10,15 +10,15 @@ import UIKit
 
 class OKMALineBrush {
     
-    public var indexType: OKIndexType = .MA5_VOLUME
-    public var positionModels: [OKVolumePositionModel]?
+    public var indicatorType: OKIndicatorType = .MA5_VOLUME
+    public var positionModels: [OKIndicatorPositionModel]?
     
     private var context: CGContext?
     
-    init(indexType: OKIndexType = .MA5, context: CGContext?, positionModels: [OKVolumePositionModel]?) {
+    init(indicatorType: OKIndicatorType = .MA5, context: CGContext?, positionModels: [OKIndicatorPositionModel]?) {
         self.context = context
         self.positionModels = positionModels
-        self.indexType = indexType
+        self.indicatorType = indicatorType
     }
     
     public func draw() {
@@ -32,7 +32,7 @@ class OKMALineBrush {
         context.setLineCap(.round)
         context.setLineJoin(.round)
         
-        switch indexType {
+        switch indicatorType {
         case .MA5, .MA5_VOLUME:
             context.setStrokeColor(OKConfiguration.shared.MA5Color)
         case .MA7, .MA7_VOLUME:
@@ -49,6 +49,10 @@ class OKMALineBrush {
             context.setStrokeColor(OKConfiguration.shared.MA30Color)
         case .MA60, .MA60_VOLUME:
             context.setStrokeColor(OKConfiguration.shared.MA60Color)
+        case .DIF:
+            context.setStrokeColor(OKConfiguration.shared.MA5Color)
+        case .DEA:
+            context.setStrokeColor(OKConfiguration.shared.MA7Color)
         default: break
         }
         
@@ -57,7 +61,7 @@ class OKMALineBrush {
         for (idx, positionModel) in positionModels.enumerated() {
             var drawPoint: CGPoint?
             
-            switch indexType {
+            switch indicatorType {
             case .MA5_VOLUME:   drawPoint = positionModel.MA5_VOLUMEPoint
             case .MA7_VOLUME:   drawPoint = positionModel.MA7_VOLUMEPoint
             case .MA10_VOLUME:  drawPoint = positionModel.MA10_VOLUMEPoint
@@ -66,6 +70,8 @@ class OKMALineBrush {
             case .MA26_VOLUME:  drawPoint = positionModel.MA26_VOLUMEPoint
             case .MA30_VOLUME:  drawPoint = positionModel.MA30_VOLUMEPoint
             case .MA60_VOLUME:  drawPoint = positionModel.MA60_VOLUMEPoint
+            case .DIF:   drawPoint = positionModel.DIFPoint
+            case .DEA:   drawPoint = positionModel.DEAPoint
             default: break
             }
             

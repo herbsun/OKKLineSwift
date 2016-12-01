@@ -16,12 +16,12 @@ enum OKKLineType: Int {
 }
 
 /// 指标种类
-enum OKIndexType: String {
+enum OKIndicatorType: String {
     case MA5, MA7, MA10, MA12, MA20, MA26, MA30, MA60, MA_OTHER
     case MA5_VOLUME, MA7_VOLUME, MA10_VOLUME, MA12_VOLUME, MA20_VOLUME, MA26_VOLUME, MA30_VOLUME, MA60_VOLUME, MA_VOLUME_OTHER
     case EMA5, EMA7, EMA10, EMA12, EMA20, EMA26, EMA30, EMA60, EMA_OTHER
     case EMA5_VOLUME, EMA7_VOLUME, EMA10_VOLUME, EMA12_VOLUME, EMA20_VOLUME, EMA26_VOLUME, EMA30_VOLUME, EMA60_VOLUME, EMA_VOLUME_OTHER
-    case MACD
+    case DIF, DEA, MACD
     case KDJ
     case BOLL
     case RSI
@@ -70,7 +70,7 @@ public final class OKConfiguration {
     /// 成交量视图背景色
     var volumeViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
     /// 指标视图背景色
-    var accessoryViewBgColor: CGColor = UIColor.gray.cgColor//UIColor(hexRGB: 0x181C20).cgColor
+    var accessoryViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
     
     /// 辅助视图背景色(e.g. 日期的背景色)
     var assistViewBgColor: CGColor = UIColor(hexRGB: 0x1D2227).cgColor
@@ -131,7 +131,7 @@ public final class OKConfiguration {
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
     /// 主图指标类型数组
-    var mainIndexTypes: [OKIndexType] = [.MA5, .MA12, .MA26]
+    var mainIndicatorTypes: [OKIndicatorType] = [.MA5, .MA12, .MA26]
     
     // MARK: - 成交量图(volume)
     
@@ -144,7 +144,7 @@ public final class OKConfiguration {
     /// 成交量图分时线宽度
     var volumeLineWidth: CGFloat = 0.5
     /// 成交量指标类型
-    var volumeIndexTypes: [OKIndexType] = [.MA5_VOLUME, .MA12_VOLUME, .MA26_VOLUME]
+    var volumeIndicatorTypes: [OKIndicatorType] = [.MA5_VOLUME, .MA12_VOLUME, .MA26_VOLUME]
     
     // MARK: - 指标图(accessory)
     
@@ -157,7 +157,7 @@ public final class OKConfiguration {
     /// 指标图分时线宽度
     var accessoryLineWidth: CGFloat = 0.5
     /// 辅助图指标类型
-    var accessoryIndexType: [OKIndexType] = [.MACD]
+    var accessoryindicatorTypes: [OKIndicatorType] = [.DIF, .DEA, .MACD]
  
     // MARK: - SegmentView
     var  showSegmentView: Bool = true

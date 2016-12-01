@@ -13,7 +13,7 @@ class OKKLineVolumeView: UIView {
 
     // MARK: - Property
     private let configuration = OKConfiguration.shared
-    private var drawVolumePositionModels = [OKVolumePositionModel]()
+    private var drawVolumePositionModels = [OKIndicatorPositionModel]()
     private var klineColors = [CGColor]()
     private var assistInfoLabel: UILabel!
     
@@ -28,7 +28,6 @@ class OKKLineVolumeView: UIView {
         assistInfoLabel.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(configuration.volumeTopViewHeight)
-            
         }
     }
     
@@ -62,9 +61,9 @@ class OKKLineVolumeView: UIView {
         
         // TODO: 画指标线
         let lineBrush = OKMALineBrush(context: context, positionModels: drawVolumePositionModels)
-        for indexType in configuration.volumeIndexTypes {
+        for indicatorType in configuration.volumeIndicatorTypes {
             // 画指标线
-            lineBrush.indexType = indexType
+            lineBrush.indicatorType = indicatorType
             lineBrush.draw()
         }
         
@@ -174,7 +173,7 @@ class OKKLineVolumeView: UIView {
 //            }
             let startPoint = CGPoint(x: xPosition, y: yPosition)
             let endPoint = CGPoint(x: xPosition, y: bounds.height)
-            let positionModel = OKVolumePositionModel(startPoint: startPoint, endPoint: endPoint)
+            let positionModel = OKIndicatorPositionModel(startPoint: startPoint, endPoint: endPoint)
             
             // TODO: 坐标转换
             var MA5_VOLUMEPoint: CGPoint?

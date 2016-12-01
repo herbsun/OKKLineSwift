@@ -11,16 +11,16 @@ import CoreGraphics
 
 class OKLineBrush {
     
-    public var indexType: OKIndexType = .MA5
+    public var indicatorType: OKIndicatorType = .MA5
     public var positionModels: [OKKLinePositionModel]?
     
     
     private var context: CGContext?
     
-    init(indexType: OKIndexType = .MA5, context: CGContext?, positionModels: [OKKLinePositionModel]?) {
+    init(indicatorType: OKIndicatorType = .MA5, context: CGContext?, positionModels: [OKKLinePositionModel]?) {
         self.context = context
         self.positionModels = positionModels
-        self.indexType = indexType
+        self.indicatorType = indicatorType
     }
     
     public func draw() {
@@ -34,7 +34,7 @@ class OKLineBrush {
         context.setLineCap(.round)
         context.setLineJoin(.round)
         
-        switch indexType {
+        switch indicatorType {
         case .MA5, .MA5_VOLUME:
             context.setStrokeColor(OKConfiguration.shared.MA5Color)
         case .MA7, .MA7_VOLUME:
@@ -59,7 +59,7 @@ class OKLineBrush {
         for (idx, positionModel) in positionModels.enumerated() {
             var drawPoint: CGPoint?
             
-            switch indexType {
+            switch indicatorType {
             case .MA5:          drawPoint = positionModel.MA5Point
             case .MA5_VOLUME:   drawPoint = positionModel.MA5_VOLUMEPoint
             case .MA7:          drawPoint = positionModel.MA7Point

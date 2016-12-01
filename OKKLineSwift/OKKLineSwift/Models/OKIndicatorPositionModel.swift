@@ -1,5 +1,5 @@
 //
-//  OKVolumePositionModel.swift
+//  OKIndicatorPositionModel.swift
 //  OKKLineSwift
 //
 //  Created by SHB on 2016/11/7.
@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 
-class OKVolumePositionModel {
+class OKIndicatorPositionModel: OKDescriptable {
     
     /// 开始点
     var startPoint: CGPoint
@@ -33,6 +33,10 @@ class OKVolumePositionModel {
     var EMA26_VOLUMEPoint: CGPoint?
     var EMA30_VOLUMEPoint: CGPoint?
     var EMA60_VOLUMEPoint: CGPoint?
+    
+    var DIFPoint: CGPoint?
+    var DEAPoint: CGPoint?
+    var MACDPoint: CGPoint?
     
     init(startPoint: CGPoint, endPoint: CGPoint) {
         self.startPoint = startPoint

@@ -8,20 +8,6 @@
 
 import UIKit
 
-protocol OKDescriptable {
-    func propertyDescription() -> String
-}
-
-extension OKDescriptable {
-    func propertyDescription() -> String {
-        let strings = Mirror(reflecting: self).children.flatMap { "\($0.label!): \($0.value)" }
-        var string = ""
-        for str in strings {
-            string += str + "\n"
-        }
-        return string
-    }
-}
 
 /// k线类型
 enum OKKLineDataType: Int {
@@ -96,11 +82,11 @@ class OKKLineModel: OKDescriptable {
     var EMA60_VOLUME: Double?
     
     // DIF = EMA(12) - EMA(26)
-    var DIF: Double!
+    var DIF: Double?
     // DEA = （前一日DEA X 8/10 + 今日DIF X 2/10）
-    var DEA: Double!
+    var DEA: Double?
     /// MACD(12,26,9) = (DIF - DEA) * 2
-    var MACD: Double!
+    var MACD: Double?
     
     // MARK: - KDJ(9,3,3) 代表指标分析周期为9天，K值D值为3天
     /// 九个交易日内最低价

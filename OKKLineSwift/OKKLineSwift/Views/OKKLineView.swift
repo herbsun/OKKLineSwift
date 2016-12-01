@@ -140,7 +140,7 @@ class OKKLineView: UIView {
         
         mainView.drawMainView()
         volumeView.drawVolumeView()
-//        accessoryView.drawAccessoryView()
+        accessoryView.drawAccessoryView()
     }
     
     /// 获取需要绘制的模型
@@ -250,12 +250,14 @@ class OKKLineView: UIView {
             
             mainView.drawAssistView(model: drawModel)
             volumeView.drawVolumeAssistView(model: drawModel)
+            accessoryView.drawAssistView(model: drawModel)
             
         } else if recognizer.state == .ended {
             // 隐藏竖线
             indicatorView.isHidden = true
             mainView.drawAssistView(model: nil)
             volumeView.drawVolumeAssistView(model: nil)
+            accessoryView.drawAssistView(model: nil)
         }
     }
 

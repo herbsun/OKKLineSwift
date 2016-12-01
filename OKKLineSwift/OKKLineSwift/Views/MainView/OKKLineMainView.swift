@@ -112,9 +112,9 @@ class OKKLineMainView: UIView {
         }
         
         let lineBrush = OKLineBrush(context: context, positionModels: drawPositionModels)
-        for indexType in configuration.mainIndexTypes {
+        for indicatorType in configuration.mainIndicatorTypes {
             // 画指标线
-            lineBrush.indexType = indexType
+            lineBrush.indicatorType = indicatorType
             lineBrush.draw()
         }
         

@@ -25,8 +25,8 @@ class OKKLineTool {
                 model.sumVolume = model.volume
                 
                 model.DIF = handleDIF(model: model)
-                model.DEA = model.DIF * 0.2
-                model.MACD = (model.DIF - model.DEA) * 2
+                model.DEA = handleDEA(model: model, previousModel: nil)
+                model.MACD = handleMACD(model: model)
                 model.minPriceOfNineClock = model.low
                 model.maxPriceOfNineClock = model.high
                 model.RSV9 = handleRSV9(model: model)
@@ -79,8 +79,8 @@ class OKKLineTool {
                 model.EMA60_VOLUME = handleEMA_VOLUME(day: 60, model: model, index: idx, previousEMA_VOLUME: previousModel.EMA60_VOLUME)
                 
                 model.DIF = handleDIF(model: model)
-                model.DEA = model.DIF * 0.2 + previousModel.DEA * 0.8
-                model.MACD = (model.DIF - model.DEA) * 2
+                model.DEA = handleDEA(model: model, previousModel: previousModel)
+                model.MACD = handleMACD(model: model)
                 model.minPriceOfNineClock = handleMinPriceOfNineClock(index: idx, models: klineModels)
                 model.maxPriceOfNineClock = handleMaxPriceOfNineClock(index: idx, models: klineModels)
                 model.RSV9 = handleRSV9(model: model)
@@ -143,12 +143,33 @@ class OKKLineTool {
         }
     }
     
-    private class func handleDIF(model: OKKLineModel) -> Double {
+    private class func handleDIF(model: OKKLineModel) -> Double? {
         guard let ema12 = model.EMA12,
             let ema26 = model.EMA26 else {
-            return 0.0
+            return nil
         }
         return ema12 - ema26
+    }
+    
+    private class func handleDEA(model: OKKLineModel, previousModel: OKKLineModel?) -> Double? {
+        
+        guard let dif = model.DIF else {
+            return nil
+        }
+        
+        if let previousDEA = previousModel?.DEA {
+            return dif * 0.2 + previousDEA * 0.8
+        } else {
+            return dif * 0.2
+        }
+    }
+    
+    private class func handleMACD(model: OKKLineModel) -> Double? {
+        guard let dif = model.DIF,
+            let dea = model.DEA else {
+            return nil
+        }
+        return (dif - dea) * 2
     }
     
     private class func handleMinPriceOfNineClock(index: Int, models: [OKKLineModel]) -> Double {
