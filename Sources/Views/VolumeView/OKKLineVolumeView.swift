@@ -50,7 +50,7 @@ class OKKLineVolumeView: OKView {
         }
         
         // 绘制指标数据
-        drawVolumeAssistView(model: configuration.drawKLineModels.last!)
+        drawVolumeAssistView(model: configuration.dataSource.drawKLineModels.last!)
 
         for (idx, positionModel) in drawVolumePositionModels.enumerated() {
             
@@ -78,7 +78,7 @@ class OKKLineVolumeView: OKView {
     
     public func drawVolumeAssistView(model: OKKLineModel?) {
         
-        let volumeModel = model == nil ? configuration.drawKLineModels.last! : model!
+        let volumeModel = model == nil ? configuration.dataSource.drawKLineModels.last! : model!
         
         var volumeStr = String(format: "VOLUME %.2f", volumeModel.volume)
         
@@ -105,14 +105,14 @@ class OKKLineVolumeView: OKView {
     
     private func fetchDrawVolumePositionModels() {
         
-        guard configuration.drawKLineModels.count > 0 else { return }
+        guard configuration.dataSource.drawKLineModels.count > 0 else { return }
         
-        var minVolume = configuration.drawKLineModels[0].volume
-        var maxVolume = configuration.drawKLineModels[0].volume
+        var minVolume = configuration.dataSource.drawKLineModels[0].volume
+        var maxVolume = configuration.dataSource.drawKLineModels[0].volume
         
         klineColors.removeAll()
         
-        for klineModel in configuration.drawKLineModels {
+        for klineModel in configuration.dataSource.drawKLineModels {
             
             // 决定K线颜色
             let strokeColor = klineModel.open > klineModel.close ? configuration.increaseColor : configuration.decreaseColor
@@ -162,7 +162,7 @@ class OKKLineVolumeView: OKView {
         
         drawVolumePositionModels.removeAll()
 
-        for (idx, klineModel) in configuration.drawKLineModels.enumerated() {
+        for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
             
             let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace

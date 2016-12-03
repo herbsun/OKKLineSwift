@@ -43,7 +43,7 @@ class OKKLineAccessoryView: OKView {
     public func drawAssistView(model: OKKLineModel?) {
         
         
-        let drawModel = model == nil ? configuration.drawKLineModels.last! : model!
+        let drawModel = model == nil ? configuration.dataSource.drawKLineModels.last! : model!
         
         var string = "MACD(12,26,9) "
         
@@ -95,14 +95,14 @@ class OKKLineAccessoryView: OKView {
     }
 
     private func fetchDrawAccessoryPositionModels() {
-        guard configuration.drawKLineModels.count > 0 else { return }
+        guard configuration.dataSource.drawKLineModels.count > 0 else { return }
         
         var minValue: Double = 0.0
         var maxValue: Double = 0.0
         
         drawColors.removeAll()
         
-        for klineModel in configuration.drawKLineModels {
+        for klineModel in configuration.dataSource.drawKLineModels {
   
             if let dif = klineModel.DIF {
                 if dif > maxValue {
@@ -144,7 +144,7 @@ class OKKLineAccessoryView: OKView {
         
         drawIndicatorPositionModels.removeAll()
         
-        for (idx, klineModel) in configuration.drawKLineModels.enumerated() {
+        for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
             
             let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace

@@ -11,34 +11,39 @@ import Foundation
 class OKMAModel {
 
     let day: Int
-    let dataSource: [OKKLineModel]
+    let klineModels: [OKKLineModel]
     
-    init(day: Int, dataSource: [OKKLineModel]) {
+    init(day: Int, klineModels: [OKKLineModel]) {
         self.day = day
-        self.dataSource = dataSource
+        self.klineModels = klineModels
     }
     
-    public func fetchMADataSource() -> [Double?]? {
+    public func fetchDrawMAData(drawRange: NSRange?) -> [Double?] {
         
-        var maDatas: [Double?]?
-        guard dataSource.count > 0 else {
+        var maDatas: [Double?] = []
+        
+        guard klineModels.count > 0 else {
             return maDatas
         }
         
-        for (index, model) in dataSource.enumerated() {
+        for (index, model) in klineModels.enumerated() {
             
             if index < (day - 1) {
-                maDatas?.append(nil)
+                maDatas.append(nil)
             }
             else if index == (day - 1) {
-                maDatas?.append(model.sumClose / Double(day))
-                
+                maDatas.append(model.sumClose / Double(day))
             }
             else {
-                maDatas?.append((model.sumClose - dataSource[index - day].sumClose) / Double(day))
+                maDatas.append((model.sumClose - klineModels[index - day].sumClose) / Double(day))
             }
         }
-        return maDatas
+        
+        if let range = drawRange {
+            return Array(maDatas[range.location...range.location+range.length])
+        } else {
+            return maDatas
+        }
     }
     
     

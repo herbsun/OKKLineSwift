@@ -41,7 +41,7 @@ class OKKLineView: OKView {
     private var drawCount: Int {
         get {
             let count = Int((contentView.frame.width) / (configuration.klineSpace + configuration.klineWidth))
-            return count > configuration.klineModels.count ? configuration.klineModels.count : count
+            return count > configuration.dataSource.klineModels.count ? configuration.dataSource.klineModels.count : count
         }
     }
     
@@ -133,7 +133,7 @@ class OKKLineView: OKView {
         
 //        if lastest {
 //            //设置contentOffset
-//            let klineViewWidth = CGFloat(configuration.klineModels.count) * (configuration.klineWidth + configuration.klineSpace) + 10
+//            let klineViewWidth = CGFloat(configuration.dataSource.klineModels.count) * (configuration.klineWidth + configuration.klineSpace) + 10
 //            let offset = klineViewWidth - contentView.bounds.width
 //            contentView.contentOffset = CGPoint(x: (offset > 0 ? offset : 0), y: 0)
 //        }
@@ -148,7 +148,7 @@ class OKKLineView: OKView {
         // 展示的个数
         
         if drawStartIndex == nil {
-            drawStartIndex = configuration.klineModels.count - drawCount - 1
+            drawStartIndex = configuration.dataSource.klineModels.count - drawCount - 1
         }
         
         if lastOffsetIndex != nil {
@@ -156,15 +156,19 @@ class OKKLineView: OKView {
         }
 
         drawStartIndex! = drawStartIndex! > 0 ? drawStartIndex! : 0
-        if drawStartIndex! > configuration.klineModels.count - drawCount - 1 {
-            drawStartIndex! = configuration.klineModels.count - drawCount - 1
+        if drawStartIndex! > configuration.dataSource.klineModels.count - drawCount - 1 {
+            drawStartIndex! = configuration.dataSource.klineModels.count - drawCount - 1
         }
 
-        configuration.drawKLineModels.removeAll()
+        configuration.dataSource.drawKLineModels.removeAll()
         
-        configuration.drawKLineModels = (configuration.klineModels as NSArray).subarray(with: NSMakeRange(drawStartIndex! > 0 ? drawStartIndex! : 0, drawCount)) as! [OKKLineModel]
+//        let range = NSMakeRange(drawStartIndex! > 0 ? drawStartIndex! : 0, drawCount)
         
+        let loc = drawStartIndex! > 0 ? drawStartIndex! : 0
         
+        configuration.dataSource.drawKLineModels = Array(configuration.dataSource.klineModels[loc...loc+drawCount])
+//            as NSArray).subarray(with: range) as! [OKKLineModel]
+        configuration.dataSource.drawRange = NSMakeRange(loc, drawCount)
         
     }
     
@@ -234,16 +238,16 @@ class OKKLineView: OKView {
                     make.leading.equalTo(previousOffset)
                 })
                 
-                if configuration.drawKLineModels.count > offsetCount {
-                    drawModel = configuration.drawKLineModels[offsetCount]
+                if configuration.dataSource.drawKLineModels.count > offsetCount {
+                    drawModel = configuration.dataSource.drawKLineModels[offsetCount]
                 }
 
             } else {
                 indicatorView.snp.updateConstraints({ (make) in
                     make.leading.equalTo(nextOffset)
                 })
-                if configuration.drawKLineModels.count > offsetCount {
-                    drawModel = configuration.drawKLineModels[offsetCount + 1]
+                if configuration.dataSource.drawKLineModels.count > offsetCount {
+                    drawModel = configuration.dataSource.drawKLineModels[offsetCount + 1]
                 }
             }
             

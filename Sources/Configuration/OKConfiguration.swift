@@ -52,11 +52,11 @@ public final class OKConfiguration {
     
     // MARK: - Common
     var dateFormatter: DateFormatter
-    
+    var dataSource: OKDataSource = OKDataSource()
     ///临时数据
-    var klineModels = [OKKLineModel]()
-    
-    var drawKLineModels = [OKKLineModel]()
+//    var klineModels = [OKKLineModel]()
+//    
+//    var drawKLineModels = [OKKLineModel]()
 //    var klineColors = [CGColor]()
 //    var klinePositions = [CGPoint]()
     
@@ -131,7 +131,7 @@ public final class OKConfiguration {
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
     /// 主图指标类型数组
-    var mainIndicatorTypes: [OKIndicatorType] = [.MA(5), .MA(12), .MA(26)]
+    var mainIndicatorTypes: [OKIndicatorType] = [.EMA(5), .EMA(12), .EMA(26)]
     
     // MARK: - 成交量图(volume)
     
@@ -165,10 +165,14 @@ public final class OKConfiguration {
 }
 
 /// 皮肤主题
-struct OKTheme {
+class OKTheme {
     
 }
 
-struct OKDataSource {
+class OKDataSource {
+    var drawRange: NSRange?
+    ///临时数据
+    var klineModels = [OKKLineModel]()
     
+    var drawKLineModels = [OKKLineModel]()
 }
