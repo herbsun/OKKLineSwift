@@ -89,14 +89,14 @@ class OKKLineVolumeView: OKView {
         // 绘制指标数据
         drawVolumeAssistView(model: configuration.dataSource.drawKLineModels.last!)
 
-        let unitValue = (limitValue.highest - limitValue.lowest) / Double(drawHeight)
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
         for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
             
             let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace
             
-            let yPosition = abs(drawMaxY - CGFloat((klineModel.volume - limitValue.lowest) / unitValue))
+            let yPosition = abs(drawMaxY - CGFloat((klineModel.volume - limitValue.minValue) / unitValue))
             let startPoint = CGPoint(x: xPosition, y: yPosition)
             let endPoint = CGPoint(x: xPosition, y: bounds.height)
             
@@ -117,7 +117,7 @@ class OKKLineVolumeView: OKView {
                 if let value = value {
                     let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
                         configuration.klineWidth * 0.5 + configuration.klineSpace
-                    points.append(CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((value - limitValue.lowest) / unitValue))))
+                    points.append(CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))))
                 } else {
                     points.append(nil)
                 }
@@ -164,22 +164,22 @@ class OKKLineVolumeView: OKView {
     
     // MARK: - Private
     
-    private func fetchLimitValue() -> (lowest: Double, highest: Double)? {
+    private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
         guard configuration.dataSource.drawKLineModels.count > 0 else {
             return nil
         }
         
-        var lowest = configuration.dataSource.drawKLineModels[0].volume
-        var highest = configuration.dataSource.drawKLineModels[0].volume
+        var minValue = configuration.dataSource.drawKLineModels[0].volume
+        var maxValue = configuration.dataSource.drawKLineModels[0].volume
         
         // 先求K线数据的最大最小
         for model in configuration.dataSource.drawKLineModels {
-            if model.volume < lowest {
-                lowest = model.volume
+            if model.volume < minValue {
+                minValue = model.volume
             }
-            if model.volume > highest {
-                highest = model.volume
+            if model.volume > maxValue {
+                maxValue = model.volume
             }
         }
         
@@ -187,111 +187,15 @@ class OKKLineVolumeView: OKView {
         for indicators in drawIndicationDatas {
             for value in indicators {
                 if value != nil {
-                    if value! > highest {
-                        highest = value!
+                    if value! > maxValue {
+                        maxValue = value!
                     }
-                    if value! < lowest {
-                        lowest = value!
+                    if value! < minValue {
+                        minValue = value!
                     }
                 }
             }
         }
-        return (lowest, highest)
+        return (minValue, maxValue)
     }
-
-    
-//    private func fetchDrawVolumePositionModels() {
-//        
-//        guard configuration.dataSource.drawKLineModels.count > 0 else { return }
-//        
-//        var minVolume = configuration.dataSource.drawKLineModels[0].volume
-//        var maxVolume = configuration.dataSource.drawKLineModels[0].volume
-//        
-//        klineColors.removeAll()
-//        
-//        for klineModel in configuration.dataSource.drawKLineModels {
-//            
-//            // 决定K线颜色
-//            let strokeColor = klineModel.open > klineModel.close ? configuration.increaseColor : configuration.decreaseColor
-//            klineColors.append(strokeColor)
-//            
-//            if klineModel.volume < minVolume {
-//                minVolume = klineModel.volume
-//            }
-//            
-//            if klineModel.volume > maxVolume {
-//                maxVolume = klineModel.volume
-//            }
-//            
-//            if let ma5 = klineModel.MA5_VOLUME {
-//                if ma5 > maxVolume {
-//                    maxVolume = ma5
-//                }
-//                
-//                if ma5 < minVolume {
-//                    minVolume = ma5
-//                }
-//            }
-//            
-//            if let ma12 = klineModel.MA12_VOLUME {
-//                if ma12 > maxVolume {
-//                    maxVolume = ma12
-//                }
-//                
-//                if ma12 < minVolume {
-//                    minVolume = ma12
-//                }
-//            }
-//            if let ma26 = klineModel.MA26_VOLUME {
-//                if ma26 > maxVolume {
-//                    maxVolume = ma26
-//                }
-//                
-//                if ma26 < minVolume {
-//                    minVolume = ma26
-//                }
-//            }
-//        }
-//        
-//        let drawHeight = bounds.height - configuration.volumeTopViewHeight
-//        let unitValue = (maxVolume - minVolume) / Double(drawHeight)
-//        let maxY = bounds.height
-//        
-//        drawVolumePositionModels.removeAll()
-//
-//        for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
-//            
-//            let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
-//                configuration.klineWidth * 0.5 + configuration.klineSpace
-//            
-//            let yPosition = abs(maxY - CGFloat((klineModel.volume - minVolume) / unitValue))
-////            if abs(yPosition - bounds.height) < 0.5 {
-////                yPosition = bounds.height - 1
-////            }
-//            let startPoint = CGPoint(x: xPosition, y: yPosition)
-//            let endPoint = CGPoint(x: xPosition, y: bounds.height)
-//            let positionModel = OKIndicatorPositionModel(startPoint: startPoint, endPoint: endPoint)
-//            
-//            // TODO: 坐标转换
-//            var MA5_VOLUMEPoint: CGPoint?
-//            var MA12_VOLUMEPoint: CGPoint?
-//            var MA26_VOLUMEPoint: CGPoint?
-//            
-//            if let ma5 = klineModel.MA5_VOLUME {
-//                MA5_VOLUMEPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma5 - minVolume) / unitValue)))
-//            }
-//            if let ma12 = klineModel.MA12_VOLUME {
-//                MA12_VOLUMEPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma12 - minVolume) / unitValue)))
-//            }
-//            if let ma26 = klineModel.MA26_VOLUME {
-//                MA26_VOLUMEPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma26 - minVolume) / unitValue)))
-//            }
-//            
-//            positionModel.MA5_VOLUMEPoint = MA5_VOLUMEPoint
-//            positionModel.MA12_VOLUMEPoint = MA12_VOLUMEPoint
-//            positionModel.MA26_VOLUMEPoint = MA26_VOLUMEPoint
-//            
-//            drawVolumePositionModels.append(positionModel)
-//        }
-//    }
 }

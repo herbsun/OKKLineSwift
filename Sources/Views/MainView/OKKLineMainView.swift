@@ -15,7 +15,6 @@ class OKKLineMainView: OKView {
     // MARK: - Property
     private var assistLabel: UILabel!
     private let configuration = OKConfiguration.shared
-    private var drawPositionModels = [OKKLinePositionModel]()
     
     private var drawIndicationDatas:[[Double?]] {
         get {
@@ -35,7 +34,6 @@ class OKKLineMainView: OKView {
                 case .EMA(let day):
                     let emaModel = OKEMAModel(day: day, klineModels: configuration.dataSource.klineModels)
                     datas.append(emaModel.fetchDrawEMAData(drawRange: configuration.dataSource.drawRange))
-//                case .BOLL
                 default:
                     break
                 }
@@ -107,17 +105,17 @@ class OKKLineMainView: OKView {
         // 绘制提示数据
         drawAssistView(model: configuration.dataSource.drawKLineModels.last!)
 
-        let unitValue = (limitValue.highest - limitValue.lowest) / Double(drawHeight)
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
         
         for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
             let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace
             
-            let openPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.open - limitValue.lowest) / unitValue)))
-            let closePoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.close - limitValue.lowest) / unitValue)))
-            let highPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.high - limitValue.lowest) / unitValue)))
-            let lowPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.low - limitValue.lowest) / unitValue)))
+            let openPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.open - limitValue.minValue) / unitValue)))
+            let closePoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.close - limitValue.minValue) / unitValue)))
+            let highPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.high - limitValue.minValue) / unitValue)))
+            let lowPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.low - limitValue.minValue) / unitValue)))
             
             switch configuration.klineType {
             case .KLine: // K线模式
@@ -135,26 +133,22 @@ class OKKLineMainView: OKView {
                     context?.setLineWidth(configuration.klineShadowLineWidth)
                     context?.strokeLineSegments(between: [highPoint, lowPoint])
      
-                    // 画日期
-                    drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
-                                 positionX: xPosition)
             case .timeLine: // 分时线模式
                 // 画线
                 context?.setLineWidth(configuration.realtimeLineWidth)
                 context?.setStrokeColor(configuration.realtimeLineColor)
-
                 if idx == 0 { // 处理第一个点
                     context?.move(to: closePoint)
                 } else {
                     context?.addLine(to: closePoint)
                 }
                     
-                    // 画日期
-    //                drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
-    //                             positionModel: positionModel)
 
             default: break
             }
+            // 画日期
+            drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
+                         positionX: xPosition)
         }
         context?.strokePath()
         
@@ -167,7 +161,7 @@ class OKKLineMainView: OKView {
                 if let value = value {
                     let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
                         configuration.klineWidth * 0.5 + configuration.klineSpace
-                    points.append(CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((value - limitValue.lowest) / unitValue))))
+                    points.append(CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))))
                 } else {
                     points.append(nil)
                 }
@@ -220,8 +214,6 @@ class OKKLineMainView: OKView {
     // MARK: - Public
     
     public func drawMainView() {
-        
-//        fetchDrawPositionModels()
         setNeedsDisplay()
     }
     
@@ -292,23 +284,23 @@ class OKKLineMainView: OKView {
     
     // MARK: - Private
     
-    private func fetchLimitValue() -> (lowest: Double, highest: Double)? {
+    private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
         guard configuration.dataSource.drawKLineModels.count > 0 else {
             return nil
         }
         
         let firstModel = configuration.dataSource.drawKLineModels[0]
-        var lowest = firstModel.low
-        var highest = firstModel.high
+        var minValue = firstModel.low
+        var maxValue = firstModel.high
         
         // 先求K线数据的最大最小
         for model in configuration.dataSource.drawKLineModels {
-            if model.low < lowest {
-                lowest = model.low
+            if model.low < minValue {
+                minValue = model.low
             }
-            if model.high > highest {
-                highest = model.high
+            if model.high > maxValue {
+                maxValue = model.high
             }
         }
         
@@ -316,119 +308,16 @@ class OKKLineMainView: OKView {
         for indicators in drawIndicationDatas {
             for value in indicators {
                 if value != nil {
-                    if value! > highest {
-                        highest = value!
+                    if value! > maxValue {
+                        maxValue = value!
                     }
-                    if value! < lowest {
-                        lowest = value!
+                    if value! < minValue {
+                        minValue = value!
                     }
                 }
             }
         }
-        return (lowest, highest)
+        return (minValue, maxValue)
     }
-    
-    /// 获取位置模型
-    ///
-    /// - Returns: 位置模型数组
-//    private func fetchDrawPositionModels() {
-//
-//        guard configuration.dataSource.drawKLineModels.count > 0 else {
-//            return
-//        }
-//        
-//        let firstModel = configuration.dataSource.drawKLineModels[0]
-//        
-//        var lowest = firstModel.low
-//        var highest = firstModel.high
-//        // 求最大最小值
-//        for (_, model) in configuration.dataSource.drawKLineModels.enumerated() {
-//            
-//            if model.low < lowest {
-//                lowest = model.low
-//            }
-//            if model.high > highest {
-//                highest = model.high
-//            }
-    
-//            if let ma5 = model.MA5 {
-//                if ma5 > highest {
-//                    highest = ma5
-//                }
-//                
-//                if ma5 < lowest {
-//                    lowest = ma5
-//                }
-//            }
-//            
-//            if let ma12 = model.MA12 {
-//                if ma12 > highest {
-//                    highest = ma12
-//                }
-//                
-//                if ma12 < lowest {
-//                    lowest = ma12
-//                }
-//            }
-//            if let ma26 = model.MA26 {
-//                if ma26 > highest {
-//                    highest = ma26
-//                }
-//                
-//                if ma26 < lowest {
-//                    lowest = ma26
-//                }
-//            }
-//        }
-    
-        // 查看指标值
-        
-        
-        
-//        lowest *= 0.9999
-//        highest *= 1.0001
-        
-//        let drawHeight = bounds.height - configuration.mainTopAssistViewHeight - configuration.mainTopAssistViewHeight
-//        let unitValue = (highest - lowest) / Double(drawHeight)
-//        let maxY = bounds.height - configuration.mainTopAssistViewHeight
-//        
-//        drawPositionModels.removeAll()
-//        
-//        for (idx, model) in configuration.dataSource.drawKLineModels.enumerated() {
-//            
-//            let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
-//            configuration.klineWidth * 0.5 + configuration.klineSpace
-//            
-//            let openPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.open - lowest) / unitValue)))
-//            let closePoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.close - lowest) / unitValue)))
-//            let hightPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.high - lowest) / unitValue)))
-//            let lowPoint = CGPoint(x: xPosition, y: abs(maxY - CGFloat((model.low - lowest) / unitValue)))
-//            // TODO: 坐标转换
-//            var MA5Point: CGPoint?
-//            var MA12Point: CGPoint?
-//            var MA26Point: CGPoint?
-//
-//            if let ma5 = model.MA5 {
-//                MA5Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma5 - lowest) / unitValue)))
-//            }
-//            if let ma12 = model.MA12 {
-//                MA12Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma12 - lowest) / unitValue)))
-//            }
-//            if let ma26 = model.MA26 {
-//                MA26Point = CGPoint(x: xPosition, y: abs(maxY - CGFloat((ma26 - lowest) / unitValue)))
-//            }
-//            
-//            let positionModel = OKKLinePositionModel(openPoint: openPoint,
-//                                                     closePoint: closePoint,
-//                                                     highPoint: hightPoint,
-//                                                     lowPoint: lowPoint)
-//            positionModel.MA5Point = MA5Point
-//            positionModel.MA12Point = MA12Point
-//            positionModel.MA26Point = MA26Point
-//            
-//            drawPositionModels.append(positionModel)
-//            
-//        }
-//    }
 }
 
