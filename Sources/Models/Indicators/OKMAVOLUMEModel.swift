@@ -1,15 +1,14 @@
 //
-//  OKMAModel.swift
+//  OKMAVOLUMEModel.swift
 //  OKKLineSwift
 //
-//  Created by SHB on 2016/12/2.
+//  Created by SHB on 2016/12/4.
 //
 //
 
 import Foundation
 
-struct OKMAModel {
-
+struct OKMAVOLUMEModel {
     let day: Int
     let klineModels: [OKKLineModel]
     
@@ -18,7 +17,7 @@ struct OKMAModel {
         self.klineModels = klineModels
     }
     
-    public func fetchDrawMAData(drawRange: NSRange?) -> [Double?] {
+    public func fetchDrawMAVOLUMEData(drawRange: NSRange?) -> [Double?] {
         
         var datas: [Double?] = []
         
@@ -32,10 +31,10 @@ struct OKMAModel {
                 datas.append(nil)
             }
             else if index == (day - 1) {
-                datas.append(model.sumClose / Double(day))
+                datas.append(model.sumVolume / Double(day))
             }
             else {
-                datas.append((model.sumClose - klineModels[index - day].sumClose) / Double(day))
+                datas.append((model.sumVolume - klineModels[index - day].sumVolume) / Double(day))
             }
         }
         
@@ -45,17 +44,15 @@ struct OKMAModel {
             return datas
         }
     }
-    
-    
-//    private func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
+//    private class func handleMA_VOLUME(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
 //        if index < (day - 1) {
 //            return nil
 //        }
 //        else if index == (day - 1) {
-//            return model.sumClose / Double(day)
+//            return model.sumVolume / Double(day)
 //        }
 //        else {
-//            return (model.sumClose - models[index - day].sumClose) / Double(day)
+//            return (model.sumVolume - models[index - day].sumVolume) / Double(day)
 //        }
 //    }
 }

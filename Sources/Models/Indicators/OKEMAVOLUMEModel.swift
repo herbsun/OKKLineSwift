@@ -1,14 +1,15 @@
 //
-//  OKEMAModel.swift
+//  OKEMAVOLUMEModel.swift
 //  OKKLineSwift
 //
-//  Created by SHB on 2016/12/2.
+//  Created by SHB on 2016/12/4.
 //
 //
 
 import Foundation
 
-struct OKEMAModel {
+struct OKEMAVOLUMEModel {
+    
     let day: Int
     let klineModels: [OKKLineModel]
     
@@ -17,7 +18,7 @@ struct OKEMAModel {
         self.klineModels = klineModels
     }
     
-    public func fetchDrawEMAData(drawRange: NSRange? = nil) -> [Double?] {
+    public func fetchDrawEMAVOLUMEData(drawRange: NSRange?) -> [Double?] {
         
         var datas: [Double?] = []
         
@@ -27,16 +28,16 @@ struct OKEMAModel {
         
         for (index, model) in klineModels.enumerated() {
             
-            let previousEMA: Double? = index > 0 ? datas[index - 1] : nil
+            let previousData: Double? = index > 0 ? datas[index - 1] : nil
             
             if index < (day - 1) {
                 datas.append(nil)
             }
-            else if previousEMA != nil {
-                datas.append(Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close)
+            else if previousData != nil {
+                datas.append(Double(day - 1) / Double(day + 1) * previousData! + 2 / Double(day + 1) * model.volume)
             }
             else {
-                datas.append(2 / Double(day + 1) * model.close)
+                datas.append(2 / Double(day + 1) * model.volume)
             }
         }
         
@@ -46,14 +47,15 @@ struct OKEMAModel {
             return datas
         }
     }
-//    private class func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double?) -> Double? {
+    
+//    private class func handleEMA_VOLUME(day: Int, model: OKKLineModel, index: Int, previousEMA_VOLUME: Double?) -> Double? {
 //        if index < (day - 1) {
 //            return nil
 //        } else {
-//            if previousEMA != nil {
-//                return Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close
+//            if previousEMA_VOLUME != nil {
+//                return Double(day - 1) / Double(day + 1) * previousEMA_VOLUME! + 2 / Double(day + 1) * model.volume
 //            } else {
-//                return 2 / Double(day + 1) * model.close
+//                return 2 / Double(day + 1) * model.volume
 //            }
 //        }
 //    }

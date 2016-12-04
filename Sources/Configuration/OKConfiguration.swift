@@ -64,7 +64,7 @@ public final class OKConfiguration {
     var showPriceView: Bool = true
     
     /// 全局主题
-    
+    let theme: OKTheme = OKTheme()
     /// 主图图表的背景色
     var mainViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
     /// 成交量视图背景色
@@ -90,16 +90,7 @@ public final class OKConfiguration {
     /// 长按辅助线宽度
     var longPressLineWidth: CGFloat = 0.8
     
-    /// MA颜色
-    var MA5Color: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
-    var MA7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var MA10Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var MA12Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var MA20Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var MA26Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var MA30Color: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
-    var MA60Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var MALineWidth: CGFloat = 0.8
+    var indicatorLineWidth: CGFloat = 0.8
     /// 时间线
     var timeLineType: OKTimeLineType = .realTime
     /// k线的间隔
@@ -131,7 +122,7 @@ public final class OKConfiguration {
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
     /// 主图指标类型数组
-    var mainIndicatorTypes: [OKIndicatorType] = [.EMA(5), .EMA(12), .EMA(26)]
+    var mainIndicatorTypes: [OKIndicatorType] = [.MA(5), .MA(12), .MA(26)]
     
     // MARK: - 成交量图(volume)
     
@@ -157,7 +148,7 @@ public final class OKConfiguration {
     /// 指标图分时线宽度
     var accessoryLineWidth: CGFloat = 0.5
     /// 辅助图指标类型
-    var accessoryindicatorTypes: [OKIndicatorType] = [.DIF, .DEA, .MACD]
+    var accessoryindicatorType: OKIndicatorType = .MACD
  
     // MARK: - SegmentView
     var  showSegmentView: Bool = true
@@ -166,7 +157,23 @@ public final class OKConfiguration {
 
 /// 皮肤主题
 class OKTheme {
+    var DIFColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
+    var DEAColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+
+    public func MAColor(day: Int) -> CGColor {
+        return UIColor(hexRGB: 0x4498EA + day).cgColor
+    }
+    public func EMAColor(day: Int) -> CGColor {
+        return UIColor(hexRGB: 0xFF783C + day).cgColor
+    }
     
+//    var MA7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+//    var MA10Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+//    var MA12Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+//    var MA20Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+//    var MA26Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+//    var MA30Color: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
+//    var MA60Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
 }
 
 class OKDataSource {

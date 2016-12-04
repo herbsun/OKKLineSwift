@@ -27,6 +27,7 @@ class OKKLineMainView: OKView {
             
             for indicator in configuration.mainIndicatorTypes {
                 switch indicator {
+                    
                 case .MA(let day):
                     let maModel = OKMAModel(day: day, klineModels: configuration.dataSource.klineModels)
                     datas.append(maModel.fetchDrawMAData(drawRange: configuration.dataSource.drawRange))
@@ -45,13 +46,13 @@ class OKKLineMainView: OKView {
     
     private var drawMaxY: CGFloat {
         get {
-            return bounds.height - configuration.mainTopAssistViewHeight
+            return bounds.height - configuration.mainBottomAssistViewHeight
         }
     }
     
     private var drawHeight: CGFloat {
         get {
-            return bounds.height - configuration.mainTopAssistViewHeight - configuration.mainTopAssistViewHeight
+            return bounds.height - configuration.mainTopAssistViewHeight - configuration.mainBottomAssistViewHeight
         }
     }
     
@@ -110,17 +111,17 @@ class OKKLineMainView: OKView {
         
         
         for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
+            let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
+                configuration.klineWidth * 0.5 + configuration.klineSpace
+            
+            let openPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.open - limitValue.lowest) / unitValue)))
+            let closePoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.close - limitValue.lowest) / unitValue)))
+            let highPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.high - limitValue.lowest) / unitValue)))
+            let lowPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.low - limitValue.lowest) / unitValue)))
+            
             switch configuration.klineType {
             case .KLine: // K线模式
                 
-                    let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
-                        configuration.klineWidth * 0.5 + configuration.klineSpace
-                    
-                    let openPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.open - limitValue.lowest) / unitValue)))
-                    let closePoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.close - limitValue.lowest) / unitValue)))
-                    let highPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.high - limitValue.lowest) / unitValue)))
-                    let lowPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.low - limitValue.lowest) / unitValue)))
-                    
                     // 决定K线颜色
                     let strokeColor = klineModel.open < klineModel.close ?
                         configuration.increaseColor : configuration.decreaseColor
@@ -137,28 +138,25 @@ class OKKLineMainView: OKView {
                     // 画日期
                     drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
                                  positionX: xPosition)
-    //        case .timeLine: // 分时线模式
-    //            // 画线
-    //            context?.setLineWidth(configuration.realtimeLineWidth)
-    //            context?.setStrokeColor(configuration.realtimeLineColor)
-    //            
-    //            for (idx, positionModel) in drawPositionModels.enumerated() {
-    //                
-    //                if idx == 0 { // 处理第一个点
-    //                    context?.move(to: positionModel.closePoint)
-    //                } else {
-    //                    context?.addLine(to: positionModel.closePoint)
-    //                }
-    //                
-    //                // 画日期
-    ////                drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
-    ////                             positionModel: positionModel)
-    //            }
-    //            context?.strokePath()
+            case .timeLine: // 分时线模式
+                // 画线
+                context?.setLineWidth(configuration.realtimeLineWidth)
+                context?.setStrokeColor(configuration.realtimeLineColor)
+
+                if idx == 0 { // 处理第一个点
+                    context?.move(to: closePoint)
+                } else {
+                    context?.addLine(to: closePoint)
+                }
+                    
+                    // 画日期
+    //                drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
+    //                             positionModel: positionModel)
 
             default: break
             }
         }
+        context?.strokePath()
         
         // 绘制指标
         for (idx, datas) in drawIndicationDatas.enumerated() {
@@ -175,9 +173,10 @@ class OKKLineMainView: OKView {
                 }
             }
             
-            let lineBrush = OKLineBrush(context: context, drawPoints: points)
+            let lineBrush = OKLineBrush(indicatorType: configuration.mainIndicatorTypes[idx],
+                                        context: context,
+                                        drawPoints: points)
             // 画指标线
-            lineBrush.indicatorType = configuration.mainIndicatorTypes[idx]
             lineBrush.draw()
         }
         
@@ -244,6 +243,16 @@ class OKKLineMainView: OKView {
         let highStr = String(format: "高: %.2f ", drawModel.high)
         let lowStr = String(format: "低: %.2f ", drawModel.low)
         let closeStr = String(format: "收: %.2f ", drawModel.close)
+        
+//        for indicator in configuration.mainIndicatorTypes {
+//            switch indicator {
+//            case .MA(let day):
+//                
+//            case .EMA(let day):
+//            default:
+//                break
+//            }
+//        }
         
         var string = openStr + highStr + lowStr + closeStr
         
