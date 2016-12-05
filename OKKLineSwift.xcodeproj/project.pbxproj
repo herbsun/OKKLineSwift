@@ -176,6 +176,8 @@
 		F69B38501DF32A0500D2C9BF /* OKEMAVOLUMEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B384F1DF32A0500D2C9BF /* OKEMAVOLUMEModel.swift */; };
 		F69B38511DF32A0500D2C9BF /* OKEMAVOLUMEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B384F1DF32A0500D2C9BF /* OKEMAVOLUMEModel.swift */; };
 		F69B38ED1DF40FF800D2C9BF /* OKMACDModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B38EC1DF40FF800D2C9BF /* OKMACDModel.swift */; };
+		F69B38EF1DF507AD00D2C9BF /* OKKDJModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B38EE1DF507AD00D2C9BF /* OKKDJModel.swift */; };
+		F6E9DB621DF568D500872DD9 /* OKKLineDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E9DB611DF568D500872DD9 /* OKKLineDrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -271,6 +273,8 @@
 		F69B384C1DF329F300D2C9BF /* OKMAVOLUMEModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMAVOLUMEModel.swift; sourceTree = "<group>"; };
 		F69B384F1DF32A0500D2C9BF /* OKEMAVOLUMEModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKEMAVOLUMEModel.swift; sourceTree = "<group>"; };
 		F69B38EC1DF40FF800D2C9BF /* OKMACDModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMACDModel.swift; sourceTree = "<group>"; };
+		F69B38EE1DF507AD00D2C9BF /* OKKDJModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKDJModel.swift; sourceTree = "<group>"; };
+		F6E9DB611DF568D500872DD9 /* OKKLineDrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineDrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -429,6 +433,7 @@
 			children = (
 				F600A58E1DF1215F00CF1C8A /* OKView.swift */,
 				F600A58D1DF1215F00CF1C8A /* OKKLineView.swift */,
+				F6E9DB611DF568D500872DD9 /* OKKLineDrawView.swift */,
 				F600A58B1DF1215F00CF1C8A /* MainView */,
 				F600A5911DF1215F00CF1C8A /* VolumeView */,
 				F600A5891DF1215F00CF1C8A /* AccessoryView */,
@@ -534,6 +539,7 @@
 				F69B38491DF328A400D2C9BF /* OKEMAModel.swift */,
 				F69B384F1DF32A0500D2C9BF /* OKEMAVOLUMEModel.swift */,
 				F69B38EC1DF40FF800D2C9BF /* OKMACDModel.swift */,
+				F69B38EE1DF507AD00D2C9BF /* OKKDJModel.swift */,
 			);
 			path = Indicators;
 			sourceTree = "<group>";
@@ -704,6 +710,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F600A5A81DF1220900CF1C8A /* Just.swift in Sources */,
+				F6E9DB621DF568D500872DD9 /* OKKLineDrawView.swift in Sources */,
 				F600A61A1DF1245800CF1C8A /* ConstraintMakerRelatable.swift in Sources */,
 				F600A60E1DF1245800CF1C8A /* ConstraintMakerExtendable.swift in Sources */,
 				F69B384A1DF328A400D2C9BF /* OKEMAModel.swift in Sources */,
@@ -757,6 +764,7 @@
 				F600A59F1DF1215F00CF1C8A /* OKKLineAccessoryView.swift in Sources */,
 				F600A59C1DF1215F00CF1C8A /* OKKLineTool.swift in Sources */,
 				F600A5D21DF1245800CF1C8A /* ConstraintAttributes.swift in Sources */,
+				F69B38EF1DF507AD00D2C9BF /* OKKDJModel.swift in Sources */,
 				F600A62A1DF1245800CF1C8A /* ConstraintRelatableTarget.swift in Sources */,
 				F600A5EE1DF1245800CF1C8A /* ConstraintItem.swift in Sources */,
 			);
