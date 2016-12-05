@@ -35,15 +35,19 @@ class OKSegmentView: OKView {
     
     private var scrollView: UIScrollView!
     private var btns = [UIButton]()
+    private var configuration: OKConfiguration!
  
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    convenience init(direction: OKSegmentDirection, titles: [String]) {
+    convenience init(direction: OKSegmentDirection, titles: [String], configuration: OKConfiguration) {
         self.init()
         self.direction = direction
         self.titles = titles
+        self.configuration = configuration
+        
+        backgroundColor = OKColor(cgColor: configuration.mainViewBgColor)
         
         scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false

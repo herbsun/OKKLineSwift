@@ -33,8 +33,16 @@ class OKKLineView: OKView {
         }
         
         let timeTitles = ["分时", "1分", "5分", "15分", "30分", "60分", "日K", "周K", "月K", "季K", "年K"]
-        timeSegmentView = OKSegmentView(direction: .horizontal, titles: timeTitles)
+        timeSegmentView = OKSegmentView(direction: .horizontal, titles: timeTitles, configuration: configuration)
+        timeSegmentView.didSelectedSegment = { [weak self] (segmentView, index) -> Void in
+            if index == 0 {
+                self?.configuration.klineType = .timeLine
+            } else {
+                self?.configuration.klineType = .KLine
+            }
         
+            self?.klineDrawView.drawKLineView(true)
+        }
         addSubview(timeSegmentView)
         timeSegmentView.snp.makeConstraints { (make) in
             make.top.equalTo(klineDrawView.snp.bottom)
@@ -42,7 +50,19 @@ class OKKLineView: OKView {
         }
         
         let indicatorTitles = ["MA", "EMA", "BOLL", "MACD", "KDJ", "RSI", "VOL"]
-        indicatorSegmentView = OKSegmentView(direction: .vertical, titles: indicatorTitles)
+        indicatorSegmentView = OKSegmentView(direction: .vertical, titles: indicatorTitles, configuration: configuration)
+        indicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, index) -> Void in
+            if index == 0 {
+                self?.configuration.mainIndicatorTypes = [.MA(5), .MA(12), .MA(26)]
+                self?.configuration.volumeIndicatorTypes = [.MA_VOLUME(5), .MA_VOLUME(12), .MA_VOLUME(26)]
+            } else if index == 1 {
+                self?.configuration.mainIndicatorTypes = [.EMA(5), .EMA(12), .EMA(26)]
+                self?.configuration.volumeIndicatorTypes = [.EMA_VOLUME(5), .EMA_VOLUME(12), .EMA_VOLUME(26)]
+            }
+            
+            self?.klineDrawView.drawKLineView(true)
+        }
+        
         addSubview(indicatorSegmentView)
         indicatorSegmentView.snp.makeConstraints { (make) in
             make.top.bottom.equalTo(klineDrawView)
