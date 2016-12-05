@@ -56,21 +56,18 @@ class OKKLineViewController: UIViewController {
                 if result.ok {
                     let resultData = result.json as! [String : Any]
                     let datas = resultData["datas"] as! [[Double]]
-                    OKConfiguration.shared.dataSource.klineModels.removeAll()
+//                    configuration.dataSource.klineModels.removeAll()
                     var dataArray = [OKKLineModel]()
                     for data in datas {
                         
                         let model = OKKLineModel(date: data[0], open: data[1], close: data[4], high: data[2], low: data[3], volume: data[5])
                         dataArray.append(model)
                     }
-                    OKConfiguration.shared.dataSource.klineModels = OKKLineTool.handleKLineModels(klineModels: dataArray)
                     
 //                    for model in OKConfiguration.shared.klineModels {
 //                        print(model.propertyDescription())
 //                    }
-                    
-                    
-                    self.klineView.drawKLineView(true)
+                    self.klineView.drawKLineView(klineModels: dataArray)
                 }
                 
                 

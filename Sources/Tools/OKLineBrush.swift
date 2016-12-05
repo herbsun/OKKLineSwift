@@ -12,13 +12,15 @@ import CoreGraphics
 class OKLineBrush {
     
     public var indicatorType: OKIndicatorType
+    public var configuration: OKConfiguration
     public var drawPoints: [CGPoint?]?
     private var context: CGContext?
     
-    init(indicatorType: OKIndicatorType, context: CGContext?, drawPoints: [CGPoint?]?) {
+    init(indicatorType: OKIndicatorType, context: CGContext?, drawPoints: [CGPoint?]?, configuration: OKConfiguration) {
         self.indicatorType = indicatorType
         self.context = context
         self.drawPoints = drawPoints
+        self.configuration = configuration
     }
     
     public func draw() {
@@ -28,19 +30,19 @@ class OKLineBrush {
             return
         }
         
-        context.setLineWidth(OKConfiguration.shared.indicatorLineWidth)
+        context.setLineWidth(configuration.indicatorLineWidth)
         context.setLineCap(.round)
         context.setLineJoin(.round)
         
         switch indicatorType {
         case .MA(let day):
-            context.setStrokeColor(OKConfiguration.shared.theme.MAColor(day: day))
+            context.setStrokeColor(configuration.theme.MAColor(day: day))
         case .EMA(let day):
-            context.setStrokeColor(OKConfiguration.shared.theme.EMAColor(day: day))
+            context.setStrokeColor(configuration.theme.EMAColor(day: day))
         case .DIF:
-            context.setStrokeColor(OKConfiguration.shared.theme.DIFColor)
+            context.setStrokeColor(configuration.theme.DIFColor)
         case .DEA:
-            context.setStrokeColor(OKConfiguration.shared.theme.DEAColor)
+            context.setStrokeColor(configuration.theme.DEAColor)
         default: break
         }
         

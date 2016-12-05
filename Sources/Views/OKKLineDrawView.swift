@@ -15,9 +15,9 @@
 class OKKLineDrawView: OKView {
     
     // MARK: - Property
-//    public var doubleTapHandle: (() -> Void)?
+    public var doubleTapHandle: (() -> Void)?
     
-    private let configuration = OKConfiguration.shared
+    private var configuration: OKConfiguration!
     
     private var contentView: UIView!
     
@@ -54,6 +54,10 @@ class OKKLineDrawView: OKView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+    }
+    convenience init(configuration: OKConfiguration) {
+        self.init()
+        self.configuration = configuration
         /// Parent View
         contentView = UIView()
         // 捏合手势
@@ -62,10 +66,10 @@ class OKKLineDrawView: OKView {
         // 长按手势
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
         contentView.addGestureRecognizer(longPressGesture)
-//        // 双击手势
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
-//        tapGesture.numberOfTapsRequired = 2
-//        contentView.addGestureRecognizer(tapGesture)
+        // 双击手势
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
+        tapGesture.numberOfTapsRequired = 2
+        contentView.addGestureRecognizer(tapGesture)
         // 移动手势
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
         contentView.addGestureRecognizer(panGesture)
@@ -78,7 +82,7 @@ class OKKLineDrawView: OKView {
         }
         
         /// Main View
-        mainView = OKKLineMainView()
+        mainView = OKKLineMainView(configuration: configuration)
         contentView.addSubview(mainView)
         mainView.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
@@ -90,7 +94,7 @@ class OKKLineDrawView: OKView {
         // TODO: mainSegmentView
         
         /// Volume View
-        volumeView = OKKLineVolumeView()
+        volumeView = OKKLineVolumeView(configuration: configuration)
         contentView.addSubview(volumeView)
         volumeView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
@@ -103,7 +107,7 @@ class OKKLineDrawView: OKView {
         // TODO: volumeSegmentView
         
         /// Accessory View
-        accessoryView = OKKLineAccessoryView()
+        accessoryView = OKKLineAccessoryView(configuration: configuration)
         contentView.addSubview(accessoryView)
         accessoryView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
@@ -121,6 +125,7 @@ class OKKLineDrawView: OKView {
             make.width.equalTo(configuration.longPressLineWidth)
             make.leading.equalTo(0)
         }
+        
     }
     
     override func layoutSubviews() {
@@ -306,11 +311,11 @@ class OKKLineDrawView: OKView {
         }
     }
     
-//    // MARK: 双击手势
-//    @objc
-//    private func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
-//        doubleTapHandle?()
-//    }
+    // MARK: 双击手势
+    @objc
+    private func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
+        doubleTapHandle?()
+    }
     
     // An empty implementation adversely affects performance during animation.
     //    override func draw(_ rect: CGRect) {

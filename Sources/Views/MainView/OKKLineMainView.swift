@@ -14,7 +14,10 @@ class OKKLineMainView: OKView {
     
     // MARK: - Property
     private var assistLabel: UILabel!
-    private let configuration = OKConfiguration.shared
+    private var configuration: OKConfiguration!
+    
+    private var lastDrawDatePoint: CGPoint = CGPoint.zero
+    private var dateAttributes: [String : Any]!
     
     private var drawIndicationDatas:[[Double?]] {
         get {
@@ -53,18 +56,22 @@ class OKKLineMainView: OKView {
             return bounds.height - configuration.mainTopAssistViewHeight - configuration.mainBottomAssistViewHeight
         }
     }
-    
-    private var lastDrawDatePoint: CGPoint = CGPoint.zero
-    private let dateAttributes: [String : Any] = [
-        NSForegroundColorAttributeName : UIColor(cgColor: OKConfiguration.shared.assistTextColor),
-        NSFontAttributeName : OKConfiguration.shared.assistTextFont
-    ]
-    
-    
+
     // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    convenience init(configuration: OKConfiguration) {
+        self.init()
+        self.configuration = configuration
+        dateAttributes  = [
+            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        
+        
         assistLabel = UILabel()
         addSubview(assistLabel)
         assistLabel.snp.makeConstraints { (make) in
@@ -169,7 +176,8 @@ class OKKLineMainView: OKView {
             
             let lineBrush = OKLineBrush(indicatorType: configuration.mainIndicatorTypes[idx],
                                         context: context,
-                                        drawPoints: points)
+                                        drawPoints: points,
+                                        configuration: configuration)
             // 画指标线
             lineBrush.draw()
         }

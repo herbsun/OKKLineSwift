@@ -11,7 +11,7 @@ import UIKit
 class OKKLineAccessoryView: OKView {
     
     // MARK: - Property
-    private let configuration = OKConfiguration.shared
+    private var configuration: OKConfiguration!
     private var drawColors = [CGColor]()
     private var assistInfoLabel: UILabel!
     private var drawMaxY: CGFloat {
@@ -46,6 +46,11 @@ class OKKLineAccessoryView: OKView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    convenience init(configuration: OKConfiguration) {
+        self.init()
+        self.configuration = configuration
         assistInfoLabel = UILabel()
         assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
         assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
@@ -165,13 +170,15 @@ class OKKLineAccessoryView: OKView {
                 if idx == 0 {
                     let lineBrush = OKLineBrush(indicatorType: .DIF,
                                                 context: context,
-                                                drawPoints: points)
+                                                drawPoints: points,
+                                                configuration: configuration)
                     lineBrush.draw()
                     
                 } else if idx == 1 {
                     let lineBrush = OKLineBrush(indicatorType: .DEA,
                                                 context: context,
-                                                drawPoints: points)
+                                                drawPoints: points,
+                                                configuration: configuration)
                     lineBrush.draw()
                 }
             }

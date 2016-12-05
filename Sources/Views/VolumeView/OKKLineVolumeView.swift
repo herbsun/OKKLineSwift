@@ -12,7 +12,7 @@ import CoreGraphics
 class OKKLineVolumeView: OKView {
 
     // MARK: - Property
-    private let configuration = OKConfiguration.shared
+    private var configuration: OKConfiguration!
     private var assistInfoLabel: UILabel!
 
     private var drawMaxY: CGFloat {
@@ -57,6 +57,11 @@ class OKKLineVolumeView: OKView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    convenience init(configuration: OKConfiguration) {
+        self.init()
+        self.configuration = configuration
         assistInfoLabel = UILabel()
         assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
         assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
@@ -125,7 +130,8 @@ class OKKLineVolumeView: OKView {
             
             let lineBrush = OKLineBrush(indicatorType: configuration.volumeIndicatorTypes[idx],
                                         context: context,
-                                        drawPoints: points)
+                                        drawPoints: points,
+                                        configuration: configuration)
             lineBrush.draw()
         }
     }

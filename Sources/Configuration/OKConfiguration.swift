@@ -43,9 +43,9 @@ enum OKTimeLineType: Int {
 
 public final class OKConfiguration {
     
-    static let shared: OKConfiguration = OKConfiguration()
+//    static let shared: OKConfiguration = OKConfiguration()
     
-    private init() {
+    public init() {
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
     }
