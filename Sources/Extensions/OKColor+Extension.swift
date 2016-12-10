@@ -6,9 +6,8 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-import Foundation
 #if os(macOS)
-    import AppKit
+    import Cocoa
     public typealias OKColor = NSView
 #else
     import UIKit

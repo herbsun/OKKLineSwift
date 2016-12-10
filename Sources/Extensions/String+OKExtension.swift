@@ -6,9 +6,8 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-import Foundation
 #if os(macOS)
-import AppKit
+import Cocoa
 #else
 import UIKit
 #endif

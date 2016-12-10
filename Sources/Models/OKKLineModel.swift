@@ -6,8 +6,7 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-import UIKit
-
+import Foundation
 
 /// k线类型
 enum OKKLineDataType: Int {

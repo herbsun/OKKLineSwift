@@ -6,7 +6,11 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-import UIKit
+#if os(macOS)
+    import Cocoa
+#else
+    import UIKit
+#endif
 
 /// K线类型
 enum OKKLineType: Int {
@@ -169,14 +173,6 @@ class OKTheme {
     public func EMAColor(day: Int) -> CGColor {
         return UIColor(hexRGB: 0x4498EA + day).cgColor
     }
-    
-//    var MA7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-//    var MA10Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-//    var MA12Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-//    var MA20Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-//    var MA26Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-//    var MA30Color: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
-//    var MA60Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
 }
 
 class OKDataSource {

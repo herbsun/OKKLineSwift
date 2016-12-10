@@ -11,6 +11,7 @@
 #else
     import UIKit
 #endif
+import Foundation
 
 class OKKLineView: OKView {
     

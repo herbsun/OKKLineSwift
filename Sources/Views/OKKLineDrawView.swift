@@ -7,7 +7,7 @@
 //
 
 #if os(macOS)
-    import AppKit
+    import Cocoa
 #else
     import UIKit
 #endif

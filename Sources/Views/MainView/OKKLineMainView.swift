@@ -6,8 +6,11 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-import UIKit
-import Foundation
+#if os(macOS)
+    import Cocoa
+#else
+    import UIKit
+#endif
 import CoreGraphics
 
 class OKKLineMainView: OKView {
