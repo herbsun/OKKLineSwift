@@ -53,11 +53,15 @@ class OKKLineView: OKView {
         indicatorSegmentView = OKSegmentView(direction: .vertical, titles: indicatorTitles, configuration: configuration)
         indicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, index) -> Void in
             if index == 0 {
-                self?.configuration.mainIndicatorTypes = [.MA(5), .MA(12), .MA(26)]
-                self?.configuration.volumeIndicatorTypes = [.MA_VOLUME(5), .MA_VOLUME(12), .MA_VOLUME(26)]
+//                self?.configuration.mainIndicatorTypes = [.MA(5), .MA(12), .MA(26)]
+//                self?.configuration.volumeIndicatorTypes = [.MA_VOLUME(5), .MA_VOLUME(12), .MA_VOLUME(26)]
             } else if index == 1 {
-                self?.configuration.mainIndicatorTypes = [.EMA(5), .EMA(12), .EMA(26)]
-                self?.configuration.volumeIndicatorTypes = [.EMA_VOLUME(5), .EMA_VOLUME(12), .EMA_VOLUME(26)]
+//                self?.configuration.mainIndicatorTypes = [.EMA(5), .EMA(12), .EMA(26)]
+//                self?.configuration.volumeIndicatorTypes = [.EMA_VOLUME(5), .EMA_VOLUME(12), .EMA_VOLUME(26)]
+            } else if index == 3 {
+                self?.configuration.accessoryindicatorType = .MACD
+            } else if index == 4 {
+                self?.configuration.accessoryindicatorType = .KDJ
             }
             
             self?.klineDrawView.drawKLineView(true)

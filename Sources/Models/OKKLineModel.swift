@@ -35,51 +35,22 @@ class OKKLineModel: OKDescriptable {
     
     // MARK: - 指标
     /// 该model以及之前所有开盘价之和
-    var sumOpen: Double!
+    var sumOpen: Double?
     /// 该model以及之前所有收盘价之和
-    var sumClose: Double!
+    var sumClose: Double?
     /// 该model以及之前所有最高价之和
-    var sumHigh: Double!
+    var sumHigh: Double?
     /// 该model以及之前所有最低价之和
-    var sumLow: Double!
+    var sumLow: Double?
     /// 该model以及之前所有成交量之和
-    var sumVolume: Double!
+    var sumVolume: Double?
     
     // MARK: MA - MA(N) = (C1+C2+……CN) / N, C:收盘价
-    var MA5: Double?
-    var MA7: Double?
-    var MA10: Double?
-    var MA12: Double?
-    var MA20: Double?
-    var MA26: Double?
-    var MA30: Double?
-    var MA60: Double?
-    var MA5_VOLUME: Double?
-    var MA7_VOLUME: Double?
-    var MA10_VOLUME: Double?
-    var MA12_VOLUME: Double?
-    var MA20_VOLUME: Double?
-    var MA26_VOLUME: Double?
-    var MA30_VOLUME: Double?
-    var MA60_VOLUME: Double?
-    
+    var MAs: [Double?]?
+    var MA_VOLUMEs: [Double?]?
     // MARK: EMA - EMA(N) = 2 / (N+1) * (C-昨日EMA) + 昨日EMA, C:收盘价
-    var EMA5: Double?
-    var EMA7: Double?
-    var EMA10: Double?
-    var EMA12: Double?
-    var EMA20: Double?
-    var EMA26: Double?
-    var EMA30: Double?
-    var EMA60: Double?
-    var EMA5_VOLUME: Double?
-    var EMA7_VOLUME: Double?
-    var EMA10_VOLUME: Double?
-    var EMA12_VOLUME: Double?
-    var EMA20_VOLUME: Double?
-    var EMA26_VOLUME: Double?
-    var EMA30_VOLUME: Double?
-    var EMA60_VOLUME: Double?
+    var EMAs: [Double?]?
+    var EMA_VOLUMEs: [Double?]?
     
     // DIF = EMA(12) - EMA(26)
     var DIF: Double?
@@ -90,22 +61,22 @@ class OKKLineModel: OKDescriptable {
     
     // MARK: - KDJ(9,3,3) 代表指标分析周期为9天，K值D值为3天
     /// 九个交易日内最低价
-    var minPriceOfNineClock: Double!
+    var minPriceOfNineClock: Double?
     /// 九个交易日最高价
-    var maxPriceOfNineClock: Double!
+    var maxPriceOfNineClock: Double?
     /// RSV(9) =（今日收盘价－9日内最低价）/（9日内最高价－9日内最低价）* 100
-    var RSV9: Double!
+    var RSV9: Double?
     /// K(3) =（当日RSV值+2*前一日K值）/ 3
-    var KDJ_K: Double!
+    var KDJ_K: Double?
     /// D(3) =（当日K值 + 2*前一日D值）/ 3
-    var KDJ_D: Double!
+    var KDJ_D: Double?
     /// J = 3K － 2D
-    var KDJ_J: Double!
+    var KDJ_J: Double?
     
     // MARK: - BOLL
-    var BOOL_MB: Double!
-    var BOOL_UP: Double!
-    var BOOL_DN: Double!
+    var BOOL_MB: Double?
+    var BOOL_UP: Double?
+    var BOOL_DN: Double?
     
     init(klineDataType: OKKLineDataType = .BTC,
          date: Double,

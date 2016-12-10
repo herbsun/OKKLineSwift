@@ -9,17 +9,17 @@
 import Foundation
 
 struct OKEMAModel {
-    let day: Int
+    
+    let indicatorType: OKIndicatorType
     let klineModels: [OKKLineModel]
     
-    init(day: Int, klineModels: [OKKLineModel]) {
-        self.day = day
+    init(indicatorType: OKIndicatorType, klineModels: [OKKLineModel]) {
+        self.indicatorType = indicatorType
         self.klineModels = klineModels
     }
-    
-    public func fetchDrawEMAData(drawRange: NSRange? = nil) -> [Double?] {
+    public func fetchDrawEMAData(drawRange: NSRange? = nil) -> [OKKLineModel] {
         
-        var datas: [Double?] = []
+        var datas = [OKKLineModel]()
         
         guard klineModels.count > 0 else {
             return datas
@@ -27,17 +27,21 @@ struct OKEMAModel {
         
         for (index, model) in klineModels.enumerated() {
             
-            let previousEMA: Double? = index > 0 ? datas[index - 1] : nil
-            
-            if index < (day - 1) {
-                datas.append(nil)
+            switch indicatorType {
+            case .EMA(let days):
+                
+                var values = [Double?]()
+                
+                for (idx, day) in days.enumerated() {
+                    
+                    let previousEMA: Double? = index > 0 ? datas[index - 1].EMAs?[idx] : nil
+                    values.append(handleEMA(day: day, model: model, index: index, previousEMA: previousEMA))
+                }
+                model.EMAs = values
+            default:
+                break
             }
-            else if previousEMA != nil {
-                datas.append(Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close)
-            }
-            else {
-                datas.append(2 / Double(day + 1) * model.close)
-            }
+            datas.append(model)
         }
         
         if let range = drawRange {
@@ -46,15 +50,16 @@ struct OKEMAModel {
             return datas
         }
     }
-//    private class func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double?) -> Double? {
-//        if index < (day - 1) {
-//            return nil
-//        } else {
-//            if previousEMA != nil {
-//                return Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close
-//            } else {
-//                return 2 / Double(day + 1) * model.close
-//            }
-//        }
-//    }
+    
+    private func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double?) -> Double? {
+        if day <= 0 || index < (day - 1) {
+            return nil
+        } else {
+            if previousEMA != nil {
+                return Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close
+            } else {
+                return 2 / Double(day + 1) * model.close
+            }
+        }
+    }
 }

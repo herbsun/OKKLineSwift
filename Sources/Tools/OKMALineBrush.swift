@@ -1,25 +1,33 @@
 //
-//  OKLineBrush.swift
+//  OKMALineBrush.swift
 //  OKKLineSwift
 //
-//  Created by SHB on 2016/11/29.
-//  Copyright © 2016年 Herb. All rights reserved.
+//  Created by SHB on 2016/12/9.
 //
+//
+
 
 import UIKit
 import CoreGraphics
 
-class OKLineBrush {
+enum OKBrushType {
+    case MA(Int)
+    case MA_VOLUME(Int)
+    case EMA(Int)
+    case EMA_VOLUME(Int)
+}
+
+class OKMALineBrush {
     
-    public var indicatorType: OKIndicatorType
+    public var calFormula: ((Int, OKKLineModel) -> CGPoint?)?
+    public var brushType: OKBrushType
     private var configuration: OKConfiguration
     private var context: CGContext
     private var firstValueIndex: Int?
     
-    public var calFormula: ((Int, OKKLineModel) -> CGPoint?)?
-    
-    init(indicatorType: OKIndicatorType, context: CGContext, configuration: OKConfiguration) {
-        self.indicatorType = indicatorType
+
+    init(brushType: OKBrushType, context: CGContext, configuration: OKConfiguration) {
+        self.brushType = brushType
         self.context = context
         self.configuration = configuration
         
@@ -27,24 +35,20 @@ class OKLineBrush {
         context.setLineCap(.round)
         context.setLineJoin(.round)
         
-        switch indicatorType {
-        case .DIF:
-            context.setStrokeColor(configuration.theme.DIFColor)
-        case .DEA:
-            context.setStrokeColor(configuration.theme.DEAColor)
-        case .KDJ_K:
-            context.setStrokeColor(configuration.theme.KDJ_KColor)
-        case .KDJ_D:
-            context.setStrokeColor(configuration.theme.KDJ_DColor)
-        case .KDJ_J:
-            context.setStrokeColor(configuration.theme.KDJ_JColor)
-            
-        default: break
+        switch brushType {
+        case .MA(let day):
+            context.setStrokeColor(configuration.theme.MAColor(day: day))
+        case .EMA(let day):
+            context.setStrokeColor(configuration.theme.EMAColor(day: day))
+        case .MA_VOLUME(let day):
+            context.setStrokeColor(configuration.theme.MAColor(day: day))
+        case .EMA_VOLUME(let day):
+            context.setStrokeColor(configuration.theme.EMAColor(day: day))
         }
     }
     
     public func draw(drawModels: [OKKLineModel]) {
-        
+    
         for (index, model) in drawModels.enumerated() {
             
             if let point = calFormula?(index, model) {
@@ -63,3 +67,4 @@ class OKLineBrush {
         context.strokePath()
     }
 }
+

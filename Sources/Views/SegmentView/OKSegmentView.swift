@@ -54,12 +54,12 @@ class OKSegmentView: OKView {
         scrollView.showsHorizontalScrollIndicator = false
         addSubview(scrollView)
         
-        for (idx, title) in titles.enumerated() {
+        for (index, title) in titles.enumerated() {
             let btn = UIButton(type: .custom)
             btn.setTitle(title, for: .normal)
             btn.setTitleColor(UIColor.white, for: .normal)
             btn.titleLabel?.font = OKFont.systemFont(size: 12)
-            btn.tag = idx
+            btn.tag = index
             btn.addTarget(self, action: #selector(selectedAction(_:)), for: .touchUpInside)
             scrollView.addSubview(btn)
             btns.append(btn)
@@ -76,13 +76,13 @@ class OKSegmentView: OKView {
         
         var lastBtn: UIButton?
 
-        for (idx, btn) in btns.enumerated() {
+        for (index, btn) in btns.enumerated() {
             switch direction {
             case .horizontal:
                 
                 let x = lastBtn == nil ? 0 : lastBtn!.frame.maxX
                 
-                let textWidth = titles[idx].stringSize(maxSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: bounds.height), fontSize: 12).width + 10
+                let textWidth = titles[index].stringSize(maxSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: bounds.height), fontSize: 12).width + 10
                 
                 let width = textWidth < 60 ? 60 : textWidth
                 

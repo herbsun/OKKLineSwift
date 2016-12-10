@@ -17,12 +17,13 @@ enum OKKLineType: Int {
 
 /// 指标种类
 enum OKIndicatorType {
-    case MA(Int)
-    case MA_VOLUME(Int)
-    case EMA(Int)
-    case EMA_VOLUME(Int)
+    case NONE
+    case MA([Int])
+    case MA_VOLUME([Int])
+    case EMA([Int])
+    case EMA_VOLUME([Int])
     case DIF, DEA, MACD
-    case KDJ
+    case KDJ, KDJ_K, KDJ_D, KDJ_J
     case BOLL
     case RSI
     case VOL
@@ -121,8 +122,8 @@ public final class OKConfiguration {
     var klineScaleFactor: CGFloat = 0.03
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
-    /// 主图指标类型数组
-    var mainIndicatorTypes: [OKIndicatorType] = [.MA(5), .MA(12), .MA(26)]
+    /// 主图指标类型
+    var mainIndicatorType: OKIndicatorType = .MA([5, 12, 26])
     
     // MARK: - 成交量图(volume)
     
@@ -135,7 +136,7 @@ public final class OKConfiguration {
     /// 成交量图分时线宽度
     var volumeLineWidth: CGFloat = 0.5
     /// 成交量指标类型
-    var volumeIndicatorTypes: [OKIndicatorType] = [.MA_VOLUME(5), .MA_VOLUME(12), .MA_VOLUME(26)]
+    var volumeIndicatorType: OKIndicatorType = .MA_VOLUME([5 ,12, 26])
     
     // MARK: - 指标图(accessory)
     
@@ -148,7 +149,7 @@ public final class OKConfiguration {
     /// 指标图分时线宽度
     var accessoryLineWidth: CGFloat = 0.5
     /// 辅助图指标类型
-    var accessoryindicatorType: OKIndicatorType = .MACD
+    var accessoryindicatorType: OKIndicatorType = .KDJ
  
     // MARK: - SegmentView
     var  showSegmentView: Bool = true
@@ -159,12 +160,14 @@ public final class OKConfiguration {
 class OKTheme {
     var DIFColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
     var DEAColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-
+    var KDJ_KColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
+    var KDJ_DColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var KDJ_JColor: CGColor = UIColor(hexRGB: 0x9998EA).cgColor
     public func MAColor(day: Int) -> CGColor {
         return UIColor(hexRGB: 0x4498EA + day).cgColor
     }
     public func EMAColor(day: Int) -> CGColor {
-        return UIColor(hexRGB: 0xFF783C + day).cgColor
+        return UIColor(hexRGB: 0x4498EA + day).cgColor
     }
     
 //    var MA7Color: CGColor = UIColor(hexRGB: 0xFF783C).cgColor

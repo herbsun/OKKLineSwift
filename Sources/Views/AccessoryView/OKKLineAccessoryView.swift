@@ -12,7 +12,7 @@ class OKKLineAccessoryView: OKView {
     
     // MARK: - Property
     private var configuration: OKConfiguration!
-    private var drawColors = [CGColor]()
+    private var accessoryDrawKLineModels: [OKKLineModel]?
     private var assistInfoLabel: UILabel!
     private var drawMaxY: CGFloat {
         get {
@@ -25,29 +25,14 @@ class OKKLineAccessoryView: OKView {
         }
     }
     
-    private var drawIndicationDatas:[[Double?]] {
+    
+    private var drawIndicationModels: [OKKLineModel] {
         get {
-            guard configuration.dataSource.drawKLineModels.count > 0 else {
-                return []
-            }
-            
-            var datas: [[Double?]] = []
-            
-            switch configuration.accessoryindicatorType {
-            case .MACD:
-                let macdModel = OKMACDModel(klineModels: configuration.dataSource.klineModels)
-                datas =  macdModel.fetchDrawMACDData(drawRange: configuration.dataSource.drawRange)
-            default:
-                break
-            }
-            return datas
+            let kdjModel = OKKDJModel(klineModels: configuration.dataSource.klineModels)
+            return kdjModel.fetchDrawKDJData(drawRange: configuration.dataSource.drawRange)
         }
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
+
     convenience init(configuration: OKConfiguration) {
         self.init()
         self.configuration = configuration
@@ -61,6 +46,10 @@ class OKKLineAccessoryView: OKView {
         }
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -68,8 +57,40 @@ class OKKLineAccessoryView: OKView {
     // MARK: - Public
     
     public func drawAccessoryView() {
-//        fetchDrawAccessoryPositionModels()
+        fetchAccessoryDrawKLineModels()
         setNeedsDisplay()
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        
+        // 背景色
+        context.clear(rect)
+        context.setFillColor(configuration.accessoryViewBgColor)
+        context.fill(rect)
+        
+        
+        // 没有数据 不绘制
+        guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
+            return
+        }
+        
+        //        drawAssistView(model: nil)
+        
+        switch configuration.accessoryindicatorType {
+        case .MACD:
+            drawMACD(context: context, drawModels: accessoryDrawKLineModels)
+            
+        case .KDJ:
+            drawKDJ(context: context, drawModels: accessoryDrawKLineModels)
+            
+        default:
+            break
+        }
     }
     
     public func drawAssistView(model: OKKLineModel?) {
@@ -90,7 +111,7 @@ class OKKLineAccessoryView: OKView {
         if let macd = drawModel.MACD {
             string += String(format: "MACD: %.2f ", macd)
         }
-
+        
         let attrs: [String : Any] = [
             NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
             NSFontAttributeName : configuration.assistTextFont
@@ -99,115 +120,191 @@ class OKKLineAccessoryView: OKView {
     }
     
     
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
+    // MARK: - Private
+    
+
+    // MARK: 绘制MACD
+    private func drawMACD(context: CGContext, drawModels: [OKKLineModel]) {
         
-        guard configuration.dataSource.klineModels.count > 0 else {
-                return
+        guard let limitValue = fetchLimitValue() else {
+            return
         }
         
-        let context = UIGraphicsGetCurrentContext()
-        // 背景色
-        context?.clear(rect)
-        context?.setFillColor(configuration.accessoryViewBgColor)
-        context?.fill(rect)
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        let middleY = drawMaxY - CGFloat(abs(limitValue.minValue) / unitValue)
         
-//        drawAssistView(model: nil)
-
+        // 画柱状图
+        for (index, model) in drawModels.enumerated() {
+            
+            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
+                configuration.klineWidth * 0.5 + configuration.klineSpace
+            
+            var startPoint = CGPoint(x: xPosition, y: middleY)
+            var endPoint = CGPoint(x: xPosition, y: middleY)
+            if let macd = model.MACD {
+                
+                let offsetValue = CGFloat(abs(macd) / unitValue)
+                
+                startPoint.y = macd > 0 ? middleY - offsetValue : middleY
+                endPoint.y = macd > 0 ? middleY : middleY + offsetValue
+                
+                context.setStrokeColor(macd > 0 ? configuration.increaseColor : configuration.decreaseColor)
+                context.setLineWidth(configuration.klineWidth)
+                context.strokeLineSegments(between: [startPoint, endPoint])
+            }
+        }
+        context.strokePath()
+        
+        // 画DIF线
+        let difLineBrush = OKLineBrush(indicatorType: .DIF,
+                                       context: context,
+                                       configuration: configuration)
+        difLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+        
+            let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+            if let value = model.DIF {
+                let yPosition = CGFloat(-(value) / unitValue) + middleY
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        difLineBrush.draw(drawModels: drawModels)
+        
+        // 画DEA线
+        let deaLineBrush = OKLineBrush(indicatorType: .DEA,
+                                       context: context,
+                                       configuration: configuration)
+        deaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.DEA {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition = CGFloat(-(value) / unitValue) + middleY
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        deaLineBrush.draw(drawModels: drawModels)
+    }
+    
+    // MARK: 绘制KDJ
+    private func drawKDJ(context: CGContext, drawModels: [OKKLineModel]) {
+        guard let limitValue = fetchLimitValue() else { return }
+        
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        
+        let KDJ_KLineBrush = OKLineBrush(indicatorType: .KDJ_K, context: context, configuration: configuration)
+        KDJ_KLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.KDJ_K {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        KDJ_KLineBrush.draw(drawModels: drawModels)
+        
+        let KDJ_DLineBrush = OKLineBrush(indicatorType: .KDJ_D, context: context, configuration: configuration)
+        KDJ_DLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.KDJ_D {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        KDJ_DLineBrush.draw(drawModels: drawModels)
+        
+        let KDJ_JLineBrush = OKLineBrush(indicatorType: .KDJ_K, context: context, configuration: configuration)
+        KDJ_JLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.KDJ_J {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        KDJ_JLineBrush.draw(drawModels: drawModels)
+    }
+    
+    private func fetchAccessoryDrawKLineModels() {
+        
+        guard configuration.dataSource.klineModels.count > 0 else {
+            accessoryDrawKLineModels = nil
+            return
+        }
+        
         switch configuration.accessoryindicatorType {
         case .MACD:
-            drawMACD(context: context)
+            let macdModel = OKMACDModel(klineModels: configuration.dataSource.klineModels)
+            accessoryDrawKLineModels = macdModel.fetchDrawMACDData(drawRange: configuration.dataSource.drawRange)
+        
+        case .KDJ:
+            let kdjModel = OKKDJModel(klineModels: configuration.dataSource.klineModels)
+            accessoryDrawKLineModels = kdjModel.fetchDrawKDJData(drawRange: configuration.dataSource.drawRange)
+        
         default:
             break
         }
     }
     
-    // MARK: - Private
-    private func drawMACD(context: CGContext?) {
-        
-        guard let limitValue = fetchLimitValue() else { return }
-        
-        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        let middleY = drawMaxY - CGFloat(abs(limitValue.minValue) / unitValue)
-        
-        if drawIndicationDatas.count == 3 {
-            for (idx, value) in drawIndicationDatas[2].enumerated() {
-                
-                let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
-                    configuration.klineWidth * 0.5 + configuration.klineSpace
-                
-                var startPoint = CGPoint(x: xPosition, y: middleY)
-                var endPoint = CGPoint(x: xPosition, y: middleY)
-                if let macd = value {
-                    
-                    let offsetValue = CGFloat(abs(macd) / unitValue)
-                    let startYPosition = macd > 0 ? middleY - offsetValue : middleY
-                    let endYPosition = macd > 0 ? middleY : middleY + offsetValue
-                    startPoint = CGPoint(x: xPosition, y: startYPosition)
-                    endPoint = CGPoint(x: xPosition, y: endYPosition)
-                    
-                    context?.setStrokeColor(macd > 0 ? configuration.increaseColor : configuration.decreaseColor)
-                    context?.setLineWidth(configuration.klineWidth)
-                    context?.strokeLineSegments(between: [startPoint, endPoint])
-                }
-            }
-            context?.strokePath()
-            // 画指标线
-            for (idx, datas) in drawIndicationDatas.enumerated() {
-                if idx == 2 { return }
-                
-                var points: [CGPoint?] = []
-                
-                for (idx, value) in datas.enumerated() {
-                    if let value = value {
-                        let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
-                            configuration.klineWidth * 0.5 + configuration.klineSpace
-                        points.append(CGPoint(x: xPosition, y: CGFloat(-(value) / unitValue) + middleY))
-                    } else {
-                        points.append(nil)
-                    }
-                }
-                if idx == 0 {
-                    let lineBrush = OKLineBrush(indicatorType: .DIF,
-                                                context: context,
-                                                drawPoints: points,
-                                                configuration: configuration)
-                    lineBrush.draw()
-                    
-                } else if idx == 1 {
-                    let lineBrush = OKLineBrush(indicatorType: .DEA,
-                                                context: context,
-                                                drawPoints: points,
-                                                configuration: configuration)
-                    lineBrush.draw()
-                }
-            }
-        }
-    }
-    
-    
+    // MARK: - 获取指标数据最大最小值
     private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
-        guard configuration.dataSource.drawKLineModels.count > 0 else {
+        guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
             return nil
         }
         
         var minValue = 0.0
         var maxValue = 0.0
         
-        // 求指标数据的最大最小
-        for indicators in drawIndicationDatas {
-            for value in indicators {
-                if value != nil {
-                    if value! > maxValue {
-                        maxValue = value!
-                    }
-                    if value! < minValue {
-                        minValue = value!
-                    }
+        switch configuration.accessoryindicatorType {
+        case .MACD:
+            for model in accessoryDrawKLineModels {
+                if let value = model.DIF {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+                if let value = model.DEA {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+                if let value = model.MACD {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
                 }
             }
+
+        case .KDJ:
+            
+            for model in accessoryDrawKLineModels {
+                            
+                if let value = model.KDJ_K {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+                
+                if let value = model.KDJ_D {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+                if let value = model.KDJ_J {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+            }
+            
+        default:
+            break
         }
+        
         return (minValue, maxValue)
     }
 }

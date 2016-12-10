@@ -8,7 +8,7 @@
 
 import Foundation
 
-class OKMACDModel {
+struct OKMACDModel {
 
     let klineModels: [OKKLineModel]
     
@@ -16,81 +16,74 @@ class OKMACDModel {
         self.klineModels = klineModels
     }
     
-    public func fetchDrawMACDData(drawRange: NSRange? = nil) -> [[Double?]] {
+    public func fetchDrawMACDData(drawRange: NSRange? = nil) -> [OKKLineModel] {
         
+        var datas = [OKKLineModel]()
         guard klineModels.count > 0 else {
-            return []
+            return datas
         }
+        var lastEMA12: Double?
+        var lastEMA26: Double?
         
-        let ema12Model = OKEMAModel(day: 12, klineModels: klineModels)
-        let ema12Datas = ema12Model.fetchDrawEMAData()
-        
-        let ema26Model = OKEMAModel(day: 26, klineModels: klineModels)
-        let ema26Datas = ema26Model.fetchDrawEMAData()
-        
-        
-        var difDatas: [Double?] = []
-        var deaDatas: [Double?] = []
-        var macdDatas: [Double?] = []
-        
-        for index in 0..<klineModels.count {
+        for (index, model) in klineModels.enumerated() {
+            let previousModel: OKKLineModel? = index > 0 ? klineModels[index - 1] : nil
             
-            guard let ema12 = ema12Datas[index],
-                let ema26 = ema26Datas[index] else {
-                
-                    difDatas.append(nil)
-                    deaDatas.append(nil)
-                    macdDatas.append(nil)
-                    continue
-            }
+            let ema12 = handleEMA(day: 12, model: model, index: index, previousEMA: lastEMA12)
+            let ema26 = handleEMA(day: 26, model: model, index: index, previousEMA: lastEMA26)
+            lastEMA12 = ema12
+            lastEMA26 = ema26
+            model.DIF = handleDIF(EMA12: ema12, EMA26: ema26)
+            model.DEA = handleDEA(model: model, previousModel: previousModel)
+            model.MACD = handleMACD(model: model)
             
-            difDatas.append(ema12 - ema26)
-            
-            if index > 0 && deaDatas[index - 1] != nil {
-                deaDatas.append(difDatas[index]! * 0.2 + deaDatas[index - 1]! * 0.8)
-            } else {
-                deaDatas.append(difDatas[index]! * 0.2)
-            }
-            
-            macdDatas.append((difDatas[index]! - deaDatas[index]!) * 2)
+            datas.append(model)
         }
         
         if let range = drawRange {
-            return [Array(difDatas[range.location...range.location+range.length]),
-                    Array(deaDatas[range.location...range.location+range.length]),
-                    Array(macdDatas[range.location...range.location+range.length])
-            ]
+            return Array(datas[range.location...range.location+range.length])
         } else {
-            return [difDatas, deaDatas, macdDatas]
+            return datas
         }
     }
     
-//    private class func handleDIF(model: OKKLineModel) -> Double? {
-//        guard let ema12 = model.EMA12,
-//            let ema26 = model.EMA26 else {
-//                return nil
-//        }
-//        return ema12 - ema26
-//    }
-//    
-//    private class func handleDEA(model: OKKLineModel, previousModel: OKKLineModel?) -> Double? {
-//        
-//        guard let dif = model.DIF else {
-//            return nil
-//        }
-//        
-//        if let previousDEA = previousModel?.DEA {
-//            return dif * 0.2 + previousDEA * 0.8
-//        } else {
-//            return dif * 0.2
-//        }
-//    }
-//    
-//    private class func handleMACD(model: OKKLineModel) -> Double? {
-//        guard let dif = model.DIF,
-//            let dea = model.DEA else {
-//                return nil
-//        }
-//        return (dif - dea) * 2
-//    }
+    private func handleEMA(day: Int, model: OKKLineModel, index: Int, previousEMA: Double?) -> Double? {
+        if day <= 0 || index < (day - 1) {
+            return nil
+        } else {
+            if previousEMA != nil {
+                return Double(day - 1) / Double(day + 1) * previousEMA! + 2 / Double(day + 1) * model.close
+            } else {
+                return 2 / Double(day + 1) * model.close
+            }
+        }
+    }
+    
+    private func handleDIF(EMA12: Double?, EMA26: Double?) -> Double? {
+        guard let ema12 = EMA12,
+            let ema26 = EMA26 else {
+                return nil
+        }
+        return ema12 - ema26
+    }
+    
+    private func handleDEA(model: OKKLineModel, previousModel: OKKLineModel?) -> Double? {
+        
+        guard let dif = model.DIF else {
+            return nil
+        }
+        
+        if let previousDEA = previousModel?.DEA {
+            return dif * 0.2 + previousDEA * 0.8
+        } else {
+            return dif * 0.2
+        }
+    }
+    
+    private func handleMACD(model: OKKLineModel) -> Double? {
+        guard let dif = model.DIF,
+            let dea = model.DEA else {
+                return nil
+        }
+        return (dif - dea) * 2
+    }
 }

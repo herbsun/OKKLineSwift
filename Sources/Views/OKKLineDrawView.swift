@@ -324,7 +324,7 @@ class OKKLineDrawView: OKView {
     //        context?.setStrokeColor(UIColor.white.cgColor)
     //        context?.setLineWidth(1.0)
     //        
-    //        context?.strokeLineSegments(between: [CGPoint(x: rect.midX, y: rect.minY), CGPoint(x: rect.midX, y: rect.maxY)])
+    //        context?.strokeLineSegments(between: [CGPoint(x: rect.mindex, y: rect.minY), CGPoint(x: rect.mindex, y: rect.maxY)])
     //        context?.strokePath()
     //    }
     

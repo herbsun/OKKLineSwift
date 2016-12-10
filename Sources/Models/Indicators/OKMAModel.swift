@@ -10,17 +10,17 @@ import Foundation
 
 struct OKMAModel {
 
-    let day: Int
+    let indicatorType: OKIndicatorType
     let klineModels: [OKKLineModel]
     
-    init(day: Int, klineModels: [OKKLineModel]) {
-        self.day = day
+    init(indicatorType: OKIndicatorType, klineModels: [OKKLineModel]) {
+        self.indicatorType = indicatorType
         self.klineModels = klineModels
     }
     
-    public func fetchDrawMAData(drawRange: NSRange?) -> [Double?] {
+    public func fetchDrawMAData(drawRange: NSRange?) -> [OKKLineModel] {
         
-        var datas: [Double?] = []
+        var datas = [OKKLineModel]()
         
         guard klineModels.count > 0 else {
             return datas
@@ -28,15 +28,21 @@ struct OKMAModel {
         
         for (index, model) in klineModels.enumerated() {
             
-            if index < (day - 1) {
-                datas.append(nil)
+            model.sumClose = model.close + (index > 0 ? klineModels[index - 1].sumClose! : 0)
+            
+            switch indicatorType {
+            case .MA(let days):
+                var values = [Double?]()
+                for day in days {
+                    
+                    values.append(handleMA(day: day, model: model, index: index, models: klineModels))
+                }
+                model.MAs = values
+            default:
+                break
             }
-            else if index == (day - 1) {
-                datas.append(model.sumClose / Double(day))
-            }
-            else {
-                datas.append((model.sumClose - klineModels[index - day].sumClose) / Double(day))
-            }
+
+            datas.append(model)
         }
         
         if let range = drawRange {
@@ -46,16 +52,15 @@ struct OKMAModel {
         }
     }
     
-    
-//    private func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
-//        if index < (day - 1) {
-//            return nil
-//        }
-//        else if index == (day - 1) {
-//            return model.sumClose / Double(day)
-//        }
-//        else {
-//            return (model.sumClose - models[index - day].sumClose) / Double(day)
-//        }
-//    }
+    private func handleMA(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
+        if day <= 0 || index < (day - 1) {
+            return nil
+        }
+        else if index == (day - 1) {
+            return model.sumClose! / Double(day)
+        }
+        else {
+            return (model.sumClose! - models[index - day].sumClose!) / Double(day)
+        }
+    }
 }

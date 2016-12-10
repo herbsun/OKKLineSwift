@@ -19,31 +19,7 @@ class OKKLineMainView: OKView {
     private var lastDrawDatePoint: CGPoint = CGPoint.zero
     private var dateAttributes: [String : Any]!
     
-    private var drawIndicationDatas:[[Double?]] {
-        get {
-            guard configuration.dataSource.drawKLineModels.count > 0 else {
-                return []
-            }
-            
-            var datas: [[Double?]] = []
-            
-            for indicator in configuration.mainIndicatorTypes {
-                switch indicator {
-                    
-                case .MA(let day):
-                    let maModel = OKMAModel(day: day, klineModels: configuration.dataSource.klineModels)
-                    datas.append(maModel.fetchDrawMAData(drawRange: configuration.dataSource.drawRange))
-                    
-                case .EMA(let day):
-                    let emaModel = OKEMAModel(day: day, klineModels: configuration.dataSource.klineModels)
-                    datas.append(emaModel.fetchDrawEMAData(drawRange: configuration.dataSource.drawRange))
-                default:
-                    break
-                }
-            }
-            return datas
-        }
-    }
+    private var mainDrawKLineModels: [OKKLineModel]?
     
     private var drawMaxY: CGFloat {
         get {
@@ -84,39 +60,95 @@ class OKKLineMainView: OKView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Public
+    
+    public func drawMainView() {
+        
+        fetchMainDrawKLineModels()
+        
+        setNeedsDisplay()
+    }
+    
+    /// 绘制辅助说明视图
+    ///
+    /// - Parameter model: 绘制的模型 如果为nil 取当前画得最后一个模型
+    public func drawAssistView(model: OKKLineModel?) {
+        
+        guard let mainDrawKLineModels = mainDrawKLineModels else { return }
+        
+        let drawModel = model == nil ? mainDrawKLineModels.last! : model!
+        
+        let date = Date(timeIntervalSince1970: drawModel.date/1000)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let dateStr = formatter.string(from: date) + " "
+        
+        let openStr = String(format: "开: %.2f ", drawModel.open)
+        let highStr = String(format: "高: %.2f ", drawModel.high)
+        let lowStr = String(format: "低: %.2f ", drawModel.low)
+        let closeStr = String(format: "收: %.2f ", drawModel.close)
+        
+        var string = openStr + highStr + lowStr + closeStr
+        
+        
+        
+        let dateAttrs: [String : Any] = [
+            NSForegroundColorAttributeName : UIColor.red,
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        
+        let attrs: [String : Any] = [
+            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        
+        let dateAttrsString =  NSMutableAttributedString(string: dateStr, attributes: dateAttrs)
+        
+        let assistAttrsString = NSAttributedString(string: string, attributes: attrs)
+        
+        dateAttrsString.append(assistAttrsString)
+        
+        dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
+        //        dateAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
+        //        assistLabel.attributedText = dateAttrsString
+        
+    }
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
         // 背景色
-        context?.clear(rect)
-        context?.setFillColor(configuration.mainViewBgColor)
-        context?.fill(rect)
+        context.clear(rect)
+        context.setFillColor(configuration.mainViewBgColor)
+        context.fill(rect)
         
         // 没有数据 不绘制
-        guard configuration.dataSource.klineModels.count > 0,
+        guard let mainDrawKLineModels = mainDrawKLineModels,
             let limitValue = fetchLimitValue() else {
             return
         }
         
         // 设置日期背景色
-        context?.setFillColor(configuration.assistViewBgColor)
+        context.setFillColor(configuration.assistViewBgColor)
         let assistRect = CGRect(x: 0,
                                 y: rect.height - configuration.mainBottomAssistViewHeight,
                                 width: rect.width,
                                 height: configuration.mainBottomAssistViewHeight)
-        context?.fill(assistRect)
+        context.fill(assistRect)
         
         lastDrawDatePoint = CGPoint.zero
         
         // 绘制提示数据
-        drawAssistView(model: configuration.dataSource.drawKLineModels.last!)
+        drawAssistView(model: mainDrawKLineModels.last!)
 
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        
-        for (idx, klineModel) in configuration.dataSource.drawKLineModels.enumerated() {
-            let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
+        for (index, klineModel) in mainDrawKLineModels.enumerated() {
+            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace
             
             let openPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.open - limitValue.minValue) / unitValue)))
@@ -130,58 +162,45 @@ class OKKLineMainView: OKView {
                     // 决定K线颜色
                     let strokeColor = klineModel.open < klineModel.close ?
                         configuration.increaseColor : configuration.decreaseColor
-                    context?.setStrokeColor(strokeColor)
+                    context.setStrokeColor(strokeColor)
                     
                     // 画开盘-收盘
-                    context?.setLineWidth(configuration.klineWidth)
-                    context?.strokeLineSegments(between: [openPoint, closePoint])
+                    context.setLineWidth(configuration.klineWidth)
+                    context.strokeLineSegments(between: [openPoint, closePoint])
                     
                     // 画上下影线
-                    context?.setLineWidth(configuration.klineShadowLineWidth)
-                    context?.strokeLineSegments(between: [highPoint, lowPoint])
+                    context.setLineWidth(configuration.klineShadowLineWidth)
+                    context.strokeLineSegments(between: [highPoint, lowPoint])
      
             case .timeLine: // 分时线模式
                 // 画线
-                context?.setLineWidth(configuration.realtimeLineWidth)
-                context?.setStrokeColor(configuration.realtimeLineColor)
-                if idx == 0 { // 处理第一个点
-                    context?.move(to: closePoint)
+                context.setLineWidth(configuration.realtimeLineWidth)
+                context.setStrokeColor(configuration.realtimeLineColor)
+                if index == 0 { // 处理第一个点
+                    context.move(to: closePoint)
                 } else {
-                    context?.addLine(to: closePoint)
+                    context.addLine(to: closePoint)
                 }
-                    
 
             default: break
             }
             // 画日期
-            drawDateLine(klineModel: configuration.dataSource.drawKLineModels[idx],
+            drawDateLine(klineModel: mainDrawKLineModels[index],
                          positionX: xPosition)
+            
         }
-        context?.strokePath()
+        context.strokePath()
+        
         
         // 绘制指标
-        for (idx, datas) in drawIndicationDatas.enumerated() {
-            
-            var points: [CGPoint?] = []
-            
-            for (idx, value) in datas.enumerated() {
-                if let value = value {
-                    let xPosition = CGFloat(idx) * (configuration.klineWidth + configuration.klineSpace) +
-                        configuration.klineWidth * 0.5 + configuration.klineSpace
-                    points.append(CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))))
-                } else {
-                    points.append(nil)
-                }
-            }
-            
-            let lineBrush = OKLineBrush(indicatorType: configuration.mainIndicatorTypes[idx],
-                                        context: context,
-                                        drawPoints: points,
-                                        configuration: configuration)
-            // 画指标线
-            lineBrush.draw()
+        switch configuration.mainIndicatorType {
+        case .MA(_):
+            drawMA(context: context, limitValue: limitValue, drawModels: mainDrawKLineModels)
+        case .EMA(_):
+            drawEMA(context: context, limitValue: limitValue, drawModels: mainDrawKLineModels)
+        default:
+            break
         }
-        
     }
     
     /// 画时间线
@@ -218,114 +237,149 @@ class OKKLineMainView: OKView {
             lastDrawDatePoint = drawDatePoint
         }
     }
-    
-    // MARK: - Public
-    
-    public func drawMainView() {
-        setNeedsDisplay()
-    }
-    
-    /// 绘制辅助说明视图
-    ///
-    /// - Parameter model: 绘制的模型 如果为nil 取当前画得最后一个模型
-    public func drawAssistView(model: OKKLineModel?) {
-        
-        guard configuration.dataSource.drawKLineModels.count > 0 else { return }
-        
-        let drawModel = model == nil ? configuration.dataSource.drawKLineModels.last! : model!
-        
-        let date = Date(timeIntervalSince1970: drawModel.date/1000)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        let dateStr = formatter.string(from: date) + " "
-        
-        let openStr = String(format: "开: %.2f ", drawModel.open)
-        let highStr = String(format: "高: %.2f ", drawModel.high)
-        let lowStr = String(format: "低: %.2f ", drawModel.low)
-        let closeStr = String(format: "收: %.2f ", drawModel.close)
-        
-//        for indicator in configuration.mainIndicatorTypes {
-//            switch indicator {
-//            case .MA(let day):
-//                
-//            case .EMA(let day):
-//            default:
-//                break
-//            }
-//        }
-        
-        var string = openStr + highStr + lowStr + closeStr
-        
-        if let ma5 = drawModel.MA5 {
-            string += String(format: "MA5: %.2f ", ma5)
-        }
-        
-        if let ma12 = drawModel.MA12 {
-            string += String(format: "MA12: %.2f ", ma12)
-        }
-        
-        if let ma26 = drawModel.MA26 {
-            string += String(format: "MA26: %.2f ", ma26)
-        }
 
-        let dateAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor.red,
-            NSFontAttributeName : configuration.assistTextFont
-        ]
-        
-        let attrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
-            NSFontAttributeName : configuration.assistTextFont
-        ]
-        
-        let dateAttrsString =  NSMutableAttributedString(string: dateStr, attributes: dateAttrs)
-        
-        let assistAttrsString = NSAttributedString(string: string, attributes: attrs)
-        
-        dateAttrsString.append(assistAttrsString)
-        
-//        dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
-//        dateAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
-        assistLabel.attributedText = dateAttrsString
-
-    }
+    
+    
     
     // MARK: - Private
     
+    private func drawMA(context: CGContext,
+                        limitValue: (minValue: Double, maxValue: Double),
+                        drawModels: [OKKLineModel])
+    {
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        
+        switch configuration.mainIndicatorType {
+        case .MA(let days):
+            
+            for (idx, day) in days.enumerated() {
+                
+                let maLineBrush = OKMALineBrush(brushType: .MA(day),
+                                                context: context,
+                                                configuration: configuration)
+                
+                maLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+                    
+                    if let value = model.MAs?[idx] {
+                    
+                        let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                            self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                        
+                        let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                        
+                        return CGPoint(x: xPosition, y: yPosition)
+                    }
+                    return nil
+                }
+                maLineBrush.draw(drawModels: drawModels)
+            }
+            
+        default:
+            break
+        }
+    }
+    
+    private func drawEMA(context: CGContext,
+                         limitValue: (minValue: Double, maxValue: Double),
+                         drawModels: [OKKLineModel])
+    {
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        
+        switch configuration.mainIndicatorType {
+        case .EMA(let days):
+            
+            for (idx, day) in days.enumerated() {
+                
+                let emaLineBrush = OKMALineBrush(brushType: .EMA(day),
+                                                 context: context,
+                                                 configuration: configuration)
+                
+                emaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+                    
+                    if let value = model.EMAs?[idx] {
+                        
+                        let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                            self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                        
+                        let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                        
+                        return CGPoint(x: xPosition, y: yPosition)
+                    }
+                    return nil
+                }
+                emaLineBrush.draw(drawModels: drawModels)
+            }
+            
+        default:
+            break
+        }
+    }
+    
+    private func fetchMainDrawKLineModels() {
+        
+        guard configuration.dataSource.klineModels.count > 0 else {
+            mainDrawKLineModels = nil
+            return
+        }
+        
+        switch configuration.mainIndicatorType {
+        case .MA(_):
+            let maModel = OKMAModel(indicatorType: configuration.mainIndicatorType,
+                                    klineModels: configuration.dataSource.klineModels)
+            mainDrawKLineModels = maModel.fetchDrawMAData(drawRange: configuration.dataSource.drawRange)
+            
+        case .EMA(_):
+            let emaModel = OKEMAModel(indicatorType: configuration.mainIndicatorType,
+                                      klineModels: configuration.dataSource.klineModels)
+            mainDrawKLineModels = emaModel.fetchDrawEMAData(drawRange: configuration.dataSource.drawRange)
+        default:
+            mainDrawKLineModels = configuration.dataSource.drawKLineModels
+        }
+    }
+    
     private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
-        guard configuration.dataSource.drawKLineModels.count > 0 else {
+        guard let mainDrawKLineModels = mainDrawKLineModels else {
             return nil
         }
         
-        let firstModel = configuration.dataSource.drawKLineModels[0]
-        var minValue = firstModel.low
-        var maxValue = firstModel.high
+        var minValue = mainDrawKLineModels[0].low
+        var maxValue = mainDrawKLineModels[0].high
         
         // 先求K线数据的最大最小
-        for model in configuration.dataSource.drawKLineModels {
+        for model in mainDrawKLineModels {
             if model.low < minValue {
                 minValue = model.low
             }
             if model.high > maxValue {
                 maxValue = model.high
             }
-        }
-        
-        // 求指标数据的最大最小
-        for indicators in drawIndicationDatas {
-            for value in indicators {
-                if value != nil {
-                    if value! > maxValue {
-                        maxValue = value!
-                    }
-                    if value! < minValue {
-                        minValue = value!
+            // 求指标数据的最大最小
+            switch configuration.mainIndicatorType {
+            case .MA(_):
+                if let MAs = model.MAs {
+                    for value in MAs {
+                        if let value = value {
+                            minValue = value < minValue ? value : minValue
+                            maxValue = value > maxValue ? value : maxValue
+                        }
                     }
                 }
+            case .EMA(_):
+                if let EMAs = model.EMAs {
+                    for value in EMAs {
+                        if let value = value {
+                            minValue = value < minValue ? value : minValue
+                            maxValue = value > maxValue ? value : maxValue
+                        }
+                    }
+                }
+            default:
+                break
             }
         }
         return (minValue, maxValue)
     }
 }
+
 

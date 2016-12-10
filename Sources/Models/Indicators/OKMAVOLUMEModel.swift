@@ -9,17 +9,18 @@
 import Foundation
 
 struct OKMAVOLUMEModel {
-    let day: Int
+    
+    let indicatorType: OKIndicatorType
     let klineModels: [OKKLineModel]
     
-    init(day: Int, klineModels: [OKKLineModel]) {
-        self.day = day
+    init(indicatorType: OKIndicatorType, klineModels: [OKKLineModel]) {
+        self.indicatorType = indicatorType
         self.klineModels = klineModels
     }
     
-    public func fetchDrawMAVOLUMEData(drawRange: NSRange?) -> [Double?] {
+    public func fetchDrawMAVOLUMEData(drawRange: NSRange?) -> [OKKLineModel] {
         
-        var datas: [Double?] = []
+        var datas = [OKKLineModel]()
         
         guard klineModels.count > 0 else {
             return datas
@@ -27,15 +28,21 @@ struct OKMAVOLUMEModel {
         
         for (index, model) in klineModels.enumerated() {
             
-            if index < (day - 1) {
-                datas.append(nil)
+            model.sumVolume = model.volume + (index > 0 ? klineModels[index - 1].sumVolume! : 0)
+            
+            switch indicatorType {
+            case .MA_VOLUME(let days):
+                var values = [Double?]()
+                for day in days {
+                    
+                    values.append(handleMA_VOLUME(day: day, model: model, index: index, models: klineModels))
+                }
+                model.MA_VOLUMEs = values
+            default:
+                break
             }
-            else if index == (day - 1) {
-                datas.append(model.sumVolume / Double(day))
-            }
-            else {
-                datas.append((model.sumVolume - klineModels[index - day].sumVolume) / Double(day))
-            }
+            
+            datas.append(model)
         }
         
         if let range = drawRange {
@@ -44,15 +51,15 @@ struct OKMAVOLUMEModel {
             return datas
         }
     }
-//    private class func handleMA_VOLUME(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
-//        if index < (day - 1) {
-//            return nil
-//        }
-//        else if index == (day - 1) {
-//            return model.sumVolume / Double(day)
-//        }
-//        else {
-//            return (model.sumVolume - models[index - day].sumVolume) / Double(day)
-//        }
-//    }
+    private func handleMA_VOLUME(day: Int, model: OKKLineModel, index: Int, models: [OKKLineModel]) -> Double? {
+        if day <= 0 || index < (day - 1) {
+            return nil
+        }
+        else if index == (day - 1) {
+            return model.sumVolume! / Double(day)
+        }
+        else {
+            return (model.sumVolume! - models[index - day].sumVolume!) / Double(day)
+        }
+    }
 }
