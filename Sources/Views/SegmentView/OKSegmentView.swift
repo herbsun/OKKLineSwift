@@ -20,7 +20,7 @@ enum OKSegmentDirection {
 @objc
 protocol OKSegmentViewDelegate: NSObjectProtocol {
     @objc
-    optional func didSelectedSegment(segmentView: OKSegmentView, index: Int)
+    optional func didSelectedSegment(segmentView: OKSegmentView, index: Int, title: String)
 }
 
 
@@ -30,7 +30,7 @@ class OKSegmentView: OKView {
     public var titles: [String] = [String]()
     public var direction: OKSegmentDirection = .horizontal
     public weak var delegate: OKSegmentViewDelegate?
-    public var didSelectedSegment: ((_ segmentView: OKSegmentView, _ index: Int) -> Void)?
+    public var didSelectedSegment: ((_ segmentView: OKSegmentView, _ result: (index: Int, title: String)) -> Void)?
     
     private var scrollView: UIScrollView!
     private var btns = [UIButton]()
@@ -102,8 +102,8 @@ class OKSegmentView: OKView {
     
     @objc
     private func selectedAction(_ sender: UIButton) {
-        delegate?.didSelectedSegment?(segmentView: self, index: sender.tag)
-        didSelectedSegment?(self, sender.tag)
+        delegate?.didSelectedSegment?(segmentView: self, index: sender.tag, title: titles[sender.tag])
+        didSelectedSegment?(self, (sender.tag, titles[sender.tag]))
     }
     
     /*

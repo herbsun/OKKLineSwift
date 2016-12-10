@@ -115,10 +115,10 @@ class OKKLineVolumeView: OKView {
         context.strokePath()
         
         // 画指标线
-        switch configuration.mainIndicatorType {
-        case .MA(_):
+        switch configuration.volumeIndicatorType {
+        case .MA_VOLUME(_):
             drawMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
-        case .EMA(_):
+        case .EMA_VOLUME(_):
             drawEMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
         default:
             break
