@@ -140,7 +140,22 @@ class OKKLineMainView: OKView {
                 let maStr = String(format: "EMA\(day): %.2f ", drawModel.EMAs![idx]!)
                 drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
             }
-            
+        case .BOLL(let day):
+            var string = "BOLL(\(day),2) "
+            if let value = drawModel.BOLL_UP {
+                string += String(format: "UP: %.2f ", value)
+            }
+            if let value = drawModel.BOLL_MB {
+                string += String(format: "MB: %.2f ", value)
+            }
+            if let value = drawModel.BOLL_DN {
+                string += String(format: "DN: %.2f ", value)
+            }
+            let attrs: [String : Any] = [
+                NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+                NSFontAttributeName : configuration.assistTextFont
+            ]
+            drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
         default:
             break
         }
@@ -234,6 +249,8 @@ class OKKLineMainView: OKView {
             drawMA(context: context, limitValue: limitValue, drawModels: mainDrawKLineModels)
         case .EMA(_):
             drawEMA(context: context, limitValue: limitValue, drawModels: mainDrawKLineModels)
+        case .BOLL(_):
+            drawBOLL(context: context, limitValue: limitValue, drawModels: mainDrawKLineModels)
         default:
             break
         }
@@ -345,10 +362,56 @@ class OKKLineMainView: OKView {
                 }
                 emaLineBrush.draw(drawModels: drawModels)
             }
-            
         default:
             break
         }
+    }
+    
+    private func drawBOLL(context: CGContext,
+                          limitValue: (minValue: Double, maxValue: Double),
+                          drawModels: [OKKLineModel])
+    {
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        
+        let MBLineBrush = OKLineBrush(indicatorType: .BOLL_MB, context: context, configuration: configuration)
+        MBLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.BOLL_MB {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        MBLineBrush.draw(drawModels: drawModels)
+        
+        let UPLineBrush = OKLineBrush(indicatorType: .BOLL_UP, context: context, configuration: configuration)
+        UPLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.BOLL_UP {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        UPLineBrush.draw(drawModels: drawModels)
+        
+        let DNLineBrush = OKLineBrush(indicatorType: .BOLL_DN, context: context, configuration: configuration)
+        DNLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
+            
+            if let value = model.BOLL_DN {
+                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
+                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
+                return CGPoint(x: xPosition, y: yPosition)
+            }
+            return nil
+        }
+        DNLineBrush.draw(drawModels: drawModels)
+
     }
     
     private func fetchMainDrawKLineModels() {
@@ -368,6 +431,10 @@ class OKKLineMainView: OKView {
             let emaModel = OKEMAModel(indicatorType: configuration.mainIndicatorType,
                                       klineModels: configuration.dataSource.klineModels)
             mainDrawKLineModels = emaModel.fetchDrawEMAData(drawRange: configuration.dataSource.drawRange)
+        case .BOLL(_):
+            let bollModel = OKBOLLModel(indicatorType: configuration.mainIndicatorType,
+                                        klineModels: configuration.dataSource.klineModels)
+            mainDrawKLineModels = bollModel.fetchDrawBOLLData(drawRange: configuration.dataSource.drawRange)
         default:
             mainDrawKLineModels = configuration.dataSource.drawKLineModels
         }
@@ -410,6 +477,21 @@ class OKKLineMainView: OKView {
                         }
                     }
                 }
+            case .BOLL(_):
+                if let value = model.BOLL_MB {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+                
+                if let value = model.BOLL_UP {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+                if let value = model.BOLL_DN {
+                    minValue = value < minValue ? value : minValue
+                    maxValue = value > maxValue ? value : maxValue
+                }
+            
             default:
                 break
             }

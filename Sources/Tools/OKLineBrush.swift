@@ -42,7 +42,12 @@ class OKLineBrush {
             context.setStrokeColor(configuration.theme.KDJ_DColor)
         case .KDJ_J:
             context.setStrokeColor(configuration.theme.KDJ_JColor)
-            
+        case .BOLL_MB:
+            context.setStrokeColor(configuration.theme.BOLL_MBColor)
+        case .BOLL_UP:
+            context.setStrokeColor(configuration.theme.BOLL_UPColor)
+        case .BOLL_DN:
+            context.setStrokeColor(configuration.theme.BOLL_DNColor)
         default: break
         }
     }

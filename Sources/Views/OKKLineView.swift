@@ -52,7 +52,7 @@ class OKKLineView: OKView {
             make.leading.trailing.bottom.equalToSuperview()
         }
         
-        let mainViewIndicatorTitles = ["MA", "EMA"]
+        let mainViewIndicatorTitles = ["MA", "EMA", "BOLL"]
         mainViewIndicatorSegmentView = OKSegmentView(direction: .vertical,
                                                      titles: mainViewIndicatorTitles,
                                                      configuration: configuration)
@@ -62,6 +62,8 @@ class OKKLineView: OKView {
                 self?.configuration.mainIndicatorType = .MA([5, 12, 26])
             } else if result.index == 1 {
                 self?.configuration.mainIndicatorType = .EMA([5, 12, 26])
+            } else if result.index == 2 {
+                self?.configuration.mainIndicatorType = .BOLL(20)
             }
             self?.klineDrawView.drawKLineView(true)
         }
@@ -96,7 +98,7 @@ class OKKLineView: OKView {
             make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.volumeScale)
         }
         
-        let accessoryViewIndicatorTitles = ["MACD", "KDJ", "BOLL"]
+        let accessoryViewIndicatorTitles = ["MACD", "KDJ"]
         accessoryViewIndicatorSegmentView = OKSegmentView(direction: .vertical,
                                                      titles: accessoryViewIndicatorTitles,
                                                      configuration: configuration)

@@ -28,7 +28,7 @@ enum OKIndicatorType {
     case EMA_VOLUME([Int])
     case DIF, DEA, MACD
     case KDJ, KDJ_K, KDJ_D, KDJ_J
-    case BOLL(Int)
+    case BOLL(Int), BOLL_MB, BOLL_UP, BOLL_DN
     case RSI
     case VOL
     case DMI
@@ -167,6 +167,9 @@ class OKTheme {
     var KDJ_KColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
     var KDJ_DColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
     var KDJ_JColor: CGColor = UIColor(hexRGB: 0x9998EA).cgColor
+    var BOLL_MBColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
+    var BOLL_UPColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
+    var BOLL_DNColor: CGColor = UIColor(hexRGB: 0x9998EA).cgColor
     public func MAColor(day: Int) -> CGColor {
         return UIColor(hexRGB: 0x4498EA + day).cgColor
     }
