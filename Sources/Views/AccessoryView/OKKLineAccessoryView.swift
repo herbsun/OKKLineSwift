@@ -42,7 +42,7 @@ class OKKLineAccessoryView: OKView {
         self.configuration = configuration
         assistInfoLabel = UILabel()
         assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
-        assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
+        assistInfoLabel.textColor = configuration.assistTextColor
         addSubview(assistInfoLabel)
         assistInfoLabel.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
@@ -74,7 +74,7 @@ class OKKLineAccessoryView: OKView {
         
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.accessoryViewBgColor)
+        context.setFillColor(configuration.accessoryViewBgColor.cgColor)
         context.fill(rect)
         
         // 没有数据 不绘制
@@ -115,38 +115,71 @@ class OKKLineAccessoryView: OKView {
         let drawAttrsString = NSMutableAttributedString()
         switch configuration.accessoryindicatorType {
         case .MACD:
-            var string = "MACD(12,26,9) "
+            let attrs: [String : Any] = [
+                NSForegroundColorAttributeName : configuration.assistTextColor,
+                NSFontAttributeName : configuration.assistTextFont
+            ]
+            drawAttrsString.append(NSAttributedString(string: "MACD(12,26,9) ", attributes: attrs))
+            
+            
             if let dif = drawModel.DIF {
-                string += String(format: "DIF: %.2f ", dif)
+                let difAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.DIFColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let difAttrsStr = NSAttributedString(string: String(format: "DIF: %.2f ", dif), attributes: difAttrs)
+                drawAttrsString.append(difAttrsStr)
             }
             if let dea = drawModel.DEA {
-                string += String(format: "DEA: %.2f ", dea)
+                let deaAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.DEAColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let deaAttrsStr = NSAttributedString(string: String(format: "DEA: %.2f ", dea), attributes: deaAttrs)
+                drawAttrsString.append(deaAttrsStr)
             }
             if let macd = drawModel.MACD {
-                string += String(format: "MACD: %.2f ", macd)
+                
+                let macdAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.MACDColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let macdAttrsStr = NSAttributedString(string: String(format: "MACD: %.2f ", macd), attributes: macdAttrs)
+                drawAttrsString.append(macdAttrsStr)
             }
-            let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
-                NSFontAttributeName : configuration.assistTextFont
-            ]
-            drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
             
         case .KDJ:
-            var string = "KDJ(9,3,3) "
-            if let value = drawModel.KDJ_K {
-                string += String(format: "K: %.2f ", value)
-            }
-            if let value = drawModel.KDJ_D {
-                string += String(format: "D: %.2f ", value)
-            }
-            if let value = drawModel.KDJ_J {
-                string += String(format: "J: %.2f ", value)
-            }
+            
             let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+                NSForegroundColorAttributeName : configuration.assistTextColor,
                 NSFontAttributeName : configuration.assistTextFont
             ]
-            drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
+            drawAttrsString.append(NSAttributedString(string: "KDJ(9,3,3) ", attributes: attrs))
+            
+            if let value = drawModel.KDJ_K {
+                let kAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.KDJ_KColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let kAttrsStr = NSAttributedString(string: String(format: "K: %.2f ", value), attributes: kAttrs)
+                drawAttrsString.append(kAttrsStr)
+            }
+            if let value = drawModel.KDJ_D {
+                let dAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.KDJ_DColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let dAttrsStr = NSAttributedString(string: String(format: "D: %.2f ", value), attributes: dAttrs)
+                drawAttrsString.append(dAttrsStr)
+            }
+            if let value = drawModel.KDJ_J {
+                let jAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.KDJ_JColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let jAttrsStr = NSAttributedString(string: String(format: "J: %.2f ", value), attributes: jAttrs)
+                drawAttrsString.append(jAttrsStr)
+            }
             
         default:
             break
@@ -182,7 +215,7 @@ class OKKLineAccessoryView: OKView {
                 startPoint.y = macd > 0 ? middleY - offsetValue : middleY
                 endPoint.y = macd > 0 ? middleY : middleY + offsetValue
                 
-                context.setStrokeColor(macd > 0 ? configuration.increaseColor : configuration.decreaseColor)
+                context.setStrokeColor(macd > 0 ? configuration.increaseColor.cgColor : configuration.decreaseColor.cgColor)
                 context.setLineWidth(configuration.klineWidth)
                 context.strokeLineSegments(between: [startPoint, endPoint])
             }
@@ -254,7 +287,7 @@ class OKKLineAccessoryView: OKView {
         }
         KDJ_DLineBrush.draw(drawModels: drawModels)
         
-        let KDJ_JLineBrush = OKLineBrush(indicatorType: .KDJ_K, context: context, configuration: configuration)
+        let KDJ_JLineBrush = OKLineBrush(indicatorType: .KDJ_J, context: context, configuration: configuration)
         KDJ_JLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_J {

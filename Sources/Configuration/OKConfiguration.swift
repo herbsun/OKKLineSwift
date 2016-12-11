@@ -71,27 +71,27 @@ public final class OKConfiguration {
     /// 全局主题
     let theme: OKTheme = OKTheme()
     /// 主图图表的背景色
-    var mainViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
+    var mainViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
     /// 成交量视图背景色
-    var volumeViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
+    var volumeViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
     /// 指标视图背景色
-    var accessoryViewBgColor: CGColor = UIColor(hexRGB: 0x181C20).cgColor
+    var accessoryViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
     
     /// 辅助视图背景色(e.g. 日期的背景色)
-    var assistViewBgColor: CGColor = UIColor(hexRGB: 0x1D2227).cgColor
+    var assistViewBgColor: OKColor = OKColor(hexRGB: 0x1D2227)
     /// 辅助视图字体颜色(e.g. 日期的字体颜色)
-    var assistTextColor: CGColor = UIColor(hexRGB: 0x565A64).cgColor
+    var assistTextColor: OKColor = OKColor(hexRGB: 0x565A64)
     /// 辅助视图字体大小(e.g. 日期的字体大小)
-    var assistTextFont: UIFont = UIFont.systemFont(ofSize: 11)
+    var assistTextFont: OKFont = OKFont.systemFont(ofSize: 11)
     /// 涨的颜色
-    var increaseColor: CGColor = UIColor(hexRGB: 0xFF5353).cgColor
+    var increaseColor: OKColor = OKColor(hexRGB: 0xFF5353)
     /// 跌的颜色
-    var decreaseColor: CGColor = UIColor(hexRGB: 0x00B07C).cgColor
+    var decreaseColor: OKColor = OKColor(hexRGB: 0x00B07C)
     
     /// 分时线颜色
-    var realtimeLineColor: CGColor = UIColor(hexRGB: 0x49A5FF).cgColor
+    var realtimeLineColor: OKColor = OKColor(hexRGB: 0x49A5FF)
     /// 长按辅助线颜色
-    var longPressLineColor: CGColor = UIColor(hexRGB: 0xE1E2E6).cgColor
+    var longPressLineColor: OKColor = OKColor(hexRGB: 0xE1E2E6)
     /// 长按辅助线宽度
     var longPressLineWidth: CGFloat = 0.8
     
@@ -153,28 +153,30 @@ public final class OKConfiguration {
     /// 指标图分时线宽度
     var accessoryLineWidth: CGFloat = 0.5
     /// 辅助图指标类型
-    var accessoryindicatorType: OKIndicatorType = .KDJ
+    var accessoryindicatorType: OKIndicatorType = .MACD
  
     // MARK: - SegmentView
-    var  showSegmentView: Bool = true
+    var showSegmentView: Bool = true
 
 }
 
 /// 皮肤主题
 class OKTheme {
-    var DIFColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
-    var DEAColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var KDJ_KColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
-    var KDJ_DColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var KDJ_JColor: CGColor = UIColor(hexRGB: 0x9998EA).cgColor
-    var BOLL_MBColor: CGColor = UIColor(hexRGB: 0x4498EA).cgColor
-    var BOLL_UPColor: CGColor = UIColor(hexRGB: 0xFF783C).cgColor
-    var BOLL_DNColor: CGColor = UIColor(hexRGB: 0x9998EA).cgColor
-    public func MAColor(day: Int) -> CGColor {
-        return UIColor(hexRGB: 0x4498EA + day).cgColor
+    var DIFColor: OKColor = OKColor(hexRGB: 0xFF8D1D)
+    var DEAColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
+    var MACDColor: OKColor = OKColor(hexRGB: 0xFFC90E)
+    var KDJ_KColor: OKColor = OKColor(hexRGB: 0xFF8D1D)
+    var KDJ_DColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
+    var KDJ_JColor: OKColor = OKColor(hexRGB: 0xE970DC)
+    var BOLL_MBColor: OKColor = OKColor(hexRGB: 0xFFAEBF)
+    var BOLL_UPColor: OKColor = OKColor(hexRGB: 0xFFC90E)
+    var BOLL_DNColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
+    public func MAColor(day: Int) -> OKColor {
+        return OKColor(hexRGB: 0x4498EA + day)
     }
-    public func EMAColor(day: Int) -> CGColor {
-        return UIColor(hexRGB: 0x4498EA + day).cgColor
+    
+    public func EMAColor(day: Int) -> OKColor {
+        return OKColor(hexRGB: 0x4498EA + day)
     }
 }
 

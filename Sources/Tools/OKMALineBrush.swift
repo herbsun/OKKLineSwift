@@ -40,13 +40,13 @@ class OKMALineBrush {
         
         switch brushType {
         case .MA(let day):
-            context.setStrokeColor(configuration.theme.MAColor(day: day))
+            context.setStrokeColor(configuration.theme.MAColor(day: day).cgColor)
         case .EMA(let day):
-            context.setStrokeColor(configuration.theme.EMAColor(day: day))
+            context.setStrokeColor(configuration.theme.EMAColor(day: day).cgColor)
         case .MA_VOLUME(let day):
-            context.setStrokeColor(configuration.theme.MAColor(day: day))
+            context.setStrokeColor(configuration.theme.MAColor(day: day).cgColor)
         case .EMA_VOLUME(let day):
-            context.setStrokeColor(configuration.theme.EMAColor(day: day))
+            context.setStrokeColor(configuration.theme.EMAColor(day: day).cgColor)
         }
     }
     

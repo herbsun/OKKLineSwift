@@ -46,7 +46,7 @@ class OKKLineMainView: OKView {
         self.init()
         self.configuration = configuration
         dateAttributes  = [
-            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+            NSForegroundColorAttributeName : configuration.assistTextColor,
             NSFontAttributeName : configuration.assistTextFont
         ]
         
@@ -99,7 +99,7 @@ class OKKLineMainView: OKView {
         let dateStr = formatter.string(from: date) + " "
         
         let dateAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor.red,
+            NSForegroundColorAttributeName : configuration.assistTextColor,
             NSFontAttributeName : configuration.assistTextFont
         ]
         drawAttrsString.append(NSAttributedString(string: dateStr, attributes: dateAttrs))
@@ -111,7 +111,7 @@ class OKKLineMainView: OKView {
         
         let string = openStr + highStr + lowStr + closeStr
         let attrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+            NSForegroundColorAttributeName : configuration.assistTextColor,
             NSFontAttributeName : configuration.assistTextFont
         ]
         
@@ -123,7 +123,7 @@ class OKKLineMainView: OKView {
             for (idx, day) in days.enumerated() {
                 
                 let attrs: [String : Any] = [
-                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.MAColor(day: day)),
+                    NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
                 let maStr = String(format: "MA\(day): %.2f ", drawModel.MAs![idx]!)
@@ -134,7 +134,7 @@ class OKKLineMainView: OKView {
             for (idx, day) in days.enumerated() {
                 
                 let attrs: [String : Any] = [
-                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.EMAColor(day: day)),
+                    NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
                 let maStr = String(format: "EMA\(day): %.2f ", drawModel.EMAs![idx]!)
@@ -152,7 +152,7 @@ class OKKLineMainView: OKView {
                 string += String(format: "DN: %.2f ", value)
             }
             let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+                NSForegroundColorAttributeName : configuration.assistTextColor,
                 NSFontAttributeName : configuration.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
@@ -174,7 +174,7 @@ class OKKLineMainView: OKView {
         }
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.mainViewBgColor)
+        context.setFillColor(configuration.mainViewBgColor.cgColor)
         context.fill(rect)
         
         // 没有数据 不绘制
@@ -184,7 +184,7 @@ class OKKLineMainView: OKView {
         }
         
         // 设置日期背景色
-        context.setFillColor(configuration.assistViewBgColor)
+        context.setFillColor(configuration.assistViewBgColor.cgColor)
         let assistRect = CGRect(x: 0,
                                 y: rect.height - configuration.mainBottomAssistViewHeight,
                                 width: rect.width,
@@ -213,7 +213,7 @@ class OKKLineMainView: OKView {
                     // 决定K线颜色
                     let strokeColor = klineModel.open < klineModel.close ?
                         configuration.increaseColor : configuration.decreaseColor
-                    context.setStrokeColor(strokeColor)
+                    context.setStrokeColor(strokeColor.cgColor)
                     
                     // 画开盘-收盘
                     context.setLineWidth(configuration.klineWidth)
@@ -226,7 +226,7 @@ class OKKLineMainView: OKView {
             case .timeLine: // 分时线模式
                 // 画线
                 context.setLineWidth(configuration.realtimeLineWidth)
-                context.setStrokeColor(configuration.realtimeLineColor)
+                context.setStrokeColor(configuration.realtimeLineColor.cgColor)
                 if index == 0 { // 处理第一个点
                     context.move(to: closePoint)
                 } else {

@@ -41,8 +41,8 @@ class OKKLineVolumeView: OKView {
         self.init()
         self.configuration = configuration
         assistInfoLabel = UILabel()
-        assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
-        assistInfoLabel.textColor = UIColor(cgColor: configuration.assistTextColor)
+        assistInfoLabel.font = OKFont.systemFont(size: 11)
+        assistInfoLabel.textColor = configuration.assistTextColor
         addSubview(assistInfoLabel)
         assistInfoLabel.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
@@ -80,7 +80,7 @@ class OKKLineVolumeView: OKView {
         let volumeStr = String(format: "VOLUME %.2f  ", drawModel.volume)
         
         let volumeAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+            NSForegroundColorAttributeName : configuration.assistTextColor,
             NSFontAttributeName : configuration.assistTextFont
         ]
         drawAttrsString.append(NSAttributedString(string: volumeStr, attributes: volumeAttrs))
@@ -91,7 +91,7 @@ class OKKLineVolumeView: OKView {
             for (idx, day) in days.enumerated() {
                 
                 let attrs: [String : Any] = [
-                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.MAColor(day: day)),
+                    NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
                 let maStr = String(format: "MAVOL\(day): %.2f ", drawModel.MA_VOLUMEs![idx]!)
@@ -102,7 +102,7 @@ class OKKLineVolumeView: OKView {
             for (idx, day) in days.enumerated() {
                 
                 let attrs: [String : Any] = [
-                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.EMAColor(day: day)),
+                    NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
                 let maStr = String(format: "EMAVOL\(day): %.2f ", drawModel.EMA_VOLUMEs![idx]!)
@@ -124,7 +124,7 @@ class OKKLineVolumeView: OKView {
         }
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.volumeViewBgColor)
+        context.setFillColor(configuration.volumeViewBgColor.cgColor)
         context.fill(rect)
         
         // 没有数据 不绘制
@@ -149,7 +149,7 @@ class OKKLineVolumeView: OKView {
             
             let strokeColor = klineModel.open < klineModel.close ?
                 configuration.increaseColor : configuration.decreaseColor
-            context.setStrokeColor(strokeColor)
+            context.setStrokeColor(strokeColor.cgColor)
             context.setLineWidth(configuration.klineWidth)
             context.strokeLineSegments(between: [startPoint, endPoint])
         }

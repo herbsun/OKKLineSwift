@@ -46,7 +46,7 @@ class OKSegmentView: OKView {
         self.titles = titles
         self.configuration = configuration
         
-        backgroundColor = OKColor(cgColor: configuration.mainViewBgColor)
+        backgroundColor = configuration.mainViewBgColor
         
         scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
@@ -56,7 +56,7 @@ class OKSegmentView: OKView {
         for (index, title) in titles.enumerated() {
             let btn = UIButton(type: .custom)
             btn.setTitle(title, for: .normal)
-            btn.setTitleColor(UIColor.white, for: .normal)
+            btn.setTitleColor(OKColor.white, for: .normal)
             btn.titleLabel?.font = OKFont.systemFont(size: 12)
             btn.tag = index
             btn.addTarget(self, action: #selector(selectedAction(_:)), for: .touchUpInside)

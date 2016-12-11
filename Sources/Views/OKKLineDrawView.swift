@@ -117,7 +117,7 @@ class OKKLineDrawView: OKView {
         
         indicatorView = UIView()
         indicatorView.isHidden = true
-        indicatorView.backgroundColor = UIColor(cgColor: configuration.longPressLineColor)
+        indicatorView.backgroundColor = configuration.longPressLineColor
         addSubview(indicatorView)
         indicatorView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()

@@ -33,21 +33,21 @@ class OKLineBrush {
         
         switch indicatorType {
         case .DIF:
-            context.setStrokeColor(configuration.theme.DIFColor)
+            context.setStrokeColor(configuration.theme.DIFColor.cgColor)
         case .DEA:
-            context.setStrokeColor(configuration.theme.DEAColor)
+            context.setStrokeColor(configuration.theme.DEAColor.cgColor)
         case .KDJ_K:
-            context.setStrokeColor(configuration.theme.KDJ_KColor)
+            context.setStrokeColor(configuration.theme.KDJ_KColor.cgColor)
         case .KDJ_D:
-            context.setStrokeColor(configuration.theme.KDJ_DColor)
+            context.setStrokeColor(configuration.theme.KDJ_DColor.cgColor)
         case .KDJ_J:
-            context.setStrokeColor(configuration.theme.KDJ_JColor)
+            context.setStrokeColor(configuration.theme.KDJ_JColor.cgColor)
         case .BOLL_MB:
-            context.setStrokeColor(configuration.theme.BOLL_MBColor)
+            context.setStrokeColor(configuration.theme.BOLL_MBColor.cgColor)
         case .BOLL_UP:
-            context.setStrokeColor(configuration.theme.BOLL_UPColor)
+            context.setStrokeColor(configuration.theme.BOLL_UPColor.cgColor)
         case .BOLL_DN:
-            context.setStrokeColor(configuration.theme.BOLL_DNColor)
+            context.setStrokeColor(configuration.theme.BOLL_DNColor.cgColor)
         default: break
         }
     }
