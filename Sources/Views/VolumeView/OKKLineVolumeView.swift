@@ -64,15 +64,56 @@ class OKKLineVolumeView: OKView {
     
     public func drawVolumeAssistView(model: OKKLineModel?) {
         
-        let volumeModel = model == nil ? configuration.dataSource.drawKLineModels.last! : model!
+        guard let volumeDrawKLineModels = volumeDrawKLineModels else { return }
         
-        var volumeStr = String(format: "VOLUME %.2f", volumeModel.volume)
+        var drawModel = volumeDrawKLineModels.last!
         
-        let attrs: [String : Any] = [
+        if let model = model {
+            for volumeModel in volumeDrawKLineModels {
+                if model.date == volumeModel.date {
+                    drawModel = volumeModel
+                    break
+                }
+            }
+        }
+        let drawAttrsString = NSMutableAttributedString()
+        let volumeStr = String(format: "VOLUME %.2f  ", drawModel.volume)
+        
+        let volumeAttrs: [String : Any] = [
             NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
             NSFontAttributeName : configuration.assistTextFont
         ]
-        assistInfoLabel.attributedText = NSAttributedString(string: volumeStr, attributes: attrs)
+        drawAttrsString.append(NSAttributedString(string: volumeStr, attributes: volumeAttrs))
+        
+        switch configuration.volumeIndicatorType {
+        case .MA_VOLUME(let days):
+            
+            for (idx, day) in days.enumerated() {
+                
+                let attrs: [String : Any] = [
+                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.MAColor(day: day)),
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let maStr = String(format: "MAVOL\(day): %.2f ", drawModel.MA_VOLUMEs![idx]!)
+                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+            }
+            
+        case .EMA_VOLUME(let days):
+            for (idx, day) in days.enumerated() {
+                
+                let attrs: [String : Any] = [
+                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.EMAColor(day: day)),
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let maStr = String(format: "EMAVOL\(day): %.2f ", drawModel.EMA_VOLUMEs![idx]!)
+                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+            }
+            
+        default:
+            break
+        }
+        
+        assistInfoLabel.attributedText = drawAttrsString
     }
     
     override func draw(_ rect: CGRect) {

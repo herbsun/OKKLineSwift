@@ -107,7 +107,7 @@ class OKKLineView: OKView {
             } else if result.index == 1 {
                 self?.configuration.accessoryindicatorType = .KDJ
             } else if result.index == 2 {
-                self?.configuration.accessoryindicatorType = .BOLL
+                self?.configuration.accessoryindicatorType = .BOLL(20)
             }
             self?.klineDrawView.drawKLineView(true)
         }

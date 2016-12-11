@@ -17,6 +17,7 @@ struct OKEMAModel {
         self.indicatorType = indicatorType
         self.klineModels = klineModels
     }
+    
     public func fetchDrawEMAData(drawRange: NSRange? = nil) -> [OKKLineModel] {
         
         var datas = [OKKLineModel]()

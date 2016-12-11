@@ -80,41 +80,74 @@ class OKKLineMainView: OKView {
         
         guard let mainDrawKLineModels = mainDrawKLineModels else { return }
         
-        let drawModel = model == nil ? mainDrawKLineModels.last! : model!
+        var drawModel = mainDrawKLineModels.last!
+        
+        if let model = model {
+            for mainModel in mainDrawKLineModels {
+                if model.date == mainModel.date {
+                    drawModel = mainModel
+                    break
+                }
+            }
+        }
+        
+        let drawAttrsString = NSMutableAttributedString()
         
         let date = Date(timeIntervalSince1970: drawModel.date/1000)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         let dateStr = formatter.string(from: date) + " "
         
+        let dateAttrs: [String : Any] = [
+            NSForegroundColorAttributeName : UIColor.red,
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        drawAttrsString.append(NSAttributedString(string: dateStr, attributes: dateAttrs))
+
         let openStr = String(format: "开: %.2f ", drawModel.open)
         let highStr = String(format: "高: %.2f ", drawModel.high)
         let lowStr = String(format: "低: %.2f ", drawModel.low)
         let closeStr = String(format: "收: %.2f ", drawModel.close)
         
-        var string = openStr + highStr + lowStr + closeStr
-        
-        
-        
-        let dateAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor.red,
-            NSFontAttributeName : configuration.assistTextFont
-        ]
-        
+        let string = openStr + highStr + lowStr + closeStr
         let attrs: [String : Any] = [
             NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
             NSFontAttributeName : configuration.assistTextFont
         ]
         
-        let dateAttrsString =  NSMutableAttributedString(string: dateStr, attributes: dateAttrs)
+        drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
         
-        let assistAttrsString = NSAttributedString(string: string, attributes: attrs)
-        
-        dateAttrsString.append(assistAttrsString)
-        
-        dateAttrsString.draw(at: CGPoint(x: 0, y: 0))
-        //        dateAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
-        //        assistLabel.attributedText = dateAttrsString
+        switch configuration.mainIndicatorType {
+        case .MA(let days):
+            
+            for (idx, day) in days.enumerated() {
+                
+                let attrs: [String : Any] = [
+                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.MAColor(day: day)),
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let maStr = String(format: "MA\(day): %.2f ", drawModel.MAs![idx]!)
+                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+            }
+
+        case .EMA(let days):
+            for (idx, day) in days.enumerated() {
+                
+                let attrs: [String : Any] = [
+                    NSForegroundColorAttributeName : UIColor(cgColor: configuration.theme.EMAColor(day: day)),
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let maStr = String(format: "EMA\(day): %.2f ", drawModel.EMAs![idx]!)
+                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+            }
+            
+        default:
+            break
+        }
+ 
+//        drawAttrsString.draw(at: CGPoint(x: 0, y: 0))
+//        drawAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
+        assistLabel.attributedText = drawAttrsString
         
     }
     

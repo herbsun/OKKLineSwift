@@ -15,8 +15,8 @@ import CoreGraphics
 
 enum OKBrushType {
     case MA(Int)
-    case MA_VOLUME(Int)
     case EMA(Int)
+    case MA_VOLUME(Int)
     case EMA_VOLUME(Int)
 }
 

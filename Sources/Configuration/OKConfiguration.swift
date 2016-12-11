@@ -28,7 +28,7 @@ enum OKIndicatorType {
     case EMA_VOLUME([Int])
     case DIF, DEA, MACD
     case KDJ, KDJ_K, KDJ_D, KDJ_J
-    case BOLL
+    case BOLL(Int)
     case RSI
     case VOL
     case DMI

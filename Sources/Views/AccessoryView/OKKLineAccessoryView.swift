@@ -77,13 +77,12 @@ class OKKLineAccessoryView: OKView {
         context.setFillColor(configuration.accessoryViewBgColor)
         context.fill(rect)
         
-        
         // 没有数据 不绘制
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
             return
         }
         
-        //        drawAssistView(model: nil)
+        drawAssistView(model: nil)
         
         switch configuration.accessoryindicatorType {
         case .MACD:
@@ -100,32 +99,63 @@ class OKKLineAccessoryView: OKView {
     public func drawAssistView(model: OKKLineModel?) {
         
         
-        let drawModel = model == nil ? configuration.dataSource.drawKLineModels.last! : model!
+        guard let accessoryDrawKLineModels = accessoryDrawKLineModels else { return }
         
-        var string = "MACD(12,26,9) "
+        var drawModel = accessoryDrawKLineModels.last!
         
-        if let dif = drawModel.DIF {
-            string += String(format: "DIF: %.2f ", dif)
+        if let model = model {
+            for accessoryModel in accessoryDrawKLineModels {
+                if model.date == accessoryModel.date {
+                    drawModel = accessoryModel
+                    break
+                }
+            }
         }
         
-        if let dea = drawModel.DEA {
-            string += String(format: "DEA: %.2f ", dea)
+        let drawAttrsString = NSMutableAttributedString()
+        switch configuration.accessoryindicatorType {
+        case .MACD:
+            var string = "MACD(12,26,9) "
+            if let dif = drawModel.DIF {
+                string += String(format: "DIF: %.2f ", dif)
+            }
+            if let dea = drawModel.DEA {
+                string += String(format: "DEA: %.2f ", dea)
+            }
+            if let macd = drawModel.MACD {
+                string += String(format: "MACD: %.2f ", macd)
+            }
+            let attrs: [String : Any] = [
+                NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+                NSFontAttributeName : configuration.assistTextFont
+            ]
+            drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
+            
+        case .KDJ:
+            var string = "KDJ(9,3,3) "
+            if let value = drawModel.KDJ_K {
+                string += String(format: "K: %.2f ", value)
+            }
+            if let value = drawModel.KDJ_D {
+                string += String(format: "D: %.2f ", value)
+            }
+            if let value = drawModel.KDJ_J {
+                string += String(format: "J: %.2f ", value)
+            }
+            let attrs: [String : Any] = [
+                NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
+                NSFontAttributeName : configuration.assistTextFont
+            ]
+            drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
+            
+        default:
+            break
         }
-        
-        if let macd = drawModel.MACD {
-            string += String(format: "MACD: %.2f ", macd)
-        }
-        
-        let attrs: [String : Any] = [
-            NSForegroundColorAttributeName : UIColor(cgColor: configuration.assistTextColor),
-            NSFontAttributeName : configuration.assistTextFont
-        ]
-        assistInfoLabel.attributedText = NSAttributedString(string: string, attributes: attrs)
+        assistInfoLabel.attributedText = drawAttrsString
     }
     
     
     // MARK: - Private
-    
 
     // MARK: 绘制MACD
     private func drawMACD(context: CGContext, drawModels: [OKKLineModel]) {

@@ -73,8 +73,11 @@ class OKKLineModel: OKDescriptable {
     var KDJ_J: Double?
     
     // MARK: - BOLL
+    // 中轨线
     var BOOL_MB: Double?
+    // 上轨线
     var BOOL_UP: Double?
+    // 下轨线
     var BOOL_DN: Double?
     
     init(klineDataType: OKKLineDataType = .BTC,
