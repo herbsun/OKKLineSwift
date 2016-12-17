@@ -16,7 +16,7 @@ extension String {
     
     func stringSize(maxSize: CGSize, fontSize: CGFloat) -> CGSize {
         
-        let attrs = [NSFontAttributeName : UIFont.systemFont(ofSize: fontSize)]
+        let attrs = [NSFontAttributeName : OKFont.systemFont(ofSize: fontSize)]
         
         let text: NSString = NSString(cString: self.cString(using: String.Encoding.utf8)!,
                                       encoding: String.Encoding.utf8.rawValue)!

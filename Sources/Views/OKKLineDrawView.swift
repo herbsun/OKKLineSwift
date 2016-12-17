@@ -22,16 +22,13 @@ class OKKLineDrawView: OKView {
     private var contentView: UIView!
     
     private var mainView: OKKLineMainView!
-    private var mainViewH: CGFloat = 0.0
-    private var mainSegmentView: OKSegmentView!
+    private var mainValueView: OKValueView!
     
     private var volumeView: OKKLineVolumeView!
-    private var volumeViewH: CGFloat = 0.0
-    private var volumeSegmentView: OKSegmentView!
+    private var volumeValueView: OKValueView!
     
     private var accessoryView: OKKLineAccessoryView!
-    private var accessoryViewH: CGFloat = 0.0
-    private var accessorySegmentView: OKSegmentView!
+    private var accessoryValueView: OKValueView!
     
     private var indicatorView: UIView!
     
@@ -58,6 +55,7 @@ class OKKLineDrawView: OKView {
     convenience init(configuration: OKConfiguration) {
         self.init()
         self.configuration = configuration
+        backgroundColor = configuration.mainViewBgColor
         /// Parent View
         contentView = UIView()
         // 捏合手势
@@ -73,28 +71,43 @@ class OKKLineDrawView: OKView {
         // 移动手势
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
         contentView.addGestureRecognizer(panGesture)
-        
         addSubview(contentView)
         
         contentView.snp.makeConstraints { (make) in
-            make.top.leading.bottom.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.top.trailing.bottom.equalToSuperview()
+            make.leading.equalTo(50)
         }
         
         /// Main View
         mainView = OKKLineMainView(configuration: configuration)
+        mainView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
+            if let limitValue = limitValue {
+                self?.mainValueView.limitValue = limitValue
+            }
+        }
         contentView.addSubview(mainView)
         mainView.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.mainScale)
         }
         
-        mainSegmentView = OKSegmentView()
-        addSubview(mainSegmentView)
-        // TODO: mainSegmentView
+        mainValueView = OKValueView(configuration: configuration)
+        addSubview(mainValueView)
+        mainValueView.snp.makeConstraints { (make) in
+            make.trailing.equalTo(contentView.snp.leading)
+            make.leading.equalToSuperview()
+            make.top.equalTo(configuration.mainTopAssistViewHeight)
+            make.bottom.equalTo(mainView.snp.bottom).offset(-configuration.mainBottomAssistViewHeight)
+        }
+        
         
         /// Volume View
         volumeView = OKKLineVolumeView(configuration: configuration)
+        volumeView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
+            if let limitValue = limitValue {
+                self?.volumeValueView.limitValue = limitValue
+            }
+        }
         contentView.addSubview(volumeView)
         volumeView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
@@ -102,12 +115,22 @@ class OKKLineDrawView: OKView {
             make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.volumeScale)
         }
         
-        volumeSegmentView = OKSegmentView()
-        addSubview(volumeSegmentView)
-        // TODO: volumeSegmentView
+        volumeValueView = OKValueView(configuration: configuration)
+        addSubview(volumeValueView)
+        volumeValueView.snp.makeConstraints { (make) in
+            make.trailing.equalTo(contentView.snp.leading)
+            make.leading.equalToSuperview()
+            make.top.equalTo(self.mainView.snp.bottom).offset(configuration.volumeTopViewHeight)
+            make.bottom.equalTo(volumeView.snp.bottom)
+        }
         
         /// Accessory View
         accessoryView = OKKLineAccessoryView(configuration: configuration)
+        accessoryView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
+            if let limitValue = limitValue {
+                self?.accessoryValueView.limitValue = limitValue
+            }
+        }
         contentView.addSubview(accessoryView)
         accessoryView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
@@ -115,6 +138,16 @@ class OKKLineDrawView: OKView {
             make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.accessoryScale)
         }
         
+        accessoryValueView = OKValueView(configuration: configuration)
+        addSubview(accessoryValueView)
+        accessoryValueView.snp.makeConstraints { (make) in
+            make.trailing.equalTo(contentView.snp.leading)
+            make.leading.equalToSuperview()
+            make.top.equalTo(self.volumeView.snp.bottom).offset(configuration.accessoryTopViewHeight)
+            make.bottom.equalTo(accessoryView.snp.bottom)
+        }
+        
+        /// 指示器
         indicatorView = UIView()
         indicatorView.isHidden = true
         indicatorView.backgroundColor = configuration.longPressLineColor
@@ -233,10 +266,14 @@ class OKKLineDrawView: OKView {
         if recognizer.state == .began || recognizer.state == .changed {
             
             let location = recognizer.location(in: recognizer.view)
-            let offsetCount = Int(location.x / (configuration.klineWidth + configuration.klineSpace))
             
-            let previousOffset = (CGFloat(offsetCount) - 0.5) * (configuration.klineWidth + configuration.klineSpace)
-            let nextOffset = (CGFloat(offsetCount + 1) - 0.5) * (configuration.klineWidth + configuration.klineSpace)
+            OKPrint(contentView.snp.leading.attributes.rawValue)
+            
+            if location.x <= 0 { return }
+            
+            let offsetCount: Int = Int(location.x / (configuration.klineWidth + configuration.klineSpace))
+            let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * (configuration.klineWidth + configuration.klineSpace) + 50
+            let nextOffset: CGFloat = (CGFloat(offsetCount + 1) + 0.5) * (configuration.klineWidth + configuration.klineSpace) + 50
             
             /// 显示竖线
             indicatorView.isHidden = false

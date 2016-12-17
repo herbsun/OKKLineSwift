@@ -15,6 +15,8 @@
 class OKKLineAccessoryView: OKView {
     
     // MARK: - Property
+    public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
+
     private var configuration: OKConfiguration!
     private var accessoryDrawKLineModels: [OKKLineModel]?
     private var assistInfoLabel: UILabel!
@@ -41,7 +43,7 @@ class OKKLineAccessoryView: OKView {
         self.init()
         self.configuration = configuration
         assistInfoLabel = UILabel()
-        assistInfoLabel.font = UIFont.systemFont(ofSize: 11)
+        assistInfoLabel.font = OKFont.systemFont(ofSize: 11)
         assistInfoLabel.textColor = configuration.assistTextColor
         addSubview(assistInfoLabel)
         assistInfoLabel.snp.makeConstraints { (make) in
@@ -371,7 +373,7 @@ class OKKLineAccessoryView: OKView {
         default:
             break
         }
-        
+        limitValueChanged?((minValue, maxValue))
         return (minValue, maxValue)
     }
 }

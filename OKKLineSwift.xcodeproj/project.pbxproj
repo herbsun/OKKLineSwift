@@ -166,6 +166,7 @@
 		F600A64D1DF1245800CF1C8A /* UILayoutSupport+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F600A5CD1DF1245800CF1C8A /* UILayoutSupport+Extensions.swift */; };
 		F600A64F1DF124C500CF1C8A /* OKKLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F600A64E1DF124C500CF1C8A /* OKKLineViewController.swift */; };
 		F600A6771DF15C8E00CF1C8A /* aaa.swift in Sources */ = {isa = PBXBuildFile; fileRef = F600A6761DF15C8E00CF1C8A /* aaa.swift */; };
+		F63D9C6E1E0302DF006F0A14 /* OKValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F63D9C6D1E0302DF006F0A14 /* OKValueView.swift */; };
 		F67B4C161DFC148E0015E6C0 /* OKBOLLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F67B4C151DFC148E0015E6C0 /* OKBOLLModel.swift */; };
 		F69B38451DF2AE5000D2C9BF /* OKLCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B38441DF2AE5000D2C9BF /* OKLCommon.swift */; };
 		F69B38471DF2E9BB00D2C9BF /* OKMAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B38461DF2E9BB00D2C9BF /* OKMAModel.swift */; };
@@ -269,6 +270,7 @@
 		F600A5CD1DF1245800CF1C8A /* UILayoutSupport+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILayoutSupport+Extensions.swift"; sourceTree = "<group>"; };
 		F600A64E1DF124C500CF1C8A /* OKKLineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineViewController.swift; sourceTree = "<group>"; };
 		F600A6761DF15C8E00CF1C8A /* aaa.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = aaa.swift; sourceTree = "<group>"; };
+		F63D9C6D1E0302DF006F0A14 /* OKValueView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKValueView.swift; sourceTree = "<group>"; };
 		F67B4C151DFC148E0015E6C0 /* OKBOLLModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKBOLLModel.swift; sourceTree = "<group>"; };
 		F69B38441DF2AE5000D2C9BF /* OKLCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKLCommon.swift; sourceTree = "<group>"; };
 		F69B38461DF2E9BB00D2C9BF /* OKMAModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMAModel.swift; sourceTree = "<group>"; };
@@ -439,6 +441,7 @@
 				F600A58E1DF1215F00CF1C8A /* OKView.swift */,
 				F600A58D1DF1215F00CF1C8A /* OKKLineView.swift */,
 				F6E9DB611DF568D500872DD9 /* OKKLineDrawView.swift */,
+				F63D9C6D1E0302DF006F0A14 /* OKValueView.swift */,
 				F600A58B1DF1215F00CF1C8A /* MainView */,
 				F600A5911DF1215F00CF1C8A /* VolumeView */,
 				F600A5891DF1215F00CF1C8A /* AccessoryView */,
@@ -630,7 +633,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				TargetAttributes = {
 					F600A5341DF1212300CF1C8A = {
 						CreatedOnToolsVersion = 8.1;
@@ -744,6 +747,7 @@
 				F600A62E1DF1245800CF1C8A /* ConstraintRelation.swift in Sources */,
 				F600A61E1DF1245800CF1C8A /* ConstraintMultiplierTarget.swift in Sources */,
 				F600A60A1DF1245800CF1C8A /* ConstraintMakerEditable.swift in Sources */,
+				F63D9C6E1E0302DF006F0A14 /* OKValueView.swift in Sources */,
 				F600A5391DF1212300CF1C8A /* AppDelegate.swift in Sources */,
 				F6EF39711DF9C44C00B9A075 /* OKMALineBrush.swift in Sources */,
 				F69B38471DF2E9BB00D2C9BF /* OKMAModel.swift in Sources */,
@@ -953,12 +957,48 @@
 		F600A52F1DF1211000CF1C8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
 		F600A5301DF1211000CF1C8A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 			};
 			name = Release;
 		};

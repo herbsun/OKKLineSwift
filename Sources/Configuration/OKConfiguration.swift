@@ -156,8 +156,12 @@ public final class OKConfiguration {
     var accessoryindicatorType: OKIndicatorType = .MACD
  
     // MARK: - SegmentView
-    var showSegmentView: Bool = true
-
+    
+    // MARK: - ValueView
+    var valueViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
+    var valueViewFont: OKFont = OKFont.systemFont(ofSize: 11)
+    var valueViewTextColor: OKColor = OKColor(hexRGB: 0xDCDADC)
+    
 }
 
 /// 皮肤主题

@@ -16,6 +16,8 @@ import CoreGraphics
 class OKKLineVolumeView: OKView {
 
     // MARK: - Property
+    public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
+
     private var configuration: OKConfiguration!
     private var volumeDrawKLineModels: [OKKLineModel]?
     private var assistInfoLabel: UILabel!
@@ -94,8 +96,10 @@ class OKKLineVolumeView: OKView {
                     NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
-                let maStr = String(format: "MAVOL\(day): %.2f ", drawModel.MA_VOLUMEs![idx]!)
-                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                if let value = drawModel.MA_VOLUMEs![idx] {
+                    let maStr = String(format: "MAVOL\(day): %.2f ", value)
+                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                }
             }
             
         case .EMA_VOLUME(let days):
@@ -105,8 +109,10 @@ class OKKLineVolumeView: OKView {
                     NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
-                let maStr = String(format: "EMAVOL\(day): %.2f ", drawModel.EMA_VOLUMEs![idx]!)
-                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                if let value = drawModel.EMA_VOLUMEs![idx] {
+                    let maStr = String(format: "EMAVOL\(day): %.2f ", value)
+                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                }
             }
             
         default:
@@ -268,7 +274,7 @@ class OKKLineVolumeView: OKView {
             return nil
         }
         
-        var minValue = volumeDrawKLineModels[0].volume
+        var minValue = 0.0//volumeDrawKLineModels[0].volume
         var maxValue = volumeDrawKLineModels[0].volume
         
         // 先求K线数据的最大最小
@@ -304,6 +310,7 @@ class OKKLineVolumeView: OKView {
                 break
             }
         }
+        limitValueChanged?((minValue, maxValue))
         return (minValue, maxValue)
     }
 }

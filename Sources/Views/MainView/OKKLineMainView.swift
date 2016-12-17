@@ -16,6 +16,7 @@ import CoreGraphics
 class OKKLineMainView: OKView {
     
     // MARK: - Property
+    public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
     private var assistLabel: UILabel!
     private var configuration: OKConfiguration!
     
@@ -126,8 +127,11 @@ class OKKLineMainView: OKView {
                     NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
-                let maStr = String(format: "MA\(day): %.2f ", drawModel.MAs![idx]!)
-                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                
+                if let value = drawModel.MAs![idx] {
+                    let maStr = String(format: "MA\(day): %.2f ", value)
+                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                }
             }
 
         case .EMA(let days):
@@ -137,25 +141,44 @@ class OKKLineMainView: OKView {
                     NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
                     NSFontAttributeName : configuration.assistTextFont
                 ]
-                let maStr = String(format: "EMA\(day): %.2f ", drawModel.EMAs![idx]!)
-                drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                if let value = drawModel.MAs![idx] {
+                    let maStr = String(format: "EMA\(day): %.2f ", value)
+                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                }
             }
-        case .BOLL(let day):
-            var string = "BOLL(\(day),2) "
+        case .BOLL(_):
+            
+//            let attrs: [String : Any] = [
+//                NSForegroundColorAttributeName : configuration.assistTextColor,
+//                NSFontAttributeName : configuration.assistTextFont
+//            ]
+//            drawAttrsString.append(NSAttributedString(string: "BOLL(\(day),2) ", attributes: attrs))
+            
             if let value = drawModel.BOLL_UP {
-                string += String(format: "UP: %.2f ", value)
+                let upAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.BOLL_UPColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let upAttrsStr = NSAttributedString(string: String(format: "UP: %.2f ", value), attributes: upAttrs)
+                drawAttrsString.append(upAttrsStr)
             }
             if let value = drawModel.BOLL_MB {
-                string += String(format: "MB: %.2f ", value)
+                let mbAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.BOLL_MBColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let mbAttrsStr = NSAttributedString(string: String(format: "MB: %.2f ", value), attributes: mbAttrs)
+                drawAttrsString.append(mbAttrsStr)
             }
             if let value = drawModel.BOLL_DN {
-                string += String(format: "DN: %.2f ", value)
+                let dnAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.BOLL_DNColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let dnAttrsStr = NSAttributedString(string: String(format: "DN: %.2f ", value), attributes: dnAttrs)
+                drawAttrsString.append(dnAttrsStr)
             }
-            let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : configuration.assistTextColor,
-                NSFontAttributeName : configuration.assistTextFont
-            ]
-            drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
+            
         default:
             break
         }
@@ -496,6 +519,9 @@ class OKKLineMainView: OKView {
                 break
             }
         }
+        
+        limitValueChanged?((minValue, maxValue))
+        
         return (minValue, maxValue)
     }
 }
