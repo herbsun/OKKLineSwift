@@ -20,6 +20,7 @@ class OKKLineDrawView: OKView {
     private var configuration: OKConfiguration!
     
     private var contentView: UIView!
+    private let contentViewLeading: CGFloat = 50.0
     
     private var mainView: OKKLineMainView!
     private var mainValueView: OKValueView!
@@ -30,7 +31,8 @@ class OKKLineDrawView: OKView {
     private var accessoryView: OKKLineAccessoryView!
     private var accessoryValueView: OKValueView!
     
-    private var indicatorView: UIView!
+    private var indicatorVerticalView: OKView!
+    private var indicatorHorizontalView: OKView!
     
     private var lastScale: CGFloat = 1.0
     private var lastPanPoint: CGPoint?
@@ -75,7 +77,7 @@ class OKKLineDrawView: OKView {
         
         contentView.snp.makeConstraints { (make) in
             make.top.trailing.bottom.equalToSuperview()
-            make.leading.equalTo(50)
+            make.leading.equalTo(contentViewLeading)
         }
         
         /// Main View
@@ -148,15 +150,26 @@ class OKKLineDrawView: OKView {
         }
         
         /// 指示器
-        indicatorView = UIView()
-        indicatorView.isHidden = true
-        indicatorView.backgroundColor = configuration.longPressLineColor
-        addSubview(indicatorView)
-        indicatorView.snp.makeConstraints { (make) in
+        indicatorVerticalView = OKView()
+        indicatorVerticalView.isHidden = true
+        indicatorVerticalView.backgroundColor = configuration.longPressLineColor
+        addSubview(indicatorVerticalView)
+        indicatorVerticalView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.top.equalTo(configuration.mainTopAssistViewHeight)
             make.width.equalTo(configuration.longPressLineWidth)
             make.leading.equalTo(0)
+        }
+        
+        indicatorHorizontalView = OKView()
+        indicatorHorizontalView.isHidden = true
+        indicatorHorizontalView.backgroundColor = configuration.longPressLineColor
+        addSubview(indicatorHorizontalView)
+        indicatorHorizontalView.snp.makeConstraints { (make) in
+            make.leading.equalTo(contentViewLeading)
+            make.trailing.equalTo(0)
+            make.height.equalTo(configuration.longPressLineWidth)
+            make.top.equalTo(0)
         }
         
     }
@@ -215,6 +228,42 @@ class OKKLineDrawView: OKView {
     }
     
     // MARK: - 手势事件
+    // MARK: 移动手势
+    
+    /// 移动手势
+    /// 左 -> 右 : x递增, x > 0
+    /// 右 -> 左 : x递减, x < 0
+    /// - Parameter recognizer: UIPanGestureRecognizer
+    @objc
+    private func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
+        
+        switch recognizer.state {
+        case .began:
+            lastPanPoint = recognizer.location(in: recognizer.view)
+        case .changed:
+            
+            let location = recognizer.location(in: recognizer.view)
+            let klineUnit = configuration.klineWidth + configuration.klineSpace
+            
+            if abs(location.x - lastPanPoint!.x) < klineUnit {
+                return
+            }
+            
+            lastOffsetIndex = Int((location.x - lastPanPoint!.x) / klineUnit)
+            
+            drawKLineView(false)
+            // 记录上次点
+            lastPanPoint = location
+            
+        case .ended:
+            
+            lastOffsetIndex = nil
+            lastPanPoint = nil
+            
+        default: break
+        }
+    }
+    
     // MARK: 捏合手势
     
     /// 捏合手势
@@ -263,34 +312,42 @@ class OKKLineDrawView: OKView {
     @objc
     private func longPressAction(_ recognizer: UILongPressGestureRecognizer) {
         
+        OKPrint(recognizer.view)
+        
         if recognizer.state == .began || recognizer.state == .changed {
             
             let location = recognizer.location(in: recognizer.view)
             
-            OKPrint(contentView.snp.leading.attributes.rawValue)
-            
             if location.x <= 0 { return }
             
-            let offsetCount: Int = Int(location.x / (configuration.klineWidth + configuration.klineSpace))
-            let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * (configuration.klineWidth + configuration.klineSpace) + 50
-            let nextOffset: CGFloat = (CGFloat(offsetCount + 1) + 0.5) * (configuration.klineWidth + configuration.klineSpace) + 50
+            let unit = configuration.klineWidth + configuration.klineSpace
+            
+            let offsetCount: Int = Int(location.x / unit)
+            let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * unit + contentViewLeading
+            let nextOffset: CGFloat = (CGFloat(offsetCount + 1) + 0.5) * unit + contentViewLeading
             
             /// 显示竖线
-            indicatorView.isHidden = false
+            indicatorVerticalView.isHidden = false
+            indicatorHorizontalView.isHidden = false
+            
             var drawModel: OKKLineModel?
+            
+            indicatorHorizontalView.snp.updateConstraints({ (make) in
+                make.top.equalTo(location.y)
+            })
             
             if abs(previousOffset - location.x) < abs(nextOffset - location.x) {
                 
-                indicatorView.snp.updateConstraints({ (make) in
+                indicatorVerticalView.snp.updateConstraints({ (make) in
                     make.leading.equalTo(previousOffset)
                 })
-                
+
                 if configuration.dataSource.drawKLineModels.count > offsetCount {
                     drawModel = configuration.dataSource.drawKLineModels[offsetCount]
                 }
                 
             } else {
-                indicatorView.snp.updateConstraints({ (make) in
+                indicatorVerticalView.snp.updateConstraints({ (make) in
                     make.leading.equalTo(nextOffset)
                 })
                 if configuration.dataSource.drawKLineModels.count > offsetCount {
@@ -305,46 +362,12 @@ class OKKLineDrawView: OKView {
             
         } else if recognizer.state == .ended {
             // 隐藏竖线
-            indicatorView.isHidden = true
+            indicatorVerticalView.isHidden = true
+            indicatorHorizontalView.isHidden = true
+            
             mainView.drawAssistView(model: nil)
             volumeView.drawVolumeAssistView(model: nil)
             accessoryView.drawAssistView(model: nil)
-        }
-    }
-    
-    // MARK: 移动手势
-    
-    /// 移动手势
-    /// 左 -> 右 : x递增, x > 0
-    /// 右 -> 左 : x递减, x < 0
-    /// - Parameter recognizer: UIPanGestureRecognizer
-    @objc
-    private func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
-        
-        switch recognizer.state {
-        case .began:
-            lastPanPoint = recognizer.location(in: recognizer.view)
-        case .changed:
-            
-            let location = recognizer.location(in: recognizer.view)
-            let klineUnit = configuration.klineWidth + configuration.klineSpace
-            
-            if abs(location.x - lastPanPoint!.x) < klineUnit {
-                return
-            }
-            
-            lastOffsetIndex = Int((location.x - lastPanPoint!.x) / klineUnit)
-            
-            drawKLineView(false)
-            // 记录上次点
-            lastPanPoint = location
-            
-        case .ended:
-            
-            lastOffsetIndex = nil
-            lastPanPoint = nil
-            
-        default: break
         }
     }
     

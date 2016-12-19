@@ -93,7 +93,7 @@ public final class OKConfiguration {
     /// 长按辅助线颜色
     var longPressLineColor: OKColor = OKColor(hexRGB: 0xE1E2E6)
     /// 长按辅助线宽度
-    var longPressLineWidth: CGFloat = 0.8
+    var longPressLineWidth: CGFloat = 0.5
     
     var indicatorLineWidth: CGFloat = 0.8
     /// 时间线
@@ -186,8 +186,6 @@ class OKTheme {
 
 class OKDataSource {
     var drawRange: NSRange?
-    ///临时数据
     var klineModels = [OKKLineModel]()
-    
     var drawKLineModels = [OKKLineModel]()
 }

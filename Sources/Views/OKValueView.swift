@@ -29,7 +29,7 @@ class OKValueView: OKView {
         valueAttrs = [
             NSForegroundColorAttributeName : configuration.valueViewTextColor,
             NSFontAttributeName : configuration.valueViewFont,
-            NSParagraphStyleAttributeName : textStyle
+            NSParagraphStyleAttributeName : textStyle,
         ]
 
     }
@@ -41,7 +41,6 @@ class OKValueView: OKView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
