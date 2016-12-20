@@ -220,7 +220,7 @@ class OKKLineMainView: OKView {
         drawAssistView(model: mainDrawKLineModels.last!)
 
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        
+        context.beginPath()
         for (index, klineModel) in mainDrawKLineModels.enumerated() {
             let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace
@@ -264,8 +264,6 @@ class OKKLineMainView: OKView {
             
         }
         context.strokePath()
-        
-        
         // 绘制指标
         switch configuration.mainIndicatorType {
         case .MA(_):

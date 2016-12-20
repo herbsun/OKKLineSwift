@@ -15,6 +15,7 @@ class OKValueView: OKView {
             setNeedsDisplay()
         }
     }
+    
     private var configuration: OKConfiguration!
     private var valueAttrs: [String : Any]!
     private let separate: CGFloat = 20.0
@@ -74,5 +75,9 @@ class OKValueView: OKView {
             let drawRect = CGRect(x: 0, y: y, width: rect.width, height: valueHeight)
             valueAttrStr.draw(in: drawRect)
         }
+    }
+    
+    public func drawNowValue() {
+        
     }
 }

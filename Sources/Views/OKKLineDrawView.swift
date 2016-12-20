@@ -19,8 +19,7 @@ class OKKLineDrawView: OKView {
     
     private var configuration: OKConfiguration!
     
-    private var contentView: UIView!
-    private let contentViewLeading: CGFloat = 50.0
+    private let drawValueViewWidth: CGFloat = 50.0
     
     private var mainView: OKKLineMainView!
     private var mainValueView: OKValueView!
@@ -43,7 +42,7 @@ class OKKLineDrawView: OKView {
     /// draw的个数
     private var drawCount: Int {
         get {
-            let count = Int((contentView.frame.width) / (configuration.klineSpace + configuration.klineWidth))
+            let count = Int((bounds.width - drawValueViewWidth) / (configuration.klineSpace + configuration.klineWidth))
             return count > configuration.dataSource.klineModels.count ? configuration.dataSource.klineModels.count : count
         }
     }
@@ -58,27 +57,20 @@ class OKKLineDrawView: OKView {
         self.init()
         self.configuration = configuration
         backgroundColor = configuration.mainViewBgColor
-        /// Parent View
-        contentView = UIView()
+        
         // 捏合手势
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
-        contentView.addGestureRecognizer(pinchGesture)
+        addGestureRecognizer(pinchGesture)
         // 长按手势
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
-        contentView.addGestureRecognizer(longPressGesture)
+        addGestureRecognizer(longPressGesture)
         // 双击手势
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
         tapGesture.numberOfTapsRequired = 2
-        contentView.addGestureRecognizer(tapGesture)
+        addGestureRecognizer(tapGesture)
         // 移动手势
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureAction(_:)))
-        contentView.addGestureRecognizer(panGesture)
-        addSubview(contentView)
-        
-        contentView.snp.makeConstraints { (make) in
-            make.top.trailing.bottom.equalToSuperview()
-            make.leading.equalTo(contentViewLeading)
-        }
+        addGestureRecognizer(panGesture)
         
         /// Main View
         mainView = OKKLineMainView(configuration: configuration)
@@ -87,21 +79,22 @@ class OKKLineDrawView: OKView {
                 self?.mainValueView.limitValue = limitValue
             }
         }
-        contentView.addSubview(mainView)
+        addSubview(mainView)
         mainView.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.mainScale)
+            make.top.trailing.equalToSuperview()
+            make.leading.equalTo(drawValueViewWidth)
+            make.height.equalToSuperview().multipliedBy(configuration.mainScale)
         }
         
+        /// Main Value View
         mainValueView = OKValueView(configuration: configuration)
         addSubview(mainValueView)
         mainValueView.snp.makeConstraints { (make) in
-            make.trailing.equalTo(contentView.snp.leading)
             make.leading.equalToSuperview()
-            make.top.equalTo(configuration.mainTopAssistViewHeight)
-            make.bottom.equalTo(mainView.snp.bottom).offset(-configuration.mainBottomAssistViewHeight)
+            make.trailing.equalTo(self.mainView.snp.leading)
+            make.top.equalTo(self.mainView.snp.top).offset(configuration.mainTopAssistViewHeight)
+            make.bottom.equalTo(self.mainView.snp.bottom).offset(-configuration.mainBottomAssistViewHeight)
         }
-        
         
         /// Volume View
         volumeView = OKKLineVolumeView(configuration: configuration)
@@ -110,20 +103,21 @@ class OKKLineDrawView: OKView {
                 self?.volumeValueView.limitValue = limitValue
             }
         }
-        contentView.addSubview(volumeView)
+        addSubview(volumeView)
         volumeView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
             make.top.equalTo(self.mainView.snp.bottom)
-            make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.volumeScale)
+            make.height.equalToSuperview().multipliedBy(configuration.volumeScale)
         }
         
+        /// Volume Value View
         volumeValueView = OKValueView(configuration: configuration)
         addSubview(volumeValueView)
         volumeValueView.snp.makeConstraints { (make) in
-            make.trailing.equalTo(contentView.snp.leading)
             make.leading.equalToSuperview()
-            make.top.equalTo(self.mainView.snp.bottom).offset(configuration.volumeTopViewHeight)
-            make.bottom.equalTo(volumeView.snp.bottom)
+            make.trailing.equalTo(self.volumeView.snp.leading)
+            make.top.equalTo(self.volumeView.snp.top).offset(configuration.volumeTopViewHeight)
+            make.bottom.equalTo(self.volumeView.snp.bottom)
         }
         
         /// Accessory View
@@ -133,20 +127,21 @@ class OKKLineDrawView: OKView {
                 self?.accessoryValueView.limitValue = limitValue
             }
         }
-        contentView.addSubview(accessoryView)
+        addSubview(accessoryView)
         accessoryView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
             make.top.equalTo(self.volumeView.snp.bottom)
-            make.height.equalTo(self.contentView.snp.height).multipliedBy(configuration.accessoryScale)
+            make.height.equalToSuperview().multipliedBy(configuration.accessoryScale)
         }
         
+        /// Accessory Value View
         accessoryValueView = OKValueView(configuration: configuration)
         addSubview(accessoryValueView)
         accessoryValueView.snp.makeConstraints { (make) in
-            make.trailing.equalTo(contentView.snp.leading)
             make.leading.equalToSuperview()
-            make.top.equalTo(self.volumeView.snp.bottom).offset(configuration.accessoryTopViewHeight)
-            make.bottom.equalTo(accessoryView.snp.bottom)
+            make.trailing.equalTo(self.accessoryView.snp.leading)
+            make.top.equalTo(self.accessoryView.snp.top).offset(configuration.accessoryTopViewHeight)
+            make.bottom.equalTo(self.accessoryView.snp.bottom)
         }
         
         /// 指示器
@@ -166,7 +161,7 @@ class OKKLineDrawView: OKView {
         indicatorHorizontalView.backgroundColor = configuration.longPressLineColor
         addSubview(indicatorHorizontalView)
         indicatorHorizontalView.snp.makeConstraints { (make) in
-            make.leading.equalTo(contentViewLeading)
+            make.leading.equalTo(drawValueViewWidth)
             make.trailing.equalTo(0)
             make.height.equalTo(configuration.longPressLineWidth)
             make.top.equalTo(0)
@@ -222,7 +217,7 @@ class OKKLineDrawView: OKView {
         let loc = drawStartIndex! > 0 ? drawStartIndex! : 0
         
         configuration.dataSource.drawKLineModels = Array(configuration.dataSource.klineModels[loc...loc+drawCount])
-        //            as NSArray).subarray(with: range) as! [OKKLineModel]
+        // as NSArray).subarray(with: range) as! [OKKLineModel]
         configuration.dataSource.drawRange = NSMakeRange(loc, drawCount)
         
     }
@@ -312,19 +307,17 @@ class OKKLineDrawView: OKView {
     @objc
     private func longPressAction(_ recognizer: UILongPressGestureRecognizer) {
         
-        OKPrint(recognizer.view)
-        
         if recognizer.state == .began || recognizer.state == .changed {
             
-            let location = recognizer.location(in: recognizer.view)
+            let location: CGPoint = recognizer.location(in: recognizer.view)
             
-            if location.x <= 0 { return }
+            if location.x <= drawValueViewWidth { return }
             
             let unit = configuration.klineWidth + configuration.klineSpace
             
-            let offsetCount: Int = Int(location.x / unit)
-            let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * unit + contentViewLeading
-            let nextOffset: CGFloat = (CGFloat(offsetCount + 1) + 0.5) * unit + contentViewLeading
+            let offsetCount: Int = Int((location.x - drawValueViewWidth) / unit)
+            let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * unit + drawValueViewWidth
+            let nextOffset: CGFloat = (CGFloat(offsetCount + 1) + 0.5) * unit + drawValueViewWidth
             
             /// 显示竖线
             indicatorVerticalView.isHidden = false
@@ -347,13 +340,13 @@ class OKKLineDrawView: OKView {
                 }
                 
             } else {
+                
                 indicatorVerticalView.snp.updateConstraints({ (make) in
                     make.leading.equalTo(nextOffset)
                 })
                 if configuration.dataSource.drawKLineModels.count > offsetCount {
                     drawModel = configuration.dataSource.drawKLineModels[offsetCount + 1]
                 }
-                
             }
             
             mainView.drawAssistView(model: drawModel)
@@ -378,14 +371,43 @@ class OKKLineDrawView: OKView {
     }
     
     // An empty implementation adversely affects performance during animation.
-    //    override func draw(_ rect: CGRect) {
-    //        super.draw(rect)
-    //        let context = UIGraphicsGetCurrentContext()
-    //        context?.setStrokeColor(UIColor.white.cgColor)
-    //        context?.setLineWidth(1.0)
-    //        
-    //        context?.strokeLineSegments(between: [CGPoint(x: rect.mindex, y: rect.minY), CGPoint(x: rect.mindex, y: rect.maxY)])
-    //        context?.strokePath()
-    //    }
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setStrokeColor(UIColor.white.cgColor)
+        context?.setLineWidth(1.0)
+        context?.setLineCap(.round)
+        context?.beginPath()
+        context?.move(to: CGPoint(x: 10, y: 0))
+        context?.setLineDash(phase: 0, lengths: [2, 2])
+        context?.addLine(to: CGPoint(x: 10, y: bounds.height))
+        context?.strokePath()
+        context?.closePath()
+        
+        
+//        context?.strokeLineSegments(between: [CGPoint(x: rect.mindex, y: rect.minY), CGPoint(x: rect.mindex, y: rect.maxY)])
+//        context?.strokePath()
+//        CGContextRef context =UIGraphicsGetCurrentContext();
+//        // 样式
+//        CGContextSetLineCap(context, kCGLineCapRound);
+//        // 宽度
+//        CGContextSetLineWidth(context, 1.0);
+//        // 颜色
+//        CGContextSetStrokeColorWithColor(context, [UIColor colorWithHexString:MAIN_COLOR].CGColor);
+//        // 开始绘制
+//        CGContextBeginPath(context);
+//        // 虚线起点 设置（x, y）控制横竖、位置
+//        CGContextMoveToPoint(context, 30, 1);
+//        // 虚线宽度，间距宽度
+//        CGFloat lengths[] = {2, 2};
+//        // 虚线的起始点
+//        CGContextSetLineDash(context, 0, lengths, 2);
+//        // 虚线终点 设置（x, y）控制横竖、位置
+//        CGContextAddLineToPoint(context, 30, CGRectGetMaxY(self.bounds));
+//        // 绘制
+//        CGContextStrokePath(context);
+//        // 关闭图像
+//        CGContextClosePath(context);
+    }
     
 }
