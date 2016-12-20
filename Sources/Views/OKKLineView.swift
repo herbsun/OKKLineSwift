@@ -6,12 +6,11 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-#if os(macOS)
-    import AppKit
-#else
+#if os(iOS) || os(tvOS)
     import UIKit
+#else
+    import Cocoa
 #endif
-import Foundation
 
 class OKKLineView: OKView {
     
@@ -32,7 +31,7 @@ class OKKLineView: OKView {
         }
         addSubview(klineDrawView)
         klineDrawView.snp.makeConstraints { (make) in
-            make.edges.equalTo(UIEdgeInsetsMake(0, 0, 44, 50))
+            make.edges.equalTo(OKEdgeInsets(top: 0, left: 0, bottom: 44, right: 50))
         }
         
         let timeTitles = ["分时", "1分", "5分", "15分", "30分", "60分", "日K", "周K", "月K", "季K", "年K"]

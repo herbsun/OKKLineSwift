@@ -6,12 +6,12 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-#if os(macOS)
-    import Cocoa
-    public typealias OKColor = NSColor
-#else
+#if os(iOS) || os(tvOS)
     import UIKit
     public typealias OKColor = UIColor
+#else
+    import Cocoa
+    public typealias OKColor = NSColor
 #endif
 
 extension OKColor {
@@ -26,7 +26,7 @@ extension OKColor {
                   alpha: alpha)
     }
     
-    public class func randomColor() -> UIColor {
+    public class func randomColor() -> OKColor {
         
         return OKColor(red: CGFloat(arc4random_uniform(255)) / 255.0,
                        green: CGFloat(arc4random_uniform(255)) / 255.0,

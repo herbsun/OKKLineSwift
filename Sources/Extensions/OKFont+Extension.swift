@@ -6,12 +6,12 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-#if os(macOS)
-    import Cocoa
-    public typealias OKFont = NSFont
-#else
+#if os(iOS) || os(tvOS)
     import UIKit
     public typealias OKFont = UIFont
+#else
+    import Cocoa
+    public typealias OKFont = NSFont
 #endif
 
 extension OKFont {

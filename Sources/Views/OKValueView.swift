@@ -6,7 +6,11 @@
 //
 //
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 
 class OKValueView: OKView {
     

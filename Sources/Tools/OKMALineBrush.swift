@@ -6,10 +6,10 @@
 //
 //
 
-#if os(macOS)
-    import Cocoa
-#else
+#if os(iOS) || os(tvOS)
     import UIKit
+#else
+    import Cocoa
 #endif
 import CoreGraphics
 

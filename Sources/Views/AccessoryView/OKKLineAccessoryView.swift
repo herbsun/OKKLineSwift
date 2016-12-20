@@ -6,10 +6,10 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-#if os(macOS)
-    import Cocoa
-#else
+#if os(iOS) || os(tvOS)
     import UIKit
+#else
+    import Cocoa
 #endif
 
 class OKKLineAccessoryView: OKView {

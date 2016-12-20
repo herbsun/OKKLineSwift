@@ -6,10 +6,10 @@
 //
 //
 
-#if os(macOS)
-    import Cocoa
-#else
+#if os(iOS) || os(tvOS)
     import UIKit
+#else
+    import Cocoa
 #endif
 
 class OKKLineDrawView: OKView {
@@ -56,7 +56,8 @@ class OKKLineDrawView: OKView {
     convenience init(configuration: OKConfiguration) {
         self.init()
         self.configuration = configuration
-        backgroundColor = configuration.mainViewBgColor
+        
+        ok_backgroundColor = configuration.mainViewBgColor
         
         // 捏合手势
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
@@ -373,41 +374,17 @@ class OKKLineDrawView: OKView {
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        let context = UIGraphicsGetCurrentContext()
-        context?.setStrokeColor(UIColor.white.cgColor)
-        context?.setLineWidth(1.0)
-        context?.setLineCap(.round)
-        context?.beginPath()
-        context?.move(to: CGPoint(x: 10, y: 0))
-        context?.setLineDash(phase: 0, lengths: [2, 2])
-        context?.addLine(to: CGPoint(x: 10, y: bounds.height))
-        context?.strokePath()
-        context?.closePath()
-        
-        
-//        context?.strokeLineSegments(between: [CGPoint(x: rect.mindex, y: rect.minY), CGPoint(x: rect.mindex, y: rect.maxY)])
+//        let context = UIGraphicsGetCurrentContext()
+//        context?.setStrokeColor(UIColor.white.cgColor)
+//        context?.setLineWidth(1.0)
+//        context?.setLineCap(.round)
+//        context?.beginPath()
+//        context?.move(to: CGPoint(x: 10, y: 0))
+//        context?.setLineDash(phase: 0, lengths: [2, 2])
+//        context?.addLine(to: CGPoint(x: 10, y: bounds.height))
 //        context?.strokePath()
-//        CGContextRef context =UIGraphicsGetCurrentContext();
-//        // 样式
-//        CGContextSetLineCap(context, kCGLineCapRound);
-//        // 宽度
-//        CGContextSetLineWidth(context, 1.0);
-//        // 颜色
-//        CGContextSetStrokeColorWithColor(context, [UIColor colorWithHexString:MAIN_COLOR].CGColor);
-//        // 开始绘制
-//        CGContextBeginPath(context);
-//        // 虚线起点 设置（x, y）控制横竖、位置
-//        CGContextMoveToPoint(context, 30, 1);
-//        // 虚线宽度，间距宽度
-//        CGFloat lengths[] = {2, 2};
-//        // 虚线的起始点
-//        CGContextSetLineDash(context, 0, lengths, 2);
-//        // 虚线终点 设置（x, y）控制横竖、位置
-//        CGContextAddLineToPoint(context, 30, CGRectGetMaxY(self.bounds));
-//        // 绘制
-//        CGContextStrokePath(context);
-//        // 关闭图像
-//        CGContextClosePath(context);
+//        context?.closePath()
+    
     }
     
 }

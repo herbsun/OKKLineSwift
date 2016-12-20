@@ -8,21 +8,22 @@
 
 import Cocoa
 
-
 class ViewController: NSViewController {
 
+    var klineView: OKKLineView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        klineView = OKKLineView()
+        klineView.doubleTapHandle = { () -> Void in
+            self.dismiss(animated: true, completion: nil)
+        }
+        view.addSubview(self.klineView)
+        klineView.snp.makeConstraints { (make) in
 
-        // Do any additional setup after loading the view.
-    }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
+            make.edges.equalTo(NSEdgeInsetsMake(0, 0, 0, 0))
         }
     }
-
-
 }
 

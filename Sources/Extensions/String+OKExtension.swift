@@ -6,10 +6,10 @@
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
-#if os(macOS)
-import Cocoa
+#if os(iOS) || os(tvOS)
+    import UIKit
 #else
-import UIKit
+    import Cocoa
 #endif
 
 extension String {
