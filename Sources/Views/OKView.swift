@@ -16,7 +16,7 @@
 
 class OKView: BaseView {
     
-    public var ok_backgroundColor: OKColor {
+    public var ok_backgroundColor: OKColor? {
         didSet {
             #if os(iOS) || os(tvOS)
                 backgroundColor = ok_backgroundColor

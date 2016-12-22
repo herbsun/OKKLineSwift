@@ -37,3 +37,11 @@ public func OKPrint(_ object: @autoclosure() -> Any?,
         }
     #endif
 }
+
+//let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+//let drawValue = Double(drawMaxY - drawY) * unitValue + limitValue.minValue
+//let drawY: CGFloat = abs(self.drawMaxY - CGFloat((drawValue - limitValue.minValue) / unitValue))
+
+
+
+

@@ -182,9 +182,9 @@ class OKKLineMainView: OKView {
         default:
             break
         }
- 
 //        drawAttrsString.draw(at: CGPoint(x: 0, y: 0))
 //        drawAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
+//        setNeedsDisplay(CGRect(x: 0, y: 0, width: bounds.width, height: 30))
         assistLabel.attributedText = drawAttrsString
         
     }

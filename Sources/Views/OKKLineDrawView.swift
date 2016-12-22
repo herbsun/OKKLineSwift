@@ -88,13 +88,17 @@ class OKKLineDrawView: OKView {
         }
         
         /// Main Value View
-        mainValueView = OKValueView(configuration: configuration)
+        let mainEdge = OKEdgeInsets(top: configuration.mainTopAssistViewHeight,
+                                    left: 0,
+                                    bottom: configuration.mainBottomAssistViewHeight,
+                                    right: 0)
+        mainValueView = OKValueView(configuration: configuration, drawEdgeInsets: mainEdge)
         addSubview(mainValueView)
         mainValueView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()
             make.trailing.equalTo(self.mainView.snp.leading)
-            make.top.equalTo(self.mainView.snp.top).offset(configuration.mainTopAssistViewHeight)
-            make.bottom.equalTo(self.mainView.snp.bottom).offset(-configuration.mainBottomAssistViewHeight)
+            make.top.equalTo(self.mainView.snp.top)
+            make.bottom.equalTo(self.mainView.snp.bottom)
         }
         
         /// Volume View
@@ -112,12 +116,13 @@ class OKKLineDrawView: OKView {
         }
         
         /// Volume Value View
-        volumeValueView = OKValueView(configuration: configuration)
+        let volumeEdge = OKEdgeInsets(top: configuration.volumeTopViewHeight, left: 0, bottom: 0, right: 0)
+        volumeValueView = OKValueView(configuration: configuration, drawEdgeInsets: volumeEdge)
         addSubview(volumeValueView)
         volumeValueView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()
             make.trailing.equalTo(self.volumeView.snp.leading)
-            make.top.equalTo(self.volumeView.snp.top).offset(configuration.volumeTopViewHeight)
+            make.top.equalTo(self.volumeView.snp.top)
             make.bottom.equalTo(self.volumeView.snp.bottom)
         }
         
@@ -136,12 +141,13 @@ class OKKLineDrawView: OKView {
         }
         
         /// Accessory Value View
-        accessoryValueView = OKValueView(configuration: configuration)
+        let asscessoryEdge = OKEdgeInsets(top: configuration.accessoryTopViewHeight, left: 0, bottom: 0, right: 0)
+        accessoryValueView = OKValueView(configuration: configuration, drawEdgeInsets: asscessoryEdge)
         addSubview(accessoryValueView)
         accessoryValueView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()
             make.trailing.equalTo(self.accessoryView.snp.leading)
-            make.top.equalTo(self.accessoryView.snp.top).offset(configuration.accessoryTopViewHeight)
+            make.top.equalTo(self.accessoryView.snp.top)
             make.bottom.equalTo(self.accessoryView.snp.bottom)
         }
         
@@ -320,11 +326,28 @@ class OKKLineDrawView: OKView {
             let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * unit + drawValueViewWidth
             let nextOffset: CGFloat = (CGFloat(offsetCount + 1) + 0.5) * unit + drawValueViewWidth
             
-            /// 显示竖线
+            /// 显示十字线
             indicatorVerticalView.isHidden = false
             indicatorHorizontalView.isHidden = false
             
             var drawModel: OKKLineModel?
+            
+            mainValueView.currentValueDrawPoint = nil
+            volumeValueView.currentValueDrawPoint = nil
+            accessoryValueView.currentValueDrawPoint = nil
+            
+            if mainView.point(inside: convert(location, to: mainView), with: nil) {
+                
+                mainValueView.currentValueDrawPoint = convert(location, to: mainView)
+                
+            } else if volumeView.point(inside: convert(location, to: volumeView), with: nil) {
+                
+                volumeValueView.currentValueDrawPoint = convert(location, to: volumeView)
+                
+            } else if accessoryView.point(inside: convert(location, to: accessoryView), with: nil) {
+                
+                accessoryValueView.currentValueDrawPoint = convert(location, to: accessoryView)
+            }
             
             indicatorHorizontalView.snp.updateConstraints({ (make) in
                 make.top.equalTo(location.y)
@@ -355,9 +378,13 @@ class OKKLineDrawView: OKView {
             accessoryView.drawAssistView(model: drawModel)
             
         } else if recognizer.state == .ended {
-            // 隐藏竖线
+            // 隐藏十字线
             indicatorVerticalView.isHidden = true
             indicatorHorizontalView.isHidden = true
+            
+            mainValueView.currentValueDrawPoint = nil
+            volumeValueView.currentValueDrawPoint = nil
+            accessoryValueView.currentValueDrawPoint = nil
             
             mainView.drawAssistView(model: nil)
             volumeView.drawVolumeAssistView(model: nil)
@@ -369,22 +396,6 @@ class OKKLineDrawView: OKView {
     @objc
     private func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
         doubleTapHandle?()
-    }
-    
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-//        let context = UIGraphicsGetCurrentContext()
-//        context?.setStrokeColor(UIColor.white.cgColor)
-//        context?.setLineWidth(1.0)
-//        context?.setLineCap(.round)
-//        context?.beginPath()
-//        context?.move(to: CGPoint(x: 10, y: 0))
-//        context?.setLineDash(phase: 0, lengths: [2, 2])
-//        context?.addLine(to: CGPoint(x: 10, y: bounds.height))
-//        context?.strokePath()
-//        context?.closePath()
-    
     }
     
 }
