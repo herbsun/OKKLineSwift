@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  OKKLineSwift-iOS-Demo
 //
-//  Created by SHB on 2016/12/2.
+//  Created by Herb on 2016/12/2.
 //
 //
 
@@ -16,9 +16,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func showKLine() {
-        
-        //        OKConfiguration.shared.mainViewBgColor = UIColor.randomColor().cgColor
-        
+                
         let klineVC = OKKLineViewController()
         klineVC.modalTransitionStyle = .crossDissolve
         present(klineVC, animated: true, completion: nil)

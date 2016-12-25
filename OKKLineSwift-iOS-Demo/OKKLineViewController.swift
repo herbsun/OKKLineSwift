@@ -2,7 +2,7 @@
 //  OKKLineViewController.swift
 //  OKKLineSwift
 //
-//  Created by SHB on 2016/11/21.
+//  Created by Herb on 2016/11/21.
 //  Copyright © 2016年 Herb. All rights reserved.
 //
 
@@ -56,7 +56,7 @@ class OKKLineViewController: UIViewController {
                 if result.ok {
                     let resultData = result.json as! [String : Any]
                     let datas = resultData["datas"] as! [[Double]]
-//                    configuration.dataSource.klineModels.removeAll()
+
                     var dataArray = [OKKLineModel]()
                     for data in datas {
                         

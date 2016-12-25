@@ -2,7 +2,7 @@
 //  OKKLineSwift_iOS_DemoTests.swift
 //  OKKLineSwift-iOS-DemoTests
 //
-//  Created by SHB on 2016/12/2.
+//  Created by Herb on 2016/12/2.
 //
 //
 
