@@ -104,11 +104,11 @@ class OKKLineView: OKView {
         
         accessoryViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
-                self?.configuration.accessoryindicatorType = .MACD
+                self?.configuration.accessory.indicatorType = .MACD
             } else if result.index == 1 {
-                self?.configuration.accessoryindicatorType = .KDJ
+                self?.configuration.accessory.indicatorType = .KDJ
             } else if result.index == 2 {
-                self?.configuration.accessoryindicatorType = .BOLL(20)
+                self?.configuration.accessory.indicatorType = .BOLL(20)
             }
             self?.klineDrawView.drawKLineView(true)
         }
@@ -118,7 +118,7 @@ class OKKLineView: OKView {
             make.top.equalTo(volumeViewIndicatorSegmentView.snp.bottom)
             make.leading.equalTo(klineDrawView.snp.trailing)
             make.trailing.equalToSuperview()
-            make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.accessoryScale)
+            make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.accessory.scale)
         }
         
     }

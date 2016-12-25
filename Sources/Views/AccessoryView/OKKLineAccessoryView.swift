@@ -28,7 +28,7 @@ class OKKLineAccessoryView: OKView {
     }
     private var drawHeight: CGFloat {
         get {
-            return bounds.height - configuration.accessoryTopViewHeight
+            return bounds.height - configuration.accessory.topViewHeight
         }
     }
     
@@ -67,7 +67,7 @@ class OKKLineAccessoryView: OKView {
         let displayRect = CGRect(x: 0,
                                  y: 0,
                                  width: bounds.width,
-                                 height: configuration.accessoryTopViewHeight)
+                                 height: configuration.accessory.topViewHeight)
         
         setNeedsDisplay(displayRect)
     }
@@ -100,7 +100,7 @@ class OKKLineAccessoryView: OKView {
         fetchAssistString(model: accessoryDrawKLineModels.last!)
         drawAssistString?.draw(in: rect)
         
-        switch configuration.accessoryindicatorType {
+        switch configuration.accessory.indicatorType {
         case .MACD:
             drawMACD(context: context, drawModels: accessoryDrawKLineModels)
             
@@ -132,7 +132,7 @@ class OKKLineAccessoryView: OKView {
         }
         
         let drawAttrsString = NSMutableAttributedString()
-        switch configuration.accessoryindicatorType {
+        switch configuration.accessory.indicatorType {
         case .MACD:
             let attrs: [String : Any] = [
                 NSForegroundColorAttributeName : configuration.assistTextColor,
@@ -324,7 +324,7 @@ class OKKLineAccessoryView: OKView {
             return
         }
         
-        switch configuration.accessoryindicatorType {
+        switch configuration.accessory.indicatorType {
         case .MACD:
             let macdModel = OKMACDModel(klineModels: configuration.dataSource.klineModels)
             accessoryDrawKLineModels = macdModel.fetchDrawMACDData(drawRange: configuration.dataSource.drawRange)
@@ -348,7 +348,7 @@ class OKKLineAccessoryView: OKView {
         var minValue = 0.0
         var maxValue = 0.0
         
-        switch configuration.accessoryindicatorType {
+        switch configuration.accessory.indicatorType {
         case .MACD:
             for model in accessoryDrawKLineModels {
                 if let value = model.DIF {

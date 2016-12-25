@@ -64,7 +64,7 @@ public final class OKConfiguration {
     let theme: OKTheme = OKTheme()
     let main: OKMainConfiguration = OKMainConfiguration()
     let volume: OKVolumeConfiguration = OKVolumeConfiguration()
-    
+    let accessory: OKAccessoryConfiguration = OKAccessoryConfiguration()
     
     /// 指标视图背景色
     var accessoryViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
@@ -113,16 +113,7 @@ public final class OKConfiguration {
     
     // MARK: - 指标图(accessory)
     
-    /// 是否显示指标图
-    var showAccessoryView: Bool = true
-    /// 指标图比例
-    var accessoryScale: CGFloat = 0.25
-    /// 顶部提示信息高度
-    var accessoryTopViewHeight: CGFloat = 20.0
-    /// 指标图分时线宽度
-    var accessoryLineWidth: CGFloat = 0.5
-    /// 辅助图指标类型
-    var accessoryindicatorType: OKIndicatorType = .MACD
+    
  
     // MARK: - SegmentView
     
@@ -194,5 +185,14 @@ class OKVolumeConfiguration {
 }
 
 class OKAccessoryConfiguration {
-    
+    /// 是否显示指标图
+    var show: Bool = true
+    /// 指标图比例
+    var scale: CGFloat = 0.25
+    /// 顶部提示信息高度
+    var topViewHeight: CGFloat = 20.0
+    /// 指标图分时线宽度
+    var lineWidth: CGFloat = 0.5
+    /// 辅助图指标类型
+    var indicatorType: OKIndicatorType = .MACD
 }

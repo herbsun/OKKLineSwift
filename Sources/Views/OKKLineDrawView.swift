@@ -137,11 +137,11 @@ class OKKLineDrawView: OKView {
         accessoryView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
             make.top.equalTo(self.volumeView.snp.bottom)
-            make.height.equalToSuperview().multipliedBy(configuration.accessoryScale)
+            make.height.equalToSuperview().multipliedBy(configuration.accessory.scale)
         }
         
         /// Accessory Value View
-        let asscessoryEdge = OKEdgeInsets(top: configuration.accessoryTopViewHeight, left: 0, bottom: 0, right: 0)
+        let asscessoryEdge = OKEdgeInsets(top: configuration.accessory.topViewHeight, left: 0, bottom: 0, right: 0)
         accessoryValueView = OKValueView(configuration: configuration, drawEdgeInsets: asscessoryEdge)
         addSubview(accessoryValueView)
         accessoryValueView.snp.makeConstraints { (make) in
