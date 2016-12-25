@@ -127,7 +127,7 @@ public final class OKConfiguration {
     /// 主图K线类型
     var klineType: OKKLineType = .KLine
     /// 主图指标类型
-    var mainIndicatorType: OKIndicatorType = .MA([5, 12, 26])
+    var mainIndicatorType: OKIndicatorType = .MA([12, 26])
     
     // MARK: - 成交量图(volume)
     
@@ -140,7 +140,7 @@ public final class OKConfiguration {
     /// 成交量图分时线宽度
     var volumeLineWidth: CGFloat = 0.5
     /// 成交量指标类型
-    var volumeIndicatorType: OKIndicatorType = .EMA_VOLUME([5 ,12, 26])
+    var volumeIndicatorType: OKIndicatorType = .EMA_VOLUME([12, 26])
     
     // MARK: - 指标图(accessory)
     
