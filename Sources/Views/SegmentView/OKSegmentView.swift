@@ -82,7 +82,7 @@ class OKSegmentView: OKView {
                 let x = lastBtn == nil ? 0 : lastBtn!.frame.maxX
                 
                 let textWidth = titles[index].stringSize(maxSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: bounds.height), fontSize: 12).width + 10
-                
+
                 let width = textWidth < 60 ? 60 : textWidth
                 
                 btn.frame = CGRect(x: x, y: 0, width: width, height: bounds.height)

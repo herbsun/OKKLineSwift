@@ -21,7 +21,6 @@ class OKKLineMainView: OKView {
     private var configuration: OKConfiguration!
     
     private var lastDrawDatePoint: CGPoint = CGPoint.zero
-    private var dateAttributes: [String : Any]!
     
     private var drawAssistString: NSAttributedString?
     
@@ -48,10 +47,6 @@ class OKKLineMainView: OKView {
     convenience init(configuration: OKConfiguration) {
         self.init()
         self.configuration = configuration
-        dateAttributes  = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
-        ]
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -196,32 +191,33 @@ class OKKLineMainView: OKView {
         let date = Date(timeIntervalSince1970: klineModel.date/1000)
         let dateString = configuration.dateFormatter.string(from: date)
         
-        let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: configuration.mainBottomAssistViewHeight)
+        let dateAttributes: [String : Any] = [
+            NSForegroundColorAttributeName : configuration.assistTextColor,
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+
+        let dateAttrString = NSAttributedString(string: dateString, attributes: dateAttributes)
         
-        let dateWidth: CGFloat = dateString.stringSize(maxSize: size, fontSize: 11.0).width
-        
-        let drawDatePoint = CGPoint(x: positionX - dateWidth * 0.5,
+        let drawDatePoint = CGPoint(x: positionX - dateAttrString.size().width * 0.5,
                                     y: bounds.height - configuration.mainBottomAssistViewHeight)
         
-        if drawDatePoint.x < 0 || (drawDatePoint.x + dateWidth) > bounds.width {
+        if drawDatePoint.x < 0 || (drawDatePoint.x + dateAttrString.size().width) > bounds.width {
             return
         }
         
         if lastDrawDatePoint.equalTo(CGPoint.zero) ||
-            abs(drawDatePoint.x - lastDrawDatePoint.x) > (dateWidth * 2) {
+            abs(drawDatePoint.x - lastDrawDatePoint.x) > (dateAttrString.size().width * 2) {
             
             let rect = CGRect(x: drawDatePoint.x,
                               y: drawDatePoint.y,
-                              width: dateWidth,
+                              width: dateAttrString.size().width,
                               height: configuration.mainBottomAssistViewHeight)
             
-            (dateString as NSString).draw(in: rect, withAttributes: dateAttributes)
+            dateAttrString.draw(in: rect)
             lastDrawDatePoint = drawDatePoint
         }
     }
 
-    
-    
     
     // MARK: - Private
     

@@ -155,7 +155,6 @@
 		F6296D951E099CA700ED1176 /* OKColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D741E099CA700ED1176 /* OKColor+Extension.swift */; };
 		F6296D961E099CA700ED1176 /* OKEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D751E099CA700ED1176 /* OKEdgeInsets+Extension.swift */; };
 		F6296D971E099CA700ED1176 /* OKFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D761E099CA700ED1176 /* OKFont+Extension.swift */; };
-		F6296D981E099CA700ED1176 /* String+OKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D771E099CA700ED1176 /* String+OKExtension.swift */; };
 		F6296D991E099CA700ED1176 /* OKBOLLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7A1E099CA700ED1176 /* OKBOLLModel.swift */; };
 		F6296D9A1E099CA700ED1176 /* OKEMAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7B1E099CA700ED1176 /* OKEMAModel.swift */; };
 		F6296D9B1E099CA700ED1176 /* OKEMAVOLUMEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7C1E099CA700ED1176 /* OKEMAVOLUMEModel.swift */; };
@@ -175,6 +174,7 @@
 		F6296DAA1E099CA700ED1176 /* OKView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D8F1E099CA700ED1176 /* OKView.swift */; };
 		F6296DAB1E099CA700ED1176 /* OKSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D911E099CA700ED1176 /* OKSegmentView.swift */; };
 		F6296DAC1E099CA700ED1176 /* OKKLineVolumeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D931E099CA700ED1176 /* OKKLineVolumeView.swift */; };
+		F6296DC71E0F9ACD00ED1176 /* String+OKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */; };
 		F69B38451DF2AE5000D2C9BF /* OKLCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69B38441DF2AE5000D2C9BF /* OKLCommon.swift */; };
 /* End PBXBuildFile section */
 
@@ -254,7 +254,6 @@
 		F6296D741E099CA700ED1176 /* OKColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OKColor+Extension.swift"; sourceTree = "<group>"; };
 		F6296D751E099CA700ED1176 /* OKEdgeInsets+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OKEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		F6296D761E099CA700ED1176 /* OKFont+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OKFont+Extension.swift"; sourceTree = "<group>"; };
-		F6296D771E099CA700ED1176 /* String+OKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+OKExtension.swift"; sourceTree = "<group>"; };
 		F6296D7A1E099CA700ED1176 /* OKBOLLModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKBOLLModel.swift; sourceTree = "<group>"; };
 		F6296D7B1E099CA700ED1176 /* OKEMAModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKEMAModel.swift; sourceTree = "<group>"; };
 		F6296D7C1E099CA700ED1176 /* OKEMAVOLUMEModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKEMAVOLUMEModel.swift; sourceTree = "<group>"; };
@@ -274,6 +273,7 @@
 		F6296D8F1E099CA700ED1176 /* OKView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKView.swift; sourceTree = "<group>"; };
 		F6296D911E099CA700ED1176 /* OKSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKSegmentView.swift; sourceTree = "<group>"; };
 		F6296D931E099CA700ED1176 /* OKKLineVolumeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineVolumeView.swift; sourceTree = "<group>"; };
+		F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+OKExtension.swift"; sourceTree = "<group>"; };
 		F69B38441DF2AE5000D2C9BF /* OKLCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKLCommon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -461,7 +461,7 @@
 				F6296D741E099CA700ED1176 /* OKColor+Extension.swift */,
 				F6296D751E099CA700ED1176 /* OKEdgeInsets+Extension.swift */,
 				F6296D761E099CA700ED1176 /* OKFont+Extension.swift */,
-				F6296D771E099CA700ED1176 /* String+OKExtension.swift */,
+				F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -747,11 +747,11 @@
 				F600A5F21DF1245800CF1C8A /* ConstraintLayoutGuide+Extensions.swift in Sources */,
 				F69B38451DF2AE5000D2C9BF /* OKLCommon.swift in Sources */,
 				F600A6221DF1245800CF1C8A /* ConstraintOffsetTarget.swift in Sources */,
-				F6296D981E099CA700ED1176 /* String+OKExtension.swift in Sources */,
 				F6296DAB1E099CA700ED1176 /* OKSegmentView.swift in Sources */,
 				F600A5FA1DF1245800CF1C8A /* ConstraintLayoutGuideDSL.swift in Sources */,
 				F600A6261DF1245800CF1C8A /* ConstraintPriorityTarget.swift in Sources */,
 				F600A6161DF1245800CF1C8A /* ConstraintMakerPriortizable.swift in Sources */,
+				F6296DC71E0F9ACD00ED1176 /* String+OKExtension.swift in Sources */,
 				F600A6121DF1245800CF1C8A /* ConstraintMakerFinalizable.swift in Sources */,
 				F600A5FE1DF1245800CF1C8A /* ConstraintLayoutSupport.swift in Sources */,
 				F6296DA11E099CA700ED1176 /* OKKLineModel.swift in Sources */,
