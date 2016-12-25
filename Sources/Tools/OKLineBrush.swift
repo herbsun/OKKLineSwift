@@ -27,7 +27,7 @@ class OKLineBrush {
         self.context = context
         self.configuration = configuration
         
-        context.setLineWidth(configuration.indicatorLineWidth)
+        context.setLineWidth(configuration.theme.indicatorLineWidth)
         context.setLineCap(.round)
         context.setLineJoin(.round)
         

@@ -107,7 +107,7 @@ class OKKLineMainView: OKView {
         }
         
         // 设置日期背景色
-        context.setFillColor(configuration.assistViewBgColor.cgColor)
+        context.setFillColor(configuration.main.assistViewBgColor.cgColor)
         let assistRect = CGRect(x: 0,
                                 y: rect.height - configuration.main.bottomAssistViewHeight,
                                 width: rect.width,
@@ -123,8 +123,8 @@ class OKKLineMainView: OKView {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
         for (index, klineModel) in mainDrawKLineModels.enumerated() {
-            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
-                configuration.klineWidth * 0.5 + configuration.klineSpace
+            let xPosition = CGFloat(index) * (configuration.theme.klineWidth + configuration.theme.klineSpace) +
+                configuration.theme.klineWidth * 0.5 + configuration.theme.klineSpace
             
             let openPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.open - limitValue.minValue) / unitValue)))
             let closePoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.close - limitValue.minValue) / unitValue)))
@@ -136,21 +136,21 @@ class OKKLineMainView: OKView {
                 
                     // 决定K线颜色
                     let strokeColor = klineModel.open < klineModel.close ?
-                        configuration.increaseColor : configuration.decreaseColor
+                        configuration.theme.increaseColor : configuration.theme.decreaseColor
                     context.setStrokeColor(strokeColor.cgColor)
                     
                     // 画开盘-收盘
-                    context.setLineWidth(configuration.klineWidth)
+                    context.setLineWidth(configuration.theme.klineWidth)
                     context.strokeLineSegments(between: [openPoint, closePoint])
                     
                     // 画上下影线
-                    context.setLineWidth(configuration.klineShadowLineWidth)
+                    context.setLineWidth(configuration.theme.klineShadowLineWidth)
                     context.strokeLineSegments(between: [highPoint, lowPoint])
      
             case .timeLine: // 分时线模式
                 // 画线
                 context.setLineWidth(configuration.main.realtimeLineWidth)
-                context.setStrokeColor(configuration.realtimeLineColor.cgColor)
+                context.setStrokeColor(configuration.main.realtimeLineColor.cgColor)
                 if index == 0 { // 处理第一个点
                     context.move(to: closePoint)
                 } else {
@@ -192,8 +192,8 @@ class OKKLineMainView: OKView {
         let dateString = configuration.dateFormatter.string(from: date)
         
         let dateAttributes: [String : Any] = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
+            NSForegroundColorAttributeName : configuration.main.assistTextColor,
+            NSFontAttributeName : configuration.main.assistTextFont
         ]
 
         let dateAttrString = NSAttributedString(string: dateString, attributes: dateAttributes)
@@ -244,8 +244,8 @@ class OKKLineMainView: OKView {
         let dateStr = formatter.string(from: date) + " "
         
         let dateAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
+            NSForegroundColorAttributeName : configuration.main.assistTextColor,
+            NSFontAttributeName : configuration.main.assistTextFont
         ]
         drawAttrsString.append(NSAttributedString(string: dateStr, attributes: dateAttrs))
         
@@ -256,8 +256,8 @@ class OKKLineMainView: OKView {
         
         let string = openStr + highStr + lowStr + closeStr
         let attrs: [String : Any] = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
+            NSForegroundColorAttributeName : configuration.main.assistTextColor,
+            NSFontAttributeName : configuration.main.assistTextFont
         ]
         
         drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
@@ -269,7 +269,7 @@ class OKKLineMainView: OKView {
                 
                 let attrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 
                 if let value = drawModel.MAs![idx] {
@@ -283,7 +283,7 @@ class OKKLineMainView: OKView {
                 
                 let attrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 if let value = drawModel.MAs![idx] {
                     let maStr = String(format: "EMA\(day): %.2f ", value)
@@ -301,7 +301,7 @@ class OKKLineMainView: OKView {
             if let value = drawModel.BOLL_UP {
                 let upAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.BOLL_UPColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let upAttrsStr = NSAttributedString(string: String(format: "UP: %.2f ", value), attributes: upAttrs)
                 drawAttrsString.append(upAttrsStr)
@@ -309,7 +309,7 @@ class OKKLineMainView: OKView {
             if let value = drawModel.BOLL_MB {
                 let mbAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.BOLL_MBColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let mbAttrsStr = NSAttributedString(string: String(format: "MB: %.2f ", value), attributes: mbAttrs)
                 drawAttrsString.append(mbAttrsStr)
@@ -317,7 +317,7 @@ class OKKLineMainView: OKView {
             if let value = drawModel.BOLL_DN {
                 let dnAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.BOLL_DNColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let dnAttrsStr = NSAttributedString(string: String(format: "DN: %.2f ", value), attributes: dnAttrs)
                 drawAttrsString.append(dnAttrsStr)
@@ -348,8 +348,8 @@ class OKKLineMainView: OKView {
                     
                     if let value = model.MAs?[idx] {
                     
-                        let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                            self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                        let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                            self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                         
                         let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                         
@@ -384,8 +384,8 @@ class OKKLineMainView: OKView {
                     
                     if let value = model.EMAs?[idx] {
                         
-                        let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                            self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                        let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                            self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                         
                         let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                         
@@ -410,8 +410,8 @@ class OKKLineMainView: OKView {
         MBLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.BOLL_MB {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                 let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                 return CGPoint(x: xPosition, y: yPosition)
             }
@@ -423,8 +423,8 @@ class OKKLineMainView: OKView {
         UPLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.BOLL_UP {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                 let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                 return CGPoint(x: xPosition, y: yPosition)
             }
@@ -436,8 +436,9 @@ class OKKLineMainView: OKView {
         DNLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.BOLL_DN {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
+                
                 let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                 return CGPoint(x: xPosition, y: yPosition)
             }

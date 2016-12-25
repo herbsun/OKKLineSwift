@@ -135,8 +135,8 @@ class OKKLineAccessoryView: OKView {
         switch configuration.accessory.indicatorType {
         case .MACD:
             let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : configuration.assistTextColor,
-                NSFontAttributeName : configuration.assistTextFont
+                NSForegroundColorAttributeName : configuration.main.assistTextColor,
+                NSFontAttributeName : configuration.main.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: "MACD(12,26,9) ", attributes: attrs))
             
@@ -144,7 +144,7 @@ class OKKLineAccessoryView: OKView {
             if let dif = drawModel.DIF {
                 let difAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.DIFColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let difAttrsStr = NSAttributedString(string: String(format: "DIF: %.2f ", dif), attributes: difAttrs)
                 drawAttrsString.append(difAttrsStr)
@@ -152,7 +152,7 @@ class OKKLineAccessoryView: OKView {
             if let dea = drawModel.DEA {
                 let deaAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.DEAColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let deaAttrsStr = NSAttributedString(string: String(format: "DEA: %.2f ", dea), attributes: deaAttrs)
                 drawAttrsString.append(deaAttrsStr)
@@ -161,7 +161,7 @@ class OKKLineAccessoryView: OKView {
                 
                 let macdAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.MACDColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let macdAttrsStr = NSAttributedString(string: String(format: "MACD: %.2f ", macd), attributes: macdAttrs)
                 drawAttrsString.append(macdAttrsStr)
@@ -170,15 +170,15 @@ class OKKLineAccessoryView: OKView {
         case .KDJ:
             
             let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : configuration.assistTextColor,
-                NSFontAttributeName : configuration.assistTextFont
+                NSForegroundColorAttributeName : configuration.main.assistTextColor,
+                NSFontAttributeName : configuration.main.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: "KDJ(9,3,3) ", attributes: attrs))
             
             if let value = drawModel.KDJ_K {
                 let kAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.KDJ_KColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let kAttrsStr = NSAttributedString(string: String(format: "K: %.2f ", value), attributes: kAttrs)
                 drawAttrsString.append(kAttrsStr)
@@ -186,7 +186,7 @@ class OKKLineAccessoryView: OKView {
             if let value = drawModel.KDJ_D {
                 let dAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.KDJ_DColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let dAttrsStr = NSAttributedString(string: String(format: "D: %.2f ", value), attributes: dAttrs)
                 drawAttrsString.append(dAttrsStr)
@@ -194,7 +194,7 @@ class OKKLineAccessoryView: OKView {
             if let value = drawModel.KDJ_J {
                 let jAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.KDJ_JColor,
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 let jAttrsStr = NSAttributedString(string: String(format: "J: %.2f ", value), attributes: jAttrs)
                 drawAttrsString.append(jAttrsStr)
@@ -219,8 +219,8 @@ class OKKLineAccessoryView: OKView {
         // 画柱状图
         for (index, model) in drawModels.enumerated() {
             
-            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
-                configuration.klineWidth * 0.5 + configuration.klineSpace
+            let xPosition = CGFloat(index) * (configuration.theme.klineWidth + configuration.theme.klineSpace) +
+                configuration.theme.klineWidth * 0.5 + configuration.theme.klineSpace
             
             var startPoint = CGPoint(x: xPosition, y: middleY)
             var endPoint = CGPoint(x: xPosition, y: middleY)
@@ -231,8 +231,8 @@ class OKKLineAccessoryView: OKView {
                 startPoint.y = macd > 0 ? middleY - offsetValue : middleY
                 endPoint.y = macd > 0 ? middleY : middleY + offsetValue
                 
-                context.setStrokeColor(macd > 0 ? configuration.increaseColor.cgColor : configuration.decreaseColor.cgColor)
-                context.setLineWidth(configuration.klineWidth)
+                context.setStrokeColor(macd > 0 ? configuration.theme.increaseColor.cgColor : configuration.theme.decreaseColor.cgColor)
+                context.setLineWidth(configuration.theme.klineWidth)
                 context.strokeLineSegments(between: [startPoint, endPoint])
             }
         }
@@ -244,8 +244,8 @@ class OKKLineAccessoryView: OKView {
                                        configuration: configuration)
         difLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
         
-            let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+            let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
             if let value = model.DIF {
                 let yPosition = CGFloat(-(value) / unitValue) + middleY
                 return CGPoint(x: xPosition, y: yPosition)
@@ -261,8 +261,8 @@ class OKKLineAccessoryView: OKView {
         deaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.DEA {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                 let yPosition = CGFloat(-(value) / unitValue) + middleY
                 return CGPoint(x: xPosition, y: yPosition)
             }
@@ -281,8 +281,8 @@ class OKKLineAccessoryView: OKView {
         KDJ_KLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_K {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                 let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                 return CGPoint(x: xPosition, y: yPosition)
             }
@@ -294,8 +294,8 @@ class OKKLineAccessoryView: OKView {
         KDJ_DLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_D {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                 let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                 return CGPoint(x: xPosition, y: yPosition)
             }
@@ -307,8 +307,8 @@ class OKKLineAccessoryView: OKView {
         KDJ_JLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_J {
-                let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                    self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                    self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                 let yPosition: CGFloat = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                 return CGPoint(x: xPosition, y: yPosition)
             }

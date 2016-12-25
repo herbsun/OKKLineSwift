@@ -42,7 +42,7 @@ class OKKLineDrawView: OKView {
     /// draw的个数
     private var drawCount: Int {
         get {
-            let count = Int((bounds.width - drawValueViewWidth) / (configuration.klineSpace + configuration.klineWidth))
+            let count = Int((bounds.width - drawValueViewWidth) / (configuration.theme.klineSpace + configuration.theme.klineWidth))
             return count > configuration.dataSource.klineModels.count ? configuration.dataSource.klineModels.count : count
         }
     }
@@ -154,23 +154,23 @@ class OKKLineDrawView: OKView {
         /// 指示器
         indicatorVerticalView = OKView()
         indicatorVerticalView.isHidden = true
-        indicatorVerticalView.backgroundColor = configuration.longPressLineColor
+        indicatorVerticalView.backgroundColor = configuration.theme.longPressLineColor
         addSubview(indicatorVerticalView)
         indicatorVerticalView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
             make.top.equalTo(configuration.main.topAssistViewHeight)
-            make.width.equalTo(configuration.longPressLineWidth)
+            make.width.equalTo(configuration.theme.longPressLineWidth)
             make.leading.equalTo(0)
         }
         
         indicatorHorizontalView = OKView()
         indicatorHorizontalView.isHidden = true
-        indicatorHorizontalView.backgroundColor = configuration.longPressLineColor
+        indicatorHorizontalView.backgroundColor = configuration.theme.longPressLineColor
         addSubview(indicatorHorizontalView)
         indicatorHorizontalView.snp.makeConstraints { (make) in
             make.leading.equalTo(drawValueViewWidth)
             make.trailing.equalTo(0)
-            make.height.equalTo(configuration.longPressLineWidth)
+            make.height.equalTo(configuration.theme.longPressLineWidth)
             make.top.equalTo(0)
         }
         
@@ -245,7 +245,7 @@ class OKKLineDrawView: OKView {
         case .changed:
             
             let location = recognizer.location(in: recognizer.view)
-            let klineUnit = configuration.klineWidth + configuration.klineSpace
+            let klineUnit = configuration.theme.klineWidth + configuration.theme.klineSpace
             
             if abs(location.x - lastPanPoint!.x) < klineUnit {
                 return
@@ -277,18 +277,18 @@ class OKKLineDrawView: OKView {
         
         let difValue = recognizer.scale - lastScale
         
-        if abs(difValue) > configuration.klineScale {
+        if abs(difValue) > configuration.theme.klineScale {
             
-            let lastKLineWidth: CGFloat = configuration.klineWidth
-            let newKLineWidth: CGFloat = configuration.klineWidth * (difValue > 0 ?
-                (1 + configuration.klineScaleFactor) : (1 - configuration.klineScaleFactor))
+            let lastKLineWidth: CGFloat = configuration.theme.klineWidth
+            let newKLineWidth: CGFloat = configuration.theme.klineWidth * (difValue > 0 ?
+                (1 + configuration.theme.klineScaleFactor) : (1 - configuration.theme.klineScaleFactor))
             
             // 超过限制 不在绘制
-            if newKLineWidth > configuration.klineMaxWidth || newKLineWidth < configuration.klineMinWidth {
+            if newKLineWidth > configuration.theme.klineMaxWidth || newKLineWidth < configuration.theme.klineMinWidth {
                 return
             }
             
-            configuration.klineWidth = newKLineWidth
+            configuration.theme.klineWidth = newKLineWidth
             lastScale = recognizer.scale
             
             if recognizer.numberOfTouches == 2 {
@@ -299,8 +299,8 @@ class OKKLineDrawView: OKView {
                 let centerPoint = CGPoint(x: (pinchPoint1.x + pinchPoint2.x) * 0.5,
                                           y: (pinchPoint1.y + pinchPoint2.y) * 0.5)
                 
-                let lastOffsetCount = Int(centerPoint.x / (configuration.klineSpace + lastKLineWidth))
-                let newOffsetCount = Int(centerPoint.x / (configuration.klineSpace + configuration.klineWidth))
+                let lastOffsetCount = Int(centerPoint.x / (configuration.theme.klineSpace + lastKLineWidth))
+                let newOffsetCount = Int(centerPoint.x / (configuration.theme.klineSpace + configuration.theme.klineWidth))
                 
                 lastOffsetIndex = newOffsetCount - lastOffsetCount
                 
@@ -320,7 +320,7 @@ class OKKLineDrawView: OKView {
             
             if location.x <= drawValueViewWidth { return }
             
-            let unit = configuration.klineWidth + configuration.klineSpace
+            let unit = configuration.theme.klineWidth + configuration.theme.klineSpace
             
             let offsetCount: Int = Int((location.x - drawValueViewWidth) / unit)
             let previousOffset: CGFloat = (CGFloat(offsetCount) + 0.5) * unit + drawValueViewWidth

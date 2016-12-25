@@ -100,17 +100,17 @@ class OKKLineVolumeView: OKView {
         
         for (index, klineModel) in volumeDrawKLineModels.enumerated() {
             
-            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
-                configuration.klineWidth * 0.5 + configuration.klineSpace
+            let xPosition = CGFloat(index) * (configuration.theme.klineWidth + configuration.theme.klineSpace) +
+                configuration.theme.klineWidth * 0.5 + configuration.theme.klineSpace
             
             let yPosition = abs(drawMaxY - CGFloat((klineModel.volume - limitValue.minValue) / unitValue))
             let startPoint = CGPoint(x: xPosition, y: yPosition)
             let endPoint = CGPoint(x: xPosition, y: bounds.height)
             
             let strokeColor = klineModel.open < klineModel.close ?
-                configuration.increaseColor : configuration.decreaseColor
+                configuration.theme.increaseColor : configuration.theme.decreaseColor
             context.setStrokeColor(strokeColor.cgColor)
-            context.setLineWidth(configuration.klineWidth)
+            context.setLineWidth(configuration.theme.klineWidth)
             context.strokeLineSegments(between: [startPoint, endPoint])
         }
         context.strokePath()
@@ -146,8 +146,8 @@ class OKKLineVolumeView: OKView {
         let volumeStr = String(format: "VOLUME %.2f  ", drawModel.volume)
         
         let volumeAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
+            NSForegroundColorAttributeName : configuration.main.assistTextColor,
+            NSFontAttributeName : configuration.main.assistTextFont
         ]
         drawAttrsString.append(NSAttributedString(string: volumeStr, attributes: volumeAttrs))
         
@@ -158,7 +158,7 @@ class OKKLineVolumeView: OKView {
                 
                 let attrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 if let value = drawModel.MA_VOLUMEs![idx] {
                     let maStr = String(format: "MAVOL\(day): %.2f ", value)
@@ -171,7 +171,7 @@ class OKKLineVolumeView: OKView {
                 
                 let attrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
-                    NSFontAttributeName : configuration.assistTextFont
+                    NSFontAttributeName : configuration.main.assistTextFont
                 ]
                 if let value = drawModel.EMA_VOLUMEs![idx] {
                     let maStr = String(format: "EMAVOL\(day): %.2f ", value)
@@ -206,8 +206,8 @@ class OKKLineVolumeView: OKView {
                     
                     if let value = model.MA_VOLUMEs?[idx] {
                         
-                        let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                            self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                        let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                            self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                         
                         let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                         
@@ -242,8 +242,8 @@ class OKKLineVolumeView: OKView {
                     
                     if let value = model.EMA_VOLUMEs?[idx] {
                         
-                        let xPosition = CGFloat(index) * (self.configuration.klineWidth + self.configuration.klineSpace) +
-                            self.configuration.klineWidth * 0.5 + self.configuration.klineSpace
+                        let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
+                            self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                         
                         let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
                         
