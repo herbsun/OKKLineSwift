@@ -57,7 +57,7 @@ class OKKLineDrawView: OKView {
         self.init()
         self.configuration = configuration
         
-        ok_backgroundColor = configuration.mainViewBgColor
+        ok_backgroundColor = configuration.main.backgroundColor
         
         // 捏合手势
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
@@ -84,13 +84,13 @@ class OKKLineDrawView: OKView {
         mainView.snp.makeConstraints { (make) in
             make.top.trailing.equalToSuperview()
             make.leading.equalTo(drawValueViewWidth)
-            make.height.equalToSuperview().multipliedBy(configuration.mainScale)
+            make.height.equalToSuperview().multipliedBy(configuration.main.scale)
         }
         
         /// Main Value View
-        let mainEdge = OKEdgeInsets(top: configuration.mainTopAssistViewHeight,
+        let mainEdge = OKEdgeInsets(top: configuration.main.topAssistViewHeight,
                                     left: 0,
-                                    bottom: configuration.mainBottomAssistViewHeight,
+                                    bottom: configuration.main.bottomAssistViewHeight,
                                     right: 0)
         mainValueView = OKValueView(configuration: configuration, drawEdgeInsets: mainEdge)
         addSubview(mainValueView)
@@ -112,11 +112,11 @@ class OKKLineDrawView: OKView {
         volumeView.snp.makeConstraints { (make) in
             make.leading.trailing.equalTo(self.mainView)
             make.top.equalTo(self.mainView.snp.bottom)
-            make.height.equalToSuperview().multipliedBy(configuration.volumeScale)
+            make.height.equalToSuperview().multipliedBy(configuration.volume.scale)
         }
         
         /// Volume Value View
-        let volumeEdge = OKEdgeInsets(top: configuration.volumeTopViewHeight, left: 0, bottom: 0, right: 0)
+        let volumeEdge = OKEdgeInsets(top: configuration.volume.topViewHeight, left: 0, bottom: 0, right: 0)
         volumeValueView = OKValueView(configuration: configuration, drawEdgeInsets: volumeEdge)
         addSubview(volumeValueView)
         volumeValueView.snp.makeConstraints { (make) in
@@ -158,7 +158,7 @@ class OKKLineDrawView: OKView {
         addSubview(indicatorVerticalView)
         indicatorVerticalView.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()
-            make.top.equalTo(configuration.mainTopAssistViewHeight)
+            make.top.equalTo(configuration.main.topAssistViewHeight)
             make.width.equalTo(configuration.longPressLineWidth)
             make.leading.equalTo(0)
         }

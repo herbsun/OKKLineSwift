@@ -38,9 +38,9 @@ class OKKLineView: OKView {
         timeSegmentView = OKSegmentView(direction: .horizontal, titles: timeTitles, configuration: configuration)
         timeSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
-                self?.configuration.klineType = .timeLine
+                self?.configuration.main.klineType = .timeLine
             } else {
-                self?.configuration.klineType = .KLine
+                self?.configuration.main.klineType = .KLine
             }
         
             self?.klineDrawView.drawKLineView(true)
@@ -58,11 +58,11 @@ class OKKLineView: OKView {
         
         mainViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
-                self?.configuration.mainIndicatorType = .MA([5, 12, 26])
+                self?.configuration.main.indicatorType = .MA([5, 12, 26])
             } else if result.index == 1 {
-                self?.configuration.mainIndicatorType = .EMA([5, 12, 26])
+                self?.configuration.main.indicatorType = .EMA([5, 12, 26])
             } else if result.index == 2 {
-                self?.configuration.mainIndicatorType = .BOLL(20)
+                self?.configuration.main.indicatorType = .BOLL(20)
             }
             self?.klineDrawView.drawKLineView(true)
         }
@@ -72,7 +72,7 @@ class OKKLineView: OKView {
             make.top.equalTo(klineDrawView.snp.top)
             make.leading.equalTo(klineDrawView.snp.trailing)
             make.trailing.equalToSuperview()
-            make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.mainScale)
+            make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.main.scale)
         }
         
         let volumeViewIndicatorTitles = ["MA", "EMA"]
@@ -82,9 +82,9 @@ class OKKLineView: OKView {
         
         volumeViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
-                self?.configuration.volumeIndicatorType = .MA_VOLUME([5, 12, 26])
+                self?.configuration.volume.indicatorType = .MA_VOLUME([5, 12, 26])
             } else if result.index == 1 {
-                self?.configuration.volumeIndicatorType = .EMA_VOLUME([5, 12, 26])
+                self?.configuration.volume.indicatorType = .EMA_VOLUME([5, 12, 26])
             }
             self?.klineDrawView.drawKLineView(true)
         }
@@ -94,7 +94,7 @@ class OKKLineView: OKView {
             make.top.equalTo(mainViewIndicatorSegmentView.snp.bottom)
             make.leading.equalTo(klineDrawView.snp.trailing)
             make.trailing.equalToSuperview()
-            make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.volumeScale)
+            make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.volume.scale)
         }
         
         let accessoryViewIndicatorTitles = ["MACD", "KDJ"]

@@ -28,13 +28,13 @@ class OKKLineMainView: OKView {
     
     private var drawMaxY: CGFloat {
         get {
-            return bounds.height - configuration.mainBottomAssistViewHeight
+            return bounds.height - configuration.main.bottomAssistViewHeight
         }
     }
     
     private var drawHeight: CGFloat {
         get {
-            return bounds.height - configuration.mainTopAssistViewHeight - configuration.mainBottomAssistViewHeight
+            return bounds.height - configuration.main.topAssistViewHeight - configuration.main.bottomAssistViewHeight
         }
     }
 
@@ -73,7 +73,7 @@ class OKKLineMainView: OKView {
         let displayRect = CGRect(x: 0,
                                  y: 0,
                                  width: bounds.width,
-                                 height: configuration.mainTopAssistViewHeight)
+                                 height: configuration.main.topAssistViewHeight)
 
         setNeedsDisplay(displayRect)
         
@@ -89,7 +89,7 @@ class OKKLineMainView: OKView {
         }
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.mainViewBgColor.cgColor)
+        context.setFillColor(configuration.main.backgroundColor.cgColor)
         context.fill(rect)
         
         // 没有数据 不绘制
@@ -109,9 +109,9 @@ class OKKLineMainView: OKView {
         // 设置日期背景色
         context.setFillColor(configuration.assistViewBgColor.cgColor)
         let assistRect = CGRect(x: 0,
-                                y: rect.height - configuration.mainBottomAssistViewHeight,
+                                y: rect.height - configuration.main.bottomAssistViewHeight,
                                 width: rect.width,
-                                height: configuration.mainBottomAssistViewHeight)
+                                height: configuration.main.bottomAssistViewHeight)
         context.fill(assistRect)
         
         lastDrawDatePoint = CGPoint.zero
@@ -131,7 +131,7 @@ class OKKLineMainView: OKView {
             let highPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.high - limitValue.minValue) / unitValue)))
             let lowPoint = CGPoint(x: xPosition, y: abs(drawMaxY - CGFloat((klineModel.low - limitValue.minValue) / unitValue)))
             
-            switch configuration.klineType {
+            switch configuration.main.klineType {
             case .KLine: // K线模式
                 
                     // 决定K线颜色
@@ -149,7 +149,7 @@ class OKKLineMainView: OKView {
      
             case .timeLine: // 分时线模式
                 // 画线
-                context.setLineWidth(configuration.realtimeLineWidth)
+                context.setLineWidth(configuration.main.realtimeLineWidth)
                 context.setStrokeColor(configuration.realtimeLineColor.cgColor)
                 if index == 0 { // 处理第一个点
                     context.move(to: closePoint)
@@ -168,7 +168,7 @@ class OKKLineMainView: OKView {
         context.strokePath()
         
         // 绘制指标
-        switch configuration.mainIndicatorType {
+        switch configuration.main.indicatorType {
         case .MA(_):
             drawMA(context: context, limitValue: limitValue, drawModels: mainDrawKLineModels)
         case .EMA(_):
@@ -199,7 +199,7 @@ class OKKLineMainView: OKView {
         let dateAttrString = NSAttributedString(string: dateString, attributes: dateAttributes)
         
         let drawDatePoint = CGPoint(x: positionX - dateAttrString.size().width * 0.5,
-                                    y: bounds.height - configuration.mainBottomAssistViewHeight)
+                                    y: bounds.height - configuration.main.bottomAssistViewHeight)
         
         if drawDatePoint.x < 0 || (drawDatePoint.x + dateAttrString.size().width) > bounds.width {
             return
@@ -211,7 +211,7 @@ class OKKLineMainView: OKView {
             let rect = CGRect(x: drawDatePoint.x,
                               y: drawDatePoint.y,
                               width: dateAttrString.size().width,
-                              height: configuration.mainBottomAssistViewHeight)
+                              height: configuration.main.bottomAssistViewHeight)
             
             dateAttrString.draw(in: rect)
             lastDrawDatePoint = drawDatePoint
@@ -262,7 +262,7 @@ class OKKLineMainView: OKView {
         
         drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
         
-        switch configuration.mainIndicatorType {
+        switch configuration.main.indicatorType {
         case .MA(let days):
             
             for (idx, day) in days.enumerated() {
@@ -335,7 +335,7 @@ class OKKLineMainView: OKView {
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        switch configuration.mainIndicatorType {
+        switch configuration.main.indicatorType {
         case .MA(let days):
             
             for (idx, day) in days.enumerated() {
@@ -371,7 +371,7 @@ class OKKLineMainView: OKView {
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        switch configuration.mainIndicatorType {
+        switch configuration.main.indicatorType {
         case .EMA(let days):
             
             for (idx, day) in days.enumerated() {
@@ -454,18 +454,18 @@ class OKKLineMainView: OKView {
             return
         }
         
-        switch configuration.mainIndicatorType {
+        switch configuration.main.indicatorType {
         case .MA(_):
-            let maModel = OKMAModel(indicatorType: configuration.mainIndicatorType,
+            let maModel = OKMAModel(indicatorType: configuration.main.indicatorType,
                                     klineModels: configuration.dataSource.klineModels)
             mainDrawKLineModels = maModel.fetchDrawMAData(drawRange: configuration.dataSource.drawRange)
             
         case .EMA(_):
-            let emaModel = OKEMAModel(indicatorType: configuration.mainIndicatorType,
+            let emaModel = OKEMAModel(indicatorType: configuration.main.indicatorType,
                                       klineModels: configuration.dataSource.klineModels)
             mainDrawKLineModels = emaModel.fetchDrawEMAData(drawRange: configuration.dataSource.drawRange)
         case .BOLL(_):
-            let bollModel = OKBOLLModel(indicatorType: configuration.mainIndicatorType,
+            let bollModel = OKBOLLModel(indicatorType: configuration.main.indicatorType,
                                         klineModels: configuration.dataSource.klineModels)
             mainDrawKLineModels = bollModel.fetchDrawBOLLData(drawRange: configuration.dataSource.drawRange)
         default:
@@ -491,7 +491,7 @@ class OKKLineMainView: OKView {
                 maxValue = model.high
             }
             // 求指标数据的最大最小
-            switch configuration.mainIndicatorType {
+            switch configuration.main.indicatorType {
             case .MA(_):
                 if let MAs = model.MAs {
                     for value in MAs {

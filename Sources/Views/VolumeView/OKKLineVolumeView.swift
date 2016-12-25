@@ -30,7 +30,7 @@ class OKKLineVolumeView: OKView {
     }
     private var drawHeight: CGFloat {
         get {
-            return bounds.height - configuration.volumeTopViewHeight
+            return bounds.height - configuration.volume.topViewHeight
         }
     }
     
@@ -62,7 +62,7 @@ class OKKLineVolumeView: OKView {
         let displayRect = CGRect(x: 0,
                                  y: 0,
                                  width: bounds.width,
-                                 height: configuration.volumeTopViewHeight)
+                                 height: configuration.volume.topViewHeight)
 
         setNeedsDisplay(displayRect)
     }
@@ -75,7 +75,7 @@ class OKKLineVolumeView: OKView {
         }
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.volumeViewBgColor.cgColor)
+        context.setFillColor(configuration.volume.backgroundColor.cgColor)
         context.fill(rect)
         
         // 没有数据 不绘制
@@ -116,7 +116,7 @@ class OKKLineVolumeView: OKView {
         context.strokePath()
         
         // 画指标线
-        switch configuration.volumeIndicatorType {
+        switch configuration.volume.indicatorType {
         case .MA_VOLUME(_):
             drawMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
         case .EMA_VOLUME(_):
@@ -151,7 +151,7 @@ class OKKLineVolumeView: OKView {
         ]
         drawAttrsString.append(NSAttributedString(string: volumeStr, attributes: volumeAttrs))
         
-        switch configuration.volumeIndicatorType {
+        switch configuration.volume.indicatorType {
         case .MA_VOLUME(let days):
             
             for (idx, day) in days.enumerated() {
@@ -193,7 +193,7 @@ class OKKLineVolumeView: OKView {
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        switch configuration.volumeIndicatorType {
+        switch configuration.volume.indicatorType {
         case .MA_VOLUME(let days):
             
             for (idx, day) in days.enumerated() {
@@ -229,7 +229,7 @@ class OKKLineVolumeView: OKView {
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        switch configuration.volumeIndicatorType {
+        switch configuration.volume.indicatorType {
         case .EMA_VOLUME(let days):
             
             for (idx, day) in days.enumerated() {
@@ -265,14 +265,14 @@ class OKKLineVolumeView: OKView {
             return
         }
         
-        switch configuration.volumeIndicatorType {
+        switch configuration.volume.indicatorType {
         case .MA_VOLUME(_):
-            let maModel = OKMAVOLUMEModel(indicatorType: configuration.volumeIndicatorType,
+            let maModel = OKMAVOLUMEModel(indicatorType: configuration.volume.indicatorType,
                                           klineModels: configuration.dataSource.klineModels)
             volumeDrawKLineModels = maModel.fetchDrawMAVOLUMEData(drawRange: configuration.dataSource.drawRange)
             
         case .EMA_VOLUME(_):
-            let emaModel = OKEMAVOLUMEModel(indicatorType: configuration.volumeIndicatorType,
+            let emaModel = OKEMAVOLUMEModel(indicatorType: configuration.volume.indicatorType,
                                             klineModels: configuration.dataSource.klineModels)
             volumeDrawKLineModels = emaModel.fetchDrawEMAVOLUMEData(drawRange: configuration.dataSource.drawRange)
             
@@ -300,7 +300,7 @@ class OKKLineVolumeView: OKView {
             }
             
             // 求指标数据的最大最小
-            switch configuration.volumeIndicatorType {
+            switch configuration.volume.indicatorType {
             case .MA_VOLUME(_):
                 if let MAs = model.MA_VOLUMEs {
                     for value in MAs {

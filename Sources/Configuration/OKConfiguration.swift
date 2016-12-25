@@ -57,23 +57,15 @@ public final class OKConfiguration {
     
     // MARK: - Common
     var dateFormatter: DateFormatter
-    var dataSource: OKDataSource = OKDataSource()
-    ///临时数据
-//    var klineModels = [OKKLineModel]()
-//    
-//    var drawKLineModels = [OKKLineModel]()
-//    var klineColors = [CGColor]()
-//    var klinePositions = [CGPoint]()
     
-    /// 是否显示价格
-    var showPriceView: Bool = true
+    var dataSource: OKDataSource = OKDataSource()
     
     /// 全局主题
     let theme: OKTheme = OKTheme()
-    /// 主图图表的背景色
-    var mainViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
-    /// 成交量视图背景色
-    var volumeViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
+    let main: OKMainConfiguration = OKMainConfiguration()
+    let volume: OKVolumeConfiguration = OKVolumeConfiguration()
+    
+    
     /// 指标视图背景色
     var accessoryViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
     
@@ -96,22 +88,12 @@ public final class OKConfiguration {
     var longPressLineWidth: CGFloat = 0.5
     
     var indicatorLineWidth: CGFloat = 0.8
-    /// 时间线
-    var timeLineType: OKTimeLineType = .realTime
+
     /// k线的间隔
     var klineSpace: CGFloat = 1.0
     
     
     // MARK: - 主图
-    
-    /// 主图比例
-    var mainScale: CGFloat = 0.50
-    /// 主图顶部提示信息高度
-    var mainTopAssistViewHeight: CGFloat = 30.0
-    /// 主图底部时间线信息高度
-    var mainBottomAssistViewHeight: CGFloat = 15.0
-    /// 主图分时线宽度
-    var realtimeLineWidth: CGFloat = 1.0
     /// k线图主体宽度
     var klineWidth: CGFloat = 5.0
     /// 上下影线宽度
@@ -124,23 +106,10 @@ public final class OKConfiguration {
     var klineScale: CGFloat = 0.03
     /// k线缩放因子
     var klineScaleFactor: CGFloat = 0.03
-    /// 主图K线类型
-    var klineType: OKKLineType = .KLine
-    /// 主图指标类型
-    var mainIndicatorType: OKIndicatorType = .MA([12, 26])
+
     
     // MARK: - 成交量图(volume)
     
-    /// 是否显示成交量视图
-    var showVolumeView: Bool = true
-    /// 成交量比例
-    var volumeScale: CGFloat = 0.25
-    /// 顶部提示信息高度
-    var volumeTopViewHeight: CGFloat = 20.0
-    /// 成交量图分时线宽度
-    var volumeLineWidth: CGFloat = 0.5
-    /// 成交量指标类型
-    var volumeIndicatorType: OKIndicatorType = .EMA_VOLUME([12, 26])
     
     // MARK: - 指标图(accessory)
     
@@ -164,6 +133,12 @@ public final class OKConfiguration {
     
 }
 
+class OKDataSource {
+    var drawRange: NSRange?
+    var klineModels = [OKKLineModel]()
+    var drawKLineModels = [OKKLineModel]()
+}
+
 /// 皮肤主题
 class OKTheme {
     var DIFColor: OKColor = OKColor(hexRGB: 0xFF8D1D)
@@ -184,8 +159,40 @@ class OKTheme {
     }
 }
 
-class OKDataSource {
-    var drawRange: NSRange?
-    var klineModels = [OKKLineModel]()
-    var drawKLineModels = [OKKLineModel]()
+class OKMainConfiguration {
+    /// 主图图表的背景色
+    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
+    /// 主图比例
+    var scale: CGFloat = 0.50
+    /// 主图顶部提示信息高度
+    var topAssistViewHeight: CGFloat = 30.0
+    /// 主图底部时间线信息高度
+    var bottomAssistViewHeight: CGFloat = 15.0
+    /// 时间线
+    var timeLineType: OKTimeLineType = .realTime
+    /// 主图分时线宽度
+    var realtimeLineWidth: CGFloat = 1.0
+    /// 主图K线类型
+    var klineType: OKKLineType = .KLine
+    /// 主图指标类型
+    var indicatorType: OKIndicatorType = .MA([12, 26])
+}
+
+class OKVolumeConfiguration {
+    /// 是否显示成交量视图
+    var show: Bool = true
+    /// 成交量视图背景色
+    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
+    /// 成交量比例
+    var scale: CGFloat = 0.25
+    /// 顶部提示信息高度
+    var topViewHeight: CGFloat = 20.0
+    /// 成交量图分时线宽度
+    var lineWidth: CGFloat = 0.5
+    /// 成交量指标类型
+    var indicatorType: OKIndicatorType = .EMA_VOLUME([12, 26])
+}
+
+class OKAccessoryConfiguration {
+    
 }

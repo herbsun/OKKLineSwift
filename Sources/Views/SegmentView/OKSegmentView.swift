@@ -46,7 +46,7 @@ class OKSegmentView: OKView {
         self.titles = titles
         self.configuration = configuration
         
-        backgroundColor = configuration.mainViewBgColor
+        backgroundColor = configuration.main.backgroundColor
         
         scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
