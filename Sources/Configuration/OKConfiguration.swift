@@ -48,9 +48,7 @@ enum OKTimeLineType: Int {
 
 public final class OKConfiguration {
     
-//    static let shared: OKConfiguration = OKConfiguration()
-    
-    public init() {
+    init() {
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
     }
@@ -58,16 +56,18 @@ public final class OKConfiguration {
     // MARK: - Common
     var dateFormatter: DateFormatter
     
-    var dataSource: OKDataSource = OKDataSource()
+    let dataSource: OKDataSource = OKDataSource()
     
     /// 全局主题
     let theme: OKTheme = OKTheme()
+    /// 主图Configuration(main)
     let main: OKMainConfiguration = OKMainConfiguration()
+    /// 成交量图Configuration(volume)
     let volume: OKVolumeConfiguration = OKVolumeConfiguration()
+    /// 指标图Configuration(accessory)
     let accessory: OKAccessoryConfiguration = OKAccessoryConfiguration()
-    
-    /// 指标视图背景色
-    var accessoryViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
+    /// 价格视图Configuration(value)
+    let value: OKValueConfiguration = OKValueConfiguration()
     
     /// 辅助视图背景色(e.g. 日期的背景色)
     var assistViewBgColor: OKColor = OKColor(hexRGB: 0x1D2227)
@@ -92,8 +92,6 @@ public final class OKConfiguration {
     /// k线的间隔
     var klineSpace: CGFloat = 1.0
     
-    
-    // MARK: - 主图
     /// k线图主体宽度
     var klineWidth: CGFloat = 5.0
     /// 上下影线宽度
@@ -106,32 +104,16 @@ public final class OKConfiguration {
     var klineScale: CGFloat = 0.03
     /// k线缩放因子
     var klineScaleFactor: CGFloat = 0.03
-
-    
-    // MARK: - 成交量图(volume)
-    
-    
-    // MARK: - 指标图(accessory)
-    
-    
- 
-    // MARK: - SegmentView
-    
-    // MARK: - ValueView
-    var valueViewBgColor: OKColor = OKColor(hexRGB: 0x181C20)
-    var valueViewFont: OKFont = OKFont.systemFont(ofSize: 11)
-    var valueViewTextColor: OKColor = OKColor(hexRGB: 0xDCDADC)
-    
 }
 
-class OKDataSource {
+public class OKDataSource {
     var drawRange: NSRange?
     var klineModels = [OKKLineModel]()
     var drawKLineModels = [OKKLineModel]()
 }
 
-/// 皮肤主题
-class OKTheme {
+// MARK: - 皮肤主题
+public class OKTheme {
     var DIFColor: OKColor = OKColor(hexRGB: 0xFF8D1D)
     var DEAColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
     var MACDColor: OKColor = OKColor(hexRGB: 0xFFC90E)
@@ -150,7 +132,9 @@ class OKTheme {
     }
 }
 
-class OKMainConfiguration {
+// MARK: - 主图Configuration(main)
+
+public class OKMainConfiguration {
     /// 主图图表的背景色
     var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
     /// 主图比例
@@ -169,7 +153,9 @@ class OKMainConfiguration {
     var indicatorType: OKIndicatorType = .MA([12, 26])
 }
 
-class OKVolumeConfiguration {
+// MARK: - 成交量图Configuration(volume)
+
+public class OKVolumeConfiguration {
     /// 是否显示成交量视图
     var show: Bool = true
     /// 成交量视图背景色
@@ -184,9 +170,13 @@ class OKVolumeConfiguration {
     var indicatorType: OKIndicatorType = .EMA_VOLUME([12, 26])
 }
 
-class OKAccessoryConfiguration {
+// MARK: - 指标图Configuration(accessory)
+
+public class OKAccessoryConfiguration {
     /// 是否显示指标图
     var show: Bool = true
+    /// 指标视图背景色
+    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
     /// 指标图比例
     var scale: CGFloat = 0.25
     /// 顶部提示信息高度
@@ -195,4 +185,13 @@ class OKAccessoryConfiguration {
     var lineWidth: CGFloat = 0.5
     /// 辅助图指标类型
     var indicatorType: OKIndicatorType = .MACD
+}
+
+// MARK: - 价格视图Configuration(value)
+
+public class OKValueConfiguration {
+    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
+    var textFont: OKFont = OKFont.systemFont(ofSize: 11)
+    var textColor: OKColor = OKColor(hexRGB: 0xDCDADC)
+    
 }

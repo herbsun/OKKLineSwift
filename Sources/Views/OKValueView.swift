@@ -41,14 +41,14 @@ class OKValueView: OKView {
         textStyle.alignment = .center
         
         limitValueAttrs = [
-            NSForegroundColorAttributeName : configuration.valueViewTextColor,
-            NSFontAttributeName : configuration.valueViewFont,
+            NSForegroundColorAttributeName : configuration.value.textColor,
+            NSFontAttributeName : configuration.value.textFont,
             NSParagraphStyleAttributeName : textStyle
         ]
         
         currentValueAttrs = [
-            NSForegroundColorAttributeName : configuration.valueViewTextColor,
-            NSFontAttributeName : configuration.valueViewFont,
+            NSForegroundColorAttributeName : configuration.value.textColor,
+            NSFontAttributeName : configuration.value.textFont,
             NSParagraphStyleAttributeName : textStyle,
         ]
 
@@ -70,14 +70,14 @@ class OKValueView: OKView {
         }
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.valueViewBgColor.cgColor)
+        context.setFillColor(configuration.value.backgroundColor.cgColor)
         context.fill(rect)
         
         guard let limitValue = limitValue else {
             return
         }
         
-        let valueHeight: CGFloat = configuration.valueViewFont.lineHeight
+        let valueHeight: CGFloat = configuration.value.textFont.lineHeight
         let drawHeight = rect.height - drawEdgeInsets.top - drawEdgeInsets.bottom
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         let drawMaxY = rect.height - drawEdgeInsets.bottom
@@ -116,7 +116,7 @@ class OKValueView: OKView {
             let drawRect = CGRect(x: 0, y: y, width: rect.width, height: valueHeight)
             
             // 画指示背景
-            context.setFillColor(configuration.valueViewBgColor.cgColor)
+            context.setFillColor(configuration.value.backgroundColor.cgColor)
             context.fill(drawRect)
             
             // 画指示框

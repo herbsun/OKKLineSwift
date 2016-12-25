@@ -81,7 +81,7 @@ class OKKLineAccessoryView: OKView {
         
         // 背景色
         context.clear(rect)
-        context.setFillColor(configuration.accessoryViewBgColor.cgColor)
+        context.setFillColor(configuration.accessory.backgroundColor.cgColor)
         context.fill(rect)
         
         // 没有数据 不绘制
