@@ -19,7 +19,8 @@ class OKKLineAccessoryView: OKView {
 
     private var configuration: OKConfiguration!
     private var accessoryDrawKLineModels: [OKKLineModel]?
-    private var assistInfoLabel: UILabel!
+    private var drawAssistString: NSAttributedString?
+    
     private var drawMaxY: CGFloat {
         get {
             return bounds.height
@@ -42,14 +43,6 @@ class OKKLineAccessoryView: OKView {
     convenience init(configuration: OKConfiguration) {
         self.init()
         self.configuration = configuration
-        assistInfoLabel = UILabel()
-        assistInfoLabel.font = OKFont.systemFont(ofSize: 11)
-        assistInfoLabel.textColor = configuration.assistTextColor
-        addSubview(assistInfoLabel)
-        assistInfoLabel.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(configuration.accessoryTopViewHeight)
-        }
     }
     
     override init(frame: CGRect) {
@@ -63,8 +56,20 @@ class OKKLineAccessoryView: OKView {
     // MARK: - Public
     
     public func drawAccessoryView() {
+        
         fetchAccessoryDrawKLineModels()
         setNeedsDisplay()
+    }
+    
+    public func drawAssistView(model: OKKLineModel?) {
+        
+        fetchAssistString(model: model)
+        let displayRect = CGRect(x: 0,
+                                 y: 0,
+                                 width: bounds.width,
+                                 height: configuration.accessoryTopViewHeight)
+        
+        setNeedsDisplay(displayRect)
     }
     
     override func draw(_ rect: CGRect) {
@@ -84,7 +89,16 @@ class OKKLineAccessoryView: OKView {
             return
         }
         
-        drawAssistView(model: nil)
+        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
+            __CGSizeEqualToSize(rect.size, bounds.size)
+            else {
+                
+                drawAssistString?.draw(in: rect)
+                return
+        }
+        
+        fetchAssistString(model: accessoryDrawKLineModels.last!)
+        drawAssistString?.draw(in: rect)
         
         switch configuration.accessoryindicatorType {
         case .MACD:
@@ -97,9 +111,12 @@ class OKKLineAccessoryView: OKView {
             break
         }
     }
+
     
-    public func drawAssistView(model: OKKLineModel?) {
-        
+    
+    // MARK: - Private
+    
+    private func fetchAssistString(model: OKKLineModel?) {
         
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else { return }
         
@@ -186,11 +203,8 @@ class OKKLineAccessoryView: OKView {
         default:
             break
         }
-        assistInfoLabel.attributedText = drawAttrsString
+        drawAssistString = drawAttrsString
     }
-    
-    
-    // MARK: - Private
 
     // MARK: 绘制MACD
     private func drawMACD(context: CGContext, drawModels: [OKKLineModel]) {

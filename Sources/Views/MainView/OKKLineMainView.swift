@@ -17,11 +17,13 @@ class OKKLineMainView: OKView {
     
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
-    private var assistLabel: UILabel!
+    
     private var configuration: OKConfiguration!
     
     private var lastDrawDatePoint: CGPoint = CGPoint.zero
     private var dateAttributes: [String : Any]!
+    
+    private var drawAssistString: NSAttributedString?
     
     private var mainDrawKLineModels: [OKKLineModel]?
     
@@ -50,14 +52,6 @@ class OKKLineMainView: OKView {
             NSForegroundColorAttributeName : configuration.assistTextColor,
             NSFontAttributeName : configuration.assistTextFont
         ]
-        
-        
-        assistLabel = UILabel()
-        addSubview(assistLabel)
-        assistLabel.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalTo(0)
-            make.height.equalTo(configuration.mainTopAssistViewHeight)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,118 +70,21 @@ class OKKLineMainView: OKView {
     
     /// 绘制辅助说明视图
     ///
-    /// - Parameter model: 绘制的模型 如果为nil 取当前画得最后一个模型
+    /// - Parameter model: 绘制的模型 如果为nil 取当前绘制最后一个模型
     public func drawAssistView(model: OKKLineModel?) {
         
-        guard let mainDrawKLineModels = mainDrawKLineModels else { return }
+        fetchAssistString(model: model)
         
-        var drawModel = mainDrawKLineModels.last!
-        
-        if let model = model {
-            for mainModel in mainDrawKLineModels {
-                if model.date == mainModel.date {
-                    drawModel = mainModel
-                    break
-                }
-            }
-        }
-        
-        let drawAttrsString = NSMutableAttributedString()
-        
-        let date = Date(timeIntervalSince1970: drawModel.date/1000)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        let dateStr = formatter.string(from: date) + " "
-        
-        let dateAttrs: [String : Any] = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
-        ]
-        drawAttrsString.append(NSAttributedString(string: dateStr, attributes: dateAttrs))
+        let displayRect = CGRect(x: 0,
+                                 y: 0,
+                                 width: bounds.width,
+                                 height: configuration.mainTopAssistViewHeight)
 
-        let openStr = String(format: "开: %.2f ", drawModel.open)
-        let highStr = String(format: "高: %.2f ", drawModel.high)
-        let lowStr = String(format: "低: %.2f ", drawModel.low)
-        let closeStr = String(format: "收: %.2f ", drawModel.close)
-        
-        let string = openStr + highStr + lowStr + closeStr
-        let attrs: [String : Any] = [
-            NSForegroundColorAttributeName : configuration.assistTextColor,
-            NSFontAttributeName : configuration.assistTextFont
-        ]
-        
-        drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
-        
-        switch configuration.mainIndicatorType {
-        case .MA(let days):
-            
-            for (idx, day) in days.enumerated() {
-                
-                let attrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
-                    NSFontAttributeName : configuration.assistTextFont
-                ]
-                
-                if let value = drawModel.MAs![idx] {
-                    let maStr = String(format: "MA\(day): %.2f ", value)
-                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
-                }
-            }
-
-        case .EMA(let days):
-            for (idx, day) in days.enumerated() {
-                
-                let attrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
-                    NSFontAttributeName : configuration.assistTextFont
-                ]
-                if let value = drawModel.MAs![idx] {
-                    let maStr = String(format: "EMA\(day): %.2f ", value)
-                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
-                }
-            }
-        case .BOLL(_):
-            
-//            let attrs: [String : Any] = [
-//                NSForegroundColorAttributeName : configuration.assistTextColor,
-//                NSFontAttributeName : configuration.assistTextFont
-//            ]
-//            drawAttrsString.append(NSAttributedString(string: "BOLL(\(day),2) ", attributes: attrs))
-            
-            if let value = drawModel.BOLL_UP {
-                let upAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.BOLL_UPColor,
-                    NSFontAttributeName : configuration.assistTextFont
-                ]
-                let upAttrsStr = NSAttributedString(string: String(format: "UP: %.2f ", value), attributes: upAttrs)
-                drawAttrsString.append(upAttrsStr)
-            }
-            if let value = drawModel.BOLL_MB {
-                let mbAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.BOLL_MBColor,
-                    NSFontAttributeName : configuration.assistTextFont
-                ]
-                let mbAttrsStr = NSAttributedString(string: String(format: "MB: %.2f ", value), attributes: mbAttrs)
-                drawAttrsString.append(mbAttrsStr)
-            }
-            if let value = drawModel.BOLL_DN {
-                let dnAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.BOLL_DNColor,
-                    NSFontAttributeName : configuration.assistTextFont
-                ]
-                let dnAttrsStr = NSAttributedString(string: String(format: "DN: %.2f ", value), attributes: dnAttrs)
-                drawAttrsString.append(dnAttrsStr)
-            }
-            
-        default:
-            break
-        }
-//        drawAttrsString.draw(at: CGPoint(x: 0, y: 0))
-//        drawAttrsString.draw(in: CGRect(x: 0, y: 0, width: bounds.width, height: 30))
-//        setNeedsDisplay(CGRect(x: 0, y: 0, width: bounds.width, height: 30))
-        assistLabel.attributedText = drawAttrsString
+        setNeedsDisplay(displayRect)
         
     }
+    
+    
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -203,6 +100,14 @@ class OKKLineMainView: OKView {
         // 没有数据 不绘制
         guard let mainDrawKLineModels = mainDrawKLineModels,
             let limitValue = fetchLimitValue() else {
+                return
+        }
+        
+        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
+            __CGSizeEqualToSize(rect.size, bounds.size)
+        else {
+        
+            drawAssistString?.draw(in: rect)
             return
         }
         
@@ -217,10 +122,11 @@ class OKKLineMainView: OKView {
         lastDrawDatePoint = CGPoint.zero
         
         // 绘制提示数据
-        drawAssistView(model: mainDrawKLineModels.last!)
+        fetchAssistString(model: mainDrawKLineModels.last!)
+        drawAssistString?.draw(in: rect)
 
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        context.beginPath()
+        
         for (index, klineModel) in mainDrawKLineModels.enumerated() {
             let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
                 configuration.klineWidth * 0.5 + configuration.klineSpace
@@ -258,12 +164,14 @@ class OKKLineMainView: OKView {
 
             default: break
             }
+            
             // 画日期
             drawDateLine(klineModel: mainDrawKLineModels[index],
                          positionX: xPosition)
             
         }
         context.strokePath()
+        
         // 绘制指标
         switch configuration.mainIndicatorType {
         case .MA(_):
@@ -275,6 +183,7 @@ class OKKLineMainView: OKView {
         default:
             break
         }
+        
     }
     
     /// 画时间线
@@ -301,7 +210,6 @@ class OKKLineMainView: OKView {
         if lastDrawDatePoint.equalTo(CGPoint.zero) ||
             abs(drawDatePoint.x - lastDrawDatePoint.x) > (dateWidth * 2) {
             
-            //(dateString as NSString).draw(at: drawDatePoint, withAttributes: dateAttributes)
             let rect = CGRect(x: drawDatePoint.x,
                               y: drawDatePoint.y,
                               width: dateWidth,
@@ -316,6 +224,114 @@ class OKKLineMainView: OKView {
     
     
     // MARK: - Private
+    
+    private func fetchAssistString(model: OKKLineModel?) {
+        
+        guard let mainDrawKLineModels = mainDrawKLineModels else { return }
+        
+        var drawModel = mainDrawKLineModels.last!
+        
+        if let model = model {
+            for mainModel in mainDrawKLineModels {
+                if model.date == mainModel.date {
+                    drawModel = mainModel
+                    break
+                }
+            }
+        }
+        
+        let drawAttrsString = NSMutableAttributedString()
+        
+        let date = Date(timeIntervalSince1970: drawModel.date/1000)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let dateStr = formatter.string(from: date) + " "
+        
+        let dateAttrs: [String : Any] = [
+            NSForegroundColorAttributeName : configuration.assistTextColor,
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        drawAttrsString.append(NSAttributedString(string: dateStr, attributes: dateAttrs))
+        
+        let openStr = String(format: "开: %.2f ", drawModel.open)
+        let highStr = String(format: "高: %.2f ", drawModel.high)
+        let lowStr = String(format: "低: %.2f ", drawModel.low)
+        let closeStr = String(format: "收: %.2f ", drawModel.close)
+        
+        let string = openStr + highStr + lowStr + closeStr
+        let attrs: [String : Any] = [
+            NSForegroundColorAttributeName : configuration.assistTextColor,
+            NSFontAttributeName : configuration.assistTextFont
+        ]
+        
+        drawAttrsString.append(NSAttributedString(string: string, attributes: attrs))
+        
+        switch configuration.mainIndicatorType {
+        case .MA(let days):
+            
+            for (idx, day) in days.enumerated() {
+                
+                let attrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                
+                if let value = drawModel.MAs![idx] {
+                    let maStr = String(format: "MA\(day): %.2f ", value)
+                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                }
+            }
+            
+        case .EMA(let days):
+            for (idx, day) in days.enumerated() {
+                
+                let attrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                if let value = drawModel.MAs![idx] {
+                    let maStr = String(format: "EMA\(day): %.2f ", value)
+                    drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
+                }
+            }
+        case .BOLL(_):
+            
+            //            let attrs: [String : Any] = [
+            //                NSForegroundColorAttributeName : configuration.assistTextColor,
+            //                NSFontAttributeName : configuration.assistTextFont
+            //            ]
+            //            drawAttrsString.append(NSAttributedString(string: "BOLL(\(day),2) ", attributes: attrs))
+            
+            if let value = drawModel.BOLL_UP {
+                let upAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.BOLL_UPColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let upAttrsStr = NSAttributedString(string: String(format: "UP: %.2f ", value), attributes: upAttrs)
+                drawAttrsString.append(upAttrsStr)
+            }
+            if let value = drawModel.BOLL_MB {
+                let mbAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.BOLL_MBColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let mbAttrsStr = NSAttributedString(string: String(format: "MB: %.2f ", value), attributes: mbAttrs)
+                drawAttrsString.append(mbAttrsStr)
+            }
+            if let value = drawModel.BOLL_DN {
+                let dnAttrs: [String : Any] = [
+                    NSForegroundColorAttributeName : configuration.theme.BOLL_DNColor,
+                    NSFontAttributeName : configuration.assistTextFont
+                ]
+                let dnAttrsStr = NSAttributedString(string: String(format: "DN: %.2f ", value), attributes: dnAttrs)
+                drawAttrsString.append(dnAttrsStr)
+            }
+            
+        default:
+            break
+        }
+        drawAssistString = drawAttrsString
+    }
     
     private func drawMA(context: CGContext,
                         limitValue: (minValue: Double, maxValue: Double),

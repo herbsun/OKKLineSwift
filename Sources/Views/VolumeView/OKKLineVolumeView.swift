@@ -20,7 +20,8 @@ class OKKLineVolumeView: OKView {
 
     private var configuration: OKConfiguration!
     private var volumeDrawKLineModels: [OKKLineModel]?
-    private var assistInfoLabel: UILabel!
+    
+    private var drawAssistString: NSAttributedString?
     
     private var drawMaxY: CGFloat {
         get {
@@ -42,14 +43,6 @@ class OKKLineVolumeView: OKView {
     convenience init(configuration: OKConfiguration) {
         self.init()
         self.configuration = configuration
-        assistInfoLabel = UILabel()
-        assistInfoLabel.font = OKFont.systemFont(size: 11)
-        assistInfoLabel.textColor = configuration.assistTextColor
-        addSubview(assistInfoLabel)
-        assistInfoLabel.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(configuration.volumeTopViewHeight)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,6 +58,77 @@ class OKKLineVolumeView: OKView {
     }
     
     public func drawVolumeAssistView(model: OKKLineModel?) {
+        fetchAssistString(model: model)
+        let displayRect = CGRect(x: 0,
+                                 y: 0,
+                                 width: bounds.width,
+                                 height: configuration.volumeTopViewHeight)
+
+        setNeedsDisplay(displayRect)
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        // 背景色
+        context.clear(rect)
+        context.setFillColor(configuration.volumeViewBgColor.cgColor)
+        context.fill(rect)
+        
+        // 没有数据 不绘制
+        guard let volumeDrawKLineModels = volumeDrawKLineModels,
+            let limitValue = fetchLimitValue() else {
+            return
+        }
+        
+        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
+            __CGSizeEqualToSize(rect.size, bounds.size)
+            else {
+                
+                drawAssistString?.draw(in: rect)
+                return
+        }
+        
+        // 绘制指标数据
+        fetchAssistString(model: volumeDrawKLineModels.last!)
+        drawAssistString?.draw(in: rect)
+
+        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        
+        for (index, klineModel) in volumeDrawKLineModels.enumerated() {
+            
+            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
+                configuration.klineWidth * 0.5 + configuration.klineSpace
+            
+            let yPosition = abs(drawMaxY - CGFloat((klineModel.volume - limitValue.minValue) / unitValue))
+            let startPoint = CGPoint(x: xPosition, y: yPosition)
+            let endPoint = CGPoint(x: xPosition, y: bounds.height)
+            
+            let strokeColor = klineModel.open < klineModel.close ?
+                configuration.increaseColor : configuration.decreaseColor
+            context.setStrokeColor(strokeColor.cgColor)
+            context.setLineWidth(configuration.klineWidth)
+            context.strokeLineSegments(between: [startPoint, endPoint])
+        }
+        context.strokePath()
+        
+        // 画指标线
+        switch configuration.volumeIndicatorType {
+        case .MA_VOLUME(_):
+            drawMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
+        case .EMA_VOLUME(_):
+            drawEMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
+        default:
+            break
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func fetchAssistString(model: OKKLineModel?) {
         
         guard let volumeDrawKLineModels = volumeDrawKLineModels else { return }
         
@@ -119,60 +183,9 @@ class OKKLineVolumeView: OKView {
             break
         }
         
-        assistInfoLabel.attributedText = drawAttrsString
-    }
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return
-        }
-        // 背景色
-        context.clear(rect)
-        context.setFillColor(configuration.volumeViewBgColor.cgColor)
-        context.fill(rect)
-        
-        // 没有数据 不绘制
-        guard let volumeDrawKLineModels = volumeDrawKLineModels,
-            let limitValue = fetchLimitValue() else {
-            return
-        }
-        
-        // 绘制指标数据
-        drawVolumeAssistView(model: volumeDrawKLineModels.last!)
+        drawAssistString = drawAttrsString
 
-        let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        
-        for (index, klineModel) in volumeDrawKLineModels.enumerated() {
-            
-            let xPosition = CGFloat(index) * (configuration.klineWidth + configuration.klineSpace) +
-                configuration.klineWidth * 0.5 + configuration.klineSpace
-            
-            let yPosition = abs(drawMaxY - CGFloat((klineModel.volume - limitValue.minValue) / unitValue))
-            let startPoint = CGPoint(x: xPosition, y: yPosition)
-            let endPoint = CGPoint(x: xPosition, y: bounds.height)
-            
-            let strokeColor = klineModel.open < klineModel.close ?
-                configuration.increaseColor : configuration.decreaseColor
-            context.setStrokeColor(strokeColor.cgColor)
-            context.setLineWidth(configuration.klineWidth)
-            context.strokeLineSegments(between: [startPoint, endPoint])
-        }
-        context.strokePath()
-        
-        // 画指标线
-        switch configuration.volumeIndicatorType {
-        case .MA_VOLUME(_):
-            drawMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
-        case .EMA_VOLUME(_):
-            drawEMA_VOLUME(context: context, limitValue: limitValue, drawModels: volumeDrawKLineModels)
-        default:
-            break
-        }
     }
-    
-    // MARK: - Private
     
     private func drawMA_VOLUME(context: CGContext,
                                limitValue: (minValue: Double, maxValue: Double),

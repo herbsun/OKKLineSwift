@@ -506,10 +506,10 @@
 				F6296D8B1E099CA700ED1176 /* OKKLineDrawView.swift */,
 				F6296D8E1E099CA700ED1176 /* OKValueView.swift */,
 				F6296D8F1E099CA700ED1176 /* OKView.swift */,
-				F6296D871E099CA700ED1176 /* AccessoryView */,
 				F6296D891E099CA700ED1176 /* MainView */,
-				F6296D901E099CA700ED1176 /* SegmentView */,
 				F6296D921E099CA700ED1176 /* VolumeView */,
+				F6296D871E099CA700ED1176 /* AccessoryView */,
+				F6296D901E099CA700ED1176 /* SegmentView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
