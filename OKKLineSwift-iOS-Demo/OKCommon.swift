@@ -1,5 +1,3 @@
-/// @brief   全局字体 颜色 定义
-/// @since   1.0
 
 import Foundation
 import UIKit
@@ -24,9 +22,9 @@ public func OKPrint(_ object: @autoclosure() -> Any?,
 //            fatalError("gLog only works for values that conform to CustomDebugStringConvertible or CustomStringConvertible")
 //        }
         
-        let gFormatter = DateFormatter()
-        gFormatter.dateFormat = "HH:mm:ss:SSS"
-        let timestamp = gFormatter.string(from: Date())
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss:SSS"
+        let timestamp = formatter.string(from: Date())
         let queue = Thread.isMainThread ? "UI" : "BG"
         let fileURL = NSURL(string: file)?.lastPathComponent ?? "Unknown file"
         
