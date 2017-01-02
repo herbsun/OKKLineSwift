@@ -21,34 +21,30 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#else
-    import Cocoa
-#endif
+import UIKit
 
-class OKKLineAccessoryView: OKView {
+class OKKLineAccessoryView: UIView {
     
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
 
-    private var configuration: OKConfiguration!
-    private var accessoryDrawKLineModels: [OKKLineModel]?
-    private var drawAssistString: NSAttributedString?
+    fileprivate var configuration: OKConfiguration!
+    fileprivate var accessoryDrawKLineModels: [OKKLineModel]?
+    fileprivate var drawAssistString: NSAttributedString?
     
-    private var drawMaxY: CGFloat {
+    fileprivate var drawMaxY: CGFloat {
         get {
             return bounds.height
         }
     }
-    private var drawHeight: CGFloat {
+    fileprivate var drawHeight: CGFloat {
         get {
             return bounds.height - configuration.accessory.topViewHeight
         }
     }
     
     
-    private var drawIndicationModels: [OKKLineModel] {
+    fileprivate var drawIndicationModels: [OKKLineModel] {
         get {
             let kdjModel = OKKDJModel(klineModels: configuration.dataSource.klineModels)
             return kdjModel.fetchDrawKDJData(drawRange: configuration.dataSource.drawRange)
@@ -126,12 +122,12 @@ class OKKLineAccessoryView: OKView {
             break
         }
     }
+}
 
+// MARK: - 辅助视图相关
+extension OKKLineAccessoryView {
     
-    
-    // MARK: - Private
-    
-    private func fetchAssistString(model: OKKLineModel?) {
+    fileprivate func fetchAssistString(model: OKKLineModel?) {
         
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else { return }
         
@@ -220,9 +216,13 @@ class OKKLineAccessoryView: OKView {
         }
         drawAssistString = drawAttrsString
     }
+}
 
+// MARK: - 绘制指标
+extension OKKLineAccessoryView {
+    
     // MARK: 绘制MACD
-    private func drawMACD(context: CGContext, drawModels: [OKKLineModel]) {
+    fileprivate func drawMACD(context: CGContext, drawModels: [OKKLineModel]) {
         
         guard let limitValue = fetchLimitValue() else {
             return
@@ -258,7 +258,7 @@ class OKKLineAccessoryView: OKView {
                                        context: context,
                                        configuration: configuration)
         difLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-        
+            
             let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                 self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
             if let value = model.DIF {
@@ -287,7 +287,8 @@ class OKKLineAccessoryView: OKView {
     }
     
     // MARK: 绘制KDJ
-    private func drawKDJ(context: CGContext, drawModels: [OKKLineModel]) {
+    fileprivate func drawKDJ(context: CGContext, drawModels: [OKKLineModel]) {
+        
         guard let limitValue = fetchLimitValue() else { return }
         
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
@@ -331,8 +332,12 @@ class OKKLineAccessoryView: OKView {
         }
         KDJ_JLineBrush.draw(drawModels: drawModels)
     }
+}
+
+// MARK: - 获取相关数据
+extension OKKLineAccessoryView {
     
-    private func fetchAccessoryDrawKLineModels() {
+    fileprivate func fetchAccessoryDrawKLineModels() {
         
         guard configuration.dataSource.klineModels.count > 0 else {
             accessoryDrawKLineModels = nil
@@ -343,18 +348,18 @@ class OKKLineAccessoryView: OKView {
         case .MACD:
             let macdModel = OKMACDModel(klineModels: configuration.dataSource.klineModels)
             accessoryDrawKLineModels = macdModel.fetchDrawMACDData(drawRange: configuration.dataSource.drawRange)
-        
+            
         case .KDJ:
             let kdjModel = OKKDJModel(klineModels: configuration.dataSource.klineModels)
             accessoryDrawKLineModels = kdjModel.fetchDrawKDJData(drawRange: configuration.dataSource.drawRange)
-        
+            
         default:
             break
         }
     }
     
     // MARK: - 获取指标数据最大最小值
-    private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
+    fileprivate func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
             return nil
@@ -379,11 +384,11 @@ class OKKLineAccessoryView: OKView {
                     maxValue = value > maxValue ? value : maxValue
                 }
             }
-
+            
         case .KDJ:
             
             for model in accessoryDrawKLineModels {
-                            
+                
                 if let value = model.KDJ_K {
                     minValue = value < minValue ? value : minValue
                     maxValue = value > maxValue ? value : maxValue

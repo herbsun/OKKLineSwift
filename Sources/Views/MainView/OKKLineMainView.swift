@@ -21,33 +21,29 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#else
-    import Cocoa
-#endif
+import UIKit
 import CoreGraphics
 
-class OKKLineMainView: OKView {
+class OKKLineMainView: UIView {
     
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
     
-    private var configuration: OKConfiguration!
+    fileprivate var configuration: OKConfiguration!
     
-    private var lastDrawDatePoint: CGPoint = CGPoint.zero
-    
-    private var drawAssistString: NSAttributedString?
-    
-    private var mainDrawKLineModels: [OKKLineModel]?
-    
-    private var drawMaxY: CGFloat {
+    fileprivate var lastDrawDatePoint: CGPoint = CGPoint.zero
+    // 辅助视图的显示内容
+    fileprivate var drawAssistString: NSAttributedString?
+    // 主图绘制K线模型数组
+    fileprivate var mainDrawKLineModels: [OKKLineModel]?
+    // 绘制区域的最大Y值
+    fileprivate var drawMaxY: CGFloat {
         get {
             return bounds.height - configuration.main.bottomAssistViewHeight
         }
     }
-    
-    private var drawHeight: CGFloat {
+    // 绘制区域的高度
+    fileprivate var drawHeight: CGFloat {
         get {
             return bounds.height - configuration.main.topAssistViewHeight - configuration.main.bottomAssistViewHeight
         }
@@ -93,8 +89,6 @@ class OKKLineMainView: OKView {
         setNeedsDisplay(displayRect)
         
     }
-    
-    
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -195,13 +189,17 @@ class OKKLineMainView: OKView {
         }
         
     }
+}
+
+// MARK: - 辅助视图(时间线,顶部显示)
+extension OKKLineMainView {
     
     /// 画时间线
     ///
     /// - Parameters:
     ///   - klineModel: 数据模型
     ///   - positionModel: 位置模型
-    private func drawDateLine(klineModel: OKKLineModel, positionX: CGFloat) {
+    fileprivate func drawDateLine(klineModel: OKKLineModel, positionX: CGFloat) {
         
         let date = Date(timeIntervalSince1970: klineModel.date/1000)
         let dateString = configuration.dateFormatter.string(from: date)
@@ -210,7 +208,7 @@ class OKKLineMainView: OKView {
             NSForegroundColorAttributeName : configuration.main.assistTextColor,
             NSFontAttributeName : configuration.main.assistTextFont
         ]
-
+        
         let dateAttrString = NSAttributedString(string: dateString, attributes: dateAttributes)
         
         let drawDatePoint = CGPoint(x: positionX - dateAttrString.size().width * 0.5,
@@ -232,11 +230,11 @@ class OKKLineMainView: OKView {
             lastDrawDatePoint = drawDatePoint
         }
     }
-
     
-    // MARK: - Private
-    
-    private func fetchAssistString(model: OKKLineModel?) {
+    /// 获取辅助视图显示文本
+    ///
+    /// - Parameter model: 当前要显示的model
+    fileprivate func fetchAssistString(model: OKKLineModel?) {
         
         guard let mainDrawKLineModels = mainDrawKLineModels else { return }
         
@@ -343,10 +341,20 @@ class OKKLineMainView: OKView {
         }
         drawAssistString = drawAttrsString
     }
+}
+
+// MARK: - 绘制指标
+extension OKKLineMainView {
     
-    private func drawMA(context: CGContext,
-                        limitValue: (minValue: Double, maxValue: Double),
-                        drawModels: [OKKLineModel])
+    /// 绘制MA指标
+    ///
+    /// - Parameters:
+    ///   - context: contex
+    ///   - limitValue: 极限值
+    ///   - drawModels: 绘制的K线模型数据
+    fileprivate func drawMA(context: CGContext,
+                            limitValue: (minValue: Double, maxValue: Double),
+                            drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
@@ -362,7 +370,7 @@ class OKKLineMainView: OKView {
                 maLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
                     
                     if let value = model.MAs?[idx] {
-                    
+                        
                         let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                             self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
                         
@@ -380,9 +388,10 @@ class OKKLineMainView: OKView {
         }
     }
     
-    private func drawEMA(context: CGContext,
-                         limitValue: (minValue: Double, maxValue: Double),
-                         drawModels: [OKKLineModel])
+    /// 绘制EMA指标
+    fileprivate func drawEMA(context: CGContext,
+                             limitValue: (minValue: Double, maxValue: Double),
+                             drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
@@ -415,9 +424,10 @@ class OKKLineMainView: OKView {
         }
     }
     
-    private func drawBOLL(context: CGContext,
-                          limitValue: (minValue: Double, maxValue: Double),
-                          drawModels: [OKKLineModel])
+    /// 绘制BOLL指标
+    fileprivate func drawBOLL(context: CGContext,
+                              limitValue: (minValue: Double, maxValue: Double),
+                              drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
@@ -460,10 +470,14 @@ class OKKLineMainView: OKView {
             return nil
         }
         DNLineBrush.draw(drawModels: drawModels)
-
     }
+}
+
+// MARK: - 获取相关数据
+extension OKKLineMainView {
     
-    private func fetchMainDrawKLineModels() {
+    /// 获取绘制主图所需的K线模型数据
+    fileprivate func fetchMainDrawKLineModels() {
         
         guard configuration.dataSource.klineModels.count > 0 else {
             mainDrawKLineModels = nil
@@ -489,7 +503,11 @@ class OKKLineMainView: OKView {
         }
     }
     
-    private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
+    
+    /// 计算最大最小值
+    ///
+    /// - Returns: 用元组包装的最大最小值
+    fileprivate func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
         guard let mainDrawKLineModels = mainDrawKLineModels else {
             return nil
@@ -540,7 +558,7 @@ class OKKLineMainView: OKView {
                     minValue = value < minValue ? value : minValue
                     maxValue = value > maxValue ? value : maxValue
                 }
-            
+                
             default:
                 break
             }
@@ -551,5 +569,4 @@ class OKKLineMainView: OKView {
         return (minValue, maxValue)
     }
 }
-
 

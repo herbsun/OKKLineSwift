@@ -21,29 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#else
-    import Cocoa
-#endif
+import UIKit
 import CoreGraphics
 
-class OKKLineVolumeView: OKView {
+class OKKLineVolumeView: UIView {
 
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
 
-    private var configuration: OKConfiguration!
-    private var volumeDrawKLineModels: [OKKLineModel]?
+    fileprivate var configuration: OKConfiguration!
+    fileprivate var volumeDrawKLineModels: [OKKLineModel]?
     
-    private var drawAssistString: NSAttributedString?
+    fileprivate var drawAssistString: NSAttributedString?
     
-    private var drawMaxY: CGFloat {
+    fileprivate var drawMaxY: CGFloat {
         get {
             return bounds.height
         }
     }
-    private var drawHeight: CGFloat {
+    fileprivate var drawHeight: CGFloat {
         get {
             return bounds.height - configuration.volume.topViewHeight
         }
@@ -140,10 +136,12 @@ class OKKLineVolumeView: OKView {
             break
         }
     }
+}
+
+// MARK: - 辅助视图相关
+extension OKKLineVolumeView {
     
-    // MARK: - Private
-    
-    private func fetchAssistString(model: OKKLineModel?) {
+    fileprivate func fetchAssistString(model: OKKLineModel?) {
         
         guard let volumeDrawKLineModels = volumeDrawKLineModels else { return }
         
@@ -199,12 +197,15 @@ class OKKLineVolumeView: OKView {
         }
         
         drawAssistString = drawAttrsString
-
     }
+}
+
+// MARK: - 绘制指标
+extension OKKLineVolumeView {
     
-    private func drawMA_VOLUME(context: CGContext,
-                               limitValue: (minValue: Double, maxValue: Double),
-                               drawModels: [OKKLineModel])
+    fileprivate func drawMA_VOLUME(context: CGContext,
+                                   limitValue: (minValue: Double, maxValue: Double),
+                                   drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
@@ -238,9 +239,9 @@ class OKKLineVolumeView: OKView {
         }
     }
     
-    private func drawEMA_VOLUME(context: CGContext,
-                                limitValue: (minValue: Double, maxValue: Double),
-                                drawModels: [OKKLineModel])
+    fileprivate func drawEMA_VOLUME(context: CGContext,
+                                    limitValue: (minValue: Double, maxValue: Double),
+                                    drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
@@ -273,8 +274,14 @@ class OKKLineVolumeView: OKView {
             break
         }
     }
+}
+
+// MARK: - 获取相关数据
+extension OKKLineVolumeView {
     
-    private func fetchVolumeDrawKLineModels() {
+    /// 获取视图绘制模型数据
+    fileprivate func fetchVolumeDrawKLineModels() {
+        
         guard configuration.dataSource.klineModels.count > 0 else {
             volumeDrawKLineModels = nil
             return
@@ -296,7 +303,8 @@ class OKKLineVolumeView: OKView {
         }
     }
     
-    private func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
+    /// 获取极限值
+    fileprivate func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
         
         guard let volumeDrawKLineModels = volumeDrawKLineModels else {
             return nil

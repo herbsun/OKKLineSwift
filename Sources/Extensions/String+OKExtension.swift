@@ -21,17 +21,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#else
-    import Cocoa
-#endif
+import UIKit
 
 extension String {
     
     func stringSize(maxSize: CGSize, fontSize: CGFloat) -> CGSize {
         
-        let attrs = [NSFontAttributeName : OKFont.systemFont(ofSize: fontSize)]
+        let attrs = [NSFontAttributeName : UIFont.systemFont(ofSize: fontSize)]
         
         let text: NSString = NSString(cString: self.cString(using: String.Encoding.utf8)!,
                                       encoding: String.Encoding.utf8.rawValue)!

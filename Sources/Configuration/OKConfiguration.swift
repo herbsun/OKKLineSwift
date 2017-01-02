@@ -21,11 +21,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#else
-    import Cocoa
-#endif
+import UIKit
 
 /// K线类型
 enum OKKLineType: Int {
@@ -103,10 +99,10 @@ public class OKTheme {
     // MARK: K线主题
     
     /// 涨的颜色
-    var increaseColor: OKColor = OKColor(hexRGB: 0xFF5353)
+    var increaseColor: UIColor = UIColor(hexRGB: 0xFF5353)
     
     /// 跌的颜色
-    var decreaseColor: OKColor = OKColor(hexRGB: 0x00B07C)
+    var decreaseColor: UIColor = UIColor(hexRGB: 0x00B07C)
     
     /// k线的间隔
     var klineSpace: CGFloat = 1.0
@@ -133,31 +129,31 @@ public class OKTheme {
     var indicatorLineWidth: CGFloat = 0.8
 
     /// 十字线颜色
-    var longPressLineColor: OKColor = OKColor(hexRGB: 0xE1E2E6)
+    var longPressLineColor: UIColor = UIColor(hexRGB: 0xE1E2E6)
     
     /// 十字线宽度
     var longPressLineWidth: CGFloat = 0.5
     
     // MARK: 指标颜色
     
-    var DIFColor: OKColor = OKColor(hexRGB: 0xFF8D1D)
-    var DEAColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
-    var MACDColor: OKColor = OKColor(hexRGB: 0xFFC90E)
+    var DIFColor: UIColor = UIColor(hexRGB: 0xFF8D1D)
+    var DEAColor: UIColor = UIColor(hexRGB: 0x0DAEE6)
+    var MACDColor: UIColor = UIColor(hexRGB: 0xFFC90E)
     
-    var KDJ_KColor: OKColor = OKColor(hexRGB: 0xFF8D1D)
-    var KDJ_DColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
-    var KDJ_JColor: OKColor = OKColor(hexRGB: 0xE970DC)
+    var KDJ_KColor: UIColor = UIColor(hexRGB: 0xFF8D1D)
+    var KDJ_DColor: UIColor = UIColor(hexRGB: 0x0DAEE6)
+    var KDJ_JColor: UIColor = UIColor(hexRGB: 0xE970DC)
     
-    var BOLL_MBColor: OKColor = OKColor(hexRGB: 0xFFAEBF)
-    var BOLL_UPColor: OKColor = OKColor(hexRGB: 0xFFC90E)
-    var BOLL_DNColor: OKColor = OKColor(hexRGB: 0x0DAEE6)
+    var BOLL_MBColor: UIColor = UIColor(hexRGB: 0xFFAEBF)
+    var BOLL_UPColor: UIColor = UIColor(hexRGB: 0xFFC90E)
+    var BOLL_DNColor: UIColor = UIColor(hexRGB: 0x0DAEE6)
     
-    public func MAColor(day: Int) -> OKColor {
-        return OKColor(hexRGB: 0x4498EA + day)
+    public func MAColor(day: Int) -> UIColor {
+        return UIColor(hexRGB: 0x4498EA + day)
     }
     
-    public func EMAColor(day: Int) -> OKColor {
-        return OKColor(hexRGB: 0x4498EA + day)
+    public func EMAColor(day: Int) -> UIColor {
+        return UIColor(hexRGB: 0x4498EA + day)
     }
 }
 
@@ -166,7 +162,7 @@ public class OKTheme {
 public class OKMainConfiguration {
     
     /// 主图图表的背景色
-    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
+    var backgroundColor: UIColor = UIColor(hexRGB: 0x181C20)
     
     /// 主图比例
     var scale: CGFloat = 0.50
@@ -187,19 +183,19 @@ public class OKMainConfiguration {
     var realtimeLineWidth: CGFloat = 1.0
     
     /// 分时线颜色
-    var realtimeLineColor: OKColor = OKColor(hexRGB: 0xFFFFFF)
+    var realtimeLineColor: UIColor = UIColor(hexRGB: 0xFFFFFF)
     
     /// 主图指标类型
     var indicatorType: OKIndicatorType = .MA([12, 26])
     
     /// 辅助视图背景色(e.g. 日期的背景色)
-    var assistViewBgColor: OKColor = OKColor(hexRGB: 0x1D2227)
+    var assistViewBgColor: UIColor = UIColor(hexRGB: 0x1D2227)
     
     /// 辅助视图字体颜色(e.g. 日期的字体颜色)
-    var assistTextColor: OKColor = OKColor(hexRGB: 0x565A64)
+    var assistTextColor: UIColor = UIColor(hexRGB: 0x565A64)
     
     /// 辅助视图字体大小(e.g. 日期的字体大小)
-    var assistTextFont: OKFont = OKFont.systemFont(ofSize: 11)
+    var assistTextFont: UIFont = UIFont.systemFont(ofSize: 11)
 }
 
 // MARK: - 成交量图Configuration(volume)
@@ -210,7 +206,7 @@ public class OKVolumeConfiguration {
     var show: Bool = true
     
     /// 成交量视图背景色
-    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
+    var backgroundColor: UIColor = UIColor(hexRGB: 0x181C20)
     
     /// 成交量比例
     var scale: CGFloat = 0.25
@@ -233,7 +229,7 @@ public class OKAccessoryConfiguration {
     var show: Bool = true
     
     /// 指标视图背景色
-    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
+    var backgroundColor: UIColor = UIColor(hexRGB: 0x181C20)
     
     /// 指标图比例
     var scale: CGFloat = 0.25
@@ -251,8 +247,8 @@ public class OKAccessoryConfiguration {
 // MARK: - 价格视图Configuration(value)
 
 public class OKValueConfiguration {
-    var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
-    var textFont: OKFont = OKFont.systemFont(ofSize: 11)
-    var textColor: OKColor = OKColor(hexRGB: 0xDCDADC)
+    var backgroundColor: UIColor = UIColor(hexRGB: 0x181C20)
+    var textFont: UIFont = UIFont.systemFont(ofSize: 11)
+    var textColor: UIColor = UIColor(hexRGB: 0xDCDADC)
     
 }

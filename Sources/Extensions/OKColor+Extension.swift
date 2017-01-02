@@ -21,15 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-    public typealias OKColor = UIColor
-#else
-    import Cocoa
-    public typealias OKColor = NSColor
-#endif
+import UIKit
 
-extension OKColor {
+extension UIColor {
     
     //MARK: - Hex
     
@@ -41,9 +35,9 @@ extension OKColor {
                   alpha: alpha)
     }
     
-    public class func randomColor() -> OKColor {
+    public class func randomColor() -> UIColor {
         
-        return OKColor(red: CGFloat(arc4random_uniform(255)) / 255.0,
+        return UIColor(red: CGFloat(arc4random_uniform(255)) / 255.0,
                        green: CGFloat(arc4random_uniform(255)) / 255.0,
                        blue: CGFloat(arc4random_uniform(255)) / 255.0,
                        alpha: 1.0)

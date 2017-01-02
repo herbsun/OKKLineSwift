@@ -21,13 +21,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(iOS) || os(tvOS)
-    import UIKit
-#else
-    import Cocoa
-#endif
+import UIKit
 
-class OKValueView: OKView {
+class OKValueView: UIView {
     
     public var limitValue: (minValue: Double, maxValue: Double)? {
         didSet {
@@ -42,12 +38,12 @@ class OKValueView: OKView {
     }
 
     private var configuration: OKConfiguration!
-    private var drawEdgeInsets: OKEdgeInsets!
+    private var drawEdgeInsets: UIEdgeInsets!
     private var limitValueAttrs: [String : Any]!
     private var currentValueAttrs: [String : Any]!
     private let separate: CGFloat = 20.0
     
-    convenience init(configuration: OKConfiguration, drawEdgeInsets: OKEdgeInsets) {
+    convenience init(configuration: OKConfiguration, drawEdgeInsets: UIEdgeInsets) {
         self.init()
         self.configuration = configuration
         self.drawEdgeInsets = drawEdgeInsets
@@ -135,7 +131,7 @@ class OKValueView: OKView {
             context.fill(drawRect)
             
             // 画指示框
-            context.setStrokeColor(OKColor.white.cgColor)
+            context.setStrokeColor(UIColor.white.cgColor)
             context.stroke(drawRect)
 
             currentValueAttrStr.draw(in: drawRect)
