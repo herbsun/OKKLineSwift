@@ -93,13 +93,13 @@ class OKKLineView: UIView {
         
         mainViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
-                self?.configuration.main.indicatorType = .MA([5, 12, 26])
+                self?.configuration.main.indicatorType = .MA([12, 26])
             } else if result.index == 1 {
                 self?.configuration.main.indicatorType = .EMA([5, 12, 26])
             } else if result.index == 2 {
                 self?.configuration.main.indicatorType = .BOLL(20)
             }
-            self?.klineDrawView.drawKLineView(true)
+            self?.klineDrawView.drawKLineView(false)
         }
         
         addSubview(mainViewIndicatorSegmentView)
@@ -125,7 +125,7 @@ class OKKLineView: UIView {
             } else if result.index == 1 {
                 self?.configuration.volume.indicatorType = .EMA_VOLUME([5, 12, 26])
             }
-            self?.klineDrawView.drawKLineView(true)
+            self?.klineDrawView.drawKLineView(false)
         }
         
         addSubview(volumeViewIndicatorSegmentView)
@@ -154,7 +154,7 @@ class OKKLineView: UIView {
             } else if result.index == 2 {
                 self?.configuration.accessory.indicatorType = .BOLL(20)
             }
-            self?.klineDrawView.drawKLineView(true)
+            self?.klineDrawView.drawKLineView(false)
         }
         
         addSubview(accessoryViewIndicatorSegmentView)

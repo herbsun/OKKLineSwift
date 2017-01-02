@@ -298,7 +298,7 @@ extension OKKLineMainView {
                     NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
                     NSFontAttributeName : configuration.main.assistTextFont
                 ]
-                if let value = drawModel.MAs![idx] {
+                if let value = drawModel.EMAs![idx] {
                     let maStr = String(format: "EMA\(day): %.2f ", value)
                     drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
                 }

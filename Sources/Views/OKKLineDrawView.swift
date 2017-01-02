@@ -94,7 +94,7 @@ class OKKLineDrawView: UIView {
     
     /// 开启draw
     ///
-    /// - Parameter initialize: 是否从最开始位置开始绘制
+    /// - Parameter initialize: 是否从最新数据位开始绘制
     public func drawKLineView(_ initialize: Bool = true) {
         
         if initialize {
