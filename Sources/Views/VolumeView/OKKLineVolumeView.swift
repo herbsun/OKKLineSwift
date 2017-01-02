@@ -69,7 +69,7 @@ class OKKLineVolumeView: OKView {
     
     public func drawVolumeView() {
         fetchVolumeDrawKLineModels()
-        setNeedsDisplay()
+        okSetNeedsDisplay()
     }
     
     public func drawVolumeAssistView(model: OKKLineModel?) {
@@ -79,13 +79,13 @@ class OKKLineVolumeView: OKView {
                                  width: bounds.width,
                                  height: configuration.volume.topViewHeight)
 
-        setNeedsDisplay(displayRect)
+        okSetNeedsDisplay(displayRect)
     }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         // 背景色

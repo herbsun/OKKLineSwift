@@ -75,7 +75,7 @@ class OKKLineMainView: OKView {
         
         fetchMainDrawKLineModels()
         
-        setNeedsDisplay()
+        okSetNeedsDisplay()
     }
     
     /// 绘制辅助说明视图
@@ -99,7 +99,7 @@ class OKKLineMainView: OKView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         // 背景色

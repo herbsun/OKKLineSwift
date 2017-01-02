@@ -251,8 +251,8 @@ public class OKAccessoryConfiguration {
 // MARK: - 价格视图Configuration(value)
 
 public class OKValueConfiguration {
+    
     var backgroundColor: OKColor = OKColor(hexRGB: 0x181C20)
     var textFont: OKFont = OKFont.systemFont(ofSize: 11)
     var textColor: OKColor = OKColor(hexRGB: 0xDCDADC)
-    
 }

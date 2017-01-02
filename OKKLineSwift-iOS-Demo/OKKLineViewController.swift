@@ -27,6 +27,10 @@ class OKKLineViewController: UIViewController {
         fetchData()
         
 //        timer.fire()
+        //let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        //let drawValue = Double(drawMaxY - drawY) * unitValue + limitValue.minValue
+        //let drawY: CGFloat = abs(self.drawMaxY - CGFloat((drawValue - limitValue.minValue) / unitValue))
+
     }
 
     override func viewWillAppear(_ animated: Bool) {

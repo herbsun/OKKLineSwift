@@ -37,9 +37,28 @@ class OKView: BaseView {
                 backgroundColor = ok_backgroundColor
             #else
                 wantsLayer = true
-                layer?.backgroundColor = ok_backgroundColor.cgColor
+                layer?.backgroundColor = ok_backgroundColor?.cgColor
             #endif
         }
+    }
+    
+    
+    public func okSetNeedsDisplay() {
+        #if os(iOS) || os(tvOS)
+            setNeedsDisplay()
+        #else
+            needsDisplay = true
+            displayIfNeeded()
+        #endif
+    }
+    
+    public func okSetNeedsDisplay(_ rect: CGRect) {
+        #if os(iOS) || os(tvOS)
+            setNeedsDisplay(rect)
+        #else
+            needsDisplay = true
+            displayIfNeeded(rect)
+        #endif
     }
 
     #if os(iOS) || os(tvOS)
@@ -52,13 +71,11 @@ class OKView: BaseView {
             fatalError("init(coder:) has not been implemented")
         }
         
-        /*
          // Only override draw() if you perform custom drawing.
          // An empty implementation adversely affects performance during animation.
-         override func draw(_ rect: CGRect) {
-         // Drawing code
-         }
-         */
+        override func draw(_ rect: CGRect) {
+            super.draw(rect)
+        }
     #else
         override var isFlipped: Bool {
             get {

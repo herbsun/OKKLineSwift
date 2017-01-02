@@ -31,13 +31,13 @@ class OKValueView: OKView {
     
     public var limitValue: (minValue: Double, maxValue: Double)? {
         didSet {
-            setNeedsDisplay()
+            okSetNeedsDisplay()
         }
     }
     
     public var currentValueDrawPoint: CGPoint? {
         didSet {
-            setNeedsDisplay()
+            okSetNeedsDisplay()
         }
     }
 
@@ -80,7 +80,7 @@ class OKValueView: OKView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         // 背景色
