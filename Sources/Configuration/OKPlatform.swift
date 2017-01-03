@@ -22,8 +22,8 @@
 //  SOFTWARE.
 
 #if os(iOS) || os(tvOS)
+    
     import UIKit
-    public typealias BaseView = UIView
     public typealias OKFont = UIFont
     public typealias OKColor = UIColor
     public typealias OKEdgeInsets = UIEdgeInsets
@@ -31,9 +31,10 @@
     func OKGraphicsGetCurrentContext() -> CGContext? {
         return UIGraphicsGetCurrentContext()
     }
+    
 #else
+    
     import Cocoa
-    public typealias BaseView = NSView
     public typealias OKFont = NSFont
     public typealias OKColor = NSColor
     public typealias OKEdgeInsets = EdgeInsets
@@ -41,6 +42,7 @@
     func OKGraphicsGetCurrentContext() -> CGContext? {
         return NSGraphicsContext.current()?.cgContext
     }
+    
 #endif
 
 extension OKFont {
@@ -115,8 +117,16 @@ extension OKColor {
         }
     }
 
-#else
+    class OKScrollView: UIScrollView {
+
+    }
     
+    class OKButton: UIButton {
+        
+    }
+    
+#else
+
     class OKView: NSView {
         
         public var okBackgroundColor: OKColor? {
@@ -127,16 +137,14 @@ extension OKColor {
         }
         
         public func okSetNeedsDisplay() {
-            needsDisplay = true
-            displayIfNeeded()
+            setNeedsDisplay(bounds)
         }
         
         public func okSetNeedsDisplay(_ rect: CGRect) {
-            needsDisplay = true
-            displayIfNeeded(rect)
+            setNeedsDisplay(rect)
         }
         
-        override var isFlipped: Bool {
+        public override var isFlipped: Bool {
             get {
                 return true
             }
@@ -146,16 +154,51 @@ extension OKColor {
             super.init(frame: frameRect)
         }
         
-        required init?(coder: NSCoder) {
+        public required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        override func draw(_ dirtyRect: NSRect) {
+        public override func draw(_ dirtyRect: NSRect) {
             super.draw(dirtyRect)
         
             // Drawing code here.
         }
     }
+    
+    class OKScrollView: NSScrollView {
+        
+        public override var isFlipped: Bool {
+            get {
+                return true
+            }
+        }
+        
+        public var showsVerticalScrollIndicator: Bool = true {
+            didSet {
+                hasVerticalScroller = showsVerticalScrollIndicator
+            }
+        }
+        
+        public var showsHorizontalScrollIndicator: Bool = true {
+            didSet {
+                hasHorizontalRuler = showsHorizontalScrollIndicator
+            }
+        }
+    }
+    
+    class OKButton: NSButton {
+        
+        public var okBackgroundColor: OKColor? {
+            didSet {
+                if let buttonCell = cell as? NSButtonCell {
+                    buttonCell.isBordered = false
+                    buttonCell.backgroundColor = okBackgroundColor
+                }
+            }
+        }
+        
+    }
+    
 #endif
 
 public func OKPrint(_ object: @autoclosure() -> Any?,

@@ -78,7 +78,7 @@ class OKKLineVolumeView: OKView {
                                  y: 0,
                                  width: bounds.width,
                                  height: configuration.volume.topViewHeight)
-
+        
         okSetNeedsDisplay(displayRect)
     }
     

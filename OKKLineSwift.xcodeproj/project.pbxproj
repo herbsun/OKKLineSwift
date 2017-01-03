@@ -172,6 +172,7 @@
 		F6296DAC1E099CA700ED1176 /* OKKLineVolumeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D931E099CA700ED1176 /* OKKLineVolumeView.swift */; };
 		F6296DC71E0F9ACD00ED1176 /* String+OKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */; };
 		F62C53A01E1A67D9009BFBCB /* OKPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62F1EE91E1A21BD00D3DBCB /* OKPlatform.swift */; };
+		F62C53A11E1AB3A8009BFBCB /* OKSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D911E099CA700ED1176 /* OKSegmentView.swift */; };
 		F62F1ED11E1A208700D3DBCB /* OKConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D721E099CA700ED1176 /* OKConfiguration.swift */; };
 		F62F1ED51E1A209100D3DBCB /* String+OKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */; };
 		F62F1ED61E1A209900D3DBCB /* OKBOLLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7A1E099CA700ED1176 /* OKBOLLModel.swift */; };
@@ -878,6 +879,7 @@
 				F62F1EDD1E1A209C00D3DBCB /* OKDescriptable.swift in Sources */,
 				F600A60C1DF1245800CF1C8A /* ConstraintMakerEditable.swift in Sources */,
 				F600A5F01DF1245800CF1C8A /* ConstraintItem.swift in Sources */,
+				F62C53A11E1AB3A8009BFBCB /* OKSegmentView.swift in Sources */,
 				F600A5F81DF1245800CF1C8A /* ConstraintLayoutGuide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

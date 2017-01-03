@@ -93,107 +93,7 @@ class OKKLineDrawView: OKView {
         
         #endif
             
-            
-        /// Main View
-        mainView = OKKLineMainView(configuration: configuration)
-        mainView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
-            if let limitValue = limitValue {
-                self?.mainValueView.limitValue = limitValue
-            }
-        }
-        addSubview(mainView)
-        mainView.snp.makeConstraints { (make) in
-            make.top.trailing.equalToSuperview()
-            make.leading.equalTo(drawValueViewWidth)
-            make.height.equalToSuperview().multipliedBy(configuration.main.scale)
-        }
-        
-        /// Main Value View
-        let mainEdge = OKEdgeInsets(top: configuration.main.topAssistViewHeight,
-                                    left: 0,
-                                    bottom: configuration.main.bottomAssistViewHeight,
-                                    right: 0)
-        mainValueView = OKValueView(configuration: configuration, drawEdgeInsets: mainEdge)
-        addSubview(mainValueView)
-        mainValueView.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview()
-            make.trailing.equalTo(self.mainView.snp.leading)
-            make.top.equalTo(self.mainView.snp.top)
-            make.bottom.equalTo(self.mainView.snp.bottom)
-        }
-        
-        /// Volume View
-        volumeView = OKKLineVolumeView(configuration: configuration)
-        volumeView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
-            if let limitValue = limitValue {
-                self?.volumeValueView.limitValue = limitValue
-            }
-        }
-        addSubview(volumeView)
-        volumeView.snp.makeConstraints { (make) in
-            make.leading.trailing.equalTo(self.mainView)
-            make.top.equalTo(self.mainView.snp.bottom)
-            make.height.equalToSuperview().multipliedBy(configuration.volume.scale)
-        }
-        
-        /// Volume Value View
-        let volumeEdge = OKEdgeInsets(top: configuration.volume.topViewHeight, left: 0, bottom: 0, right: 0)
-        volumeValueView = OKValueView(configuration: configuration, drawEdgeInsets: volumeEdge)
-        addSubview(volumeValueView)
-        volumeValueView.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview()
-            make.trailing.equalTo(self.volumeView.snp.leading)
-            make.top.equalTo(self.volumeView.snp.top)
-            make.bottom.equalTo(self.volumeView.snp.bottom)
-        }
-        
-        /// Accessory View
-        accessoryView = OKKLineAccessoryView(configuration: configuration)
-        accessoryView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
-            if let limitValue = limitValue {
-                self?.accessoryValueView.limitValue = limitValue
-            }
-        }
-        addSubview(accessoryView)
-        accessoryView.snp.makeConstraints { (make) in
-            make.leading.trailing.equalTo(self.mainView)
-            make.top.equalTo(self.volumeView.snp.bottom)
-            make.height.equalToSuperview().multipliedBy(configuration.accessory.scale)
-        }
-        
-        /// Accessory Value View
-        let asscessoryEdge = OKEdgeInsets(top: configuration.accessory.topViewHeight, left: 0, bottom: 0, right: 0)
-        accessoryValueView = OKValueView(configuration: configuration, drawEdgeInsets: asscessoryEdge)
-        addSubview(accessoryValueView)
-        accessoryValueView.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview()
-            make.trailing.equalTo(self.accessoryView.snp.leading)
-            make.top.equalTo(self.accessoryView.snp.top)
-            make.bottom.equalTo(self.accessoryView.snp.bottom)
-        }
-        
-        /// 指示器
-        indicatorVerticalView = OKView()
-        indicatorVerticalView.isHidden = true
-        indicatorVerticalView.okBackgroundColor = configuration.theme.longPressLineColor
-        addSubview(indicatorVerticalView)
-        indicatorVerticalView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
-            make.top.equalTo(configuration.main.topAssistViewHeight)
-            make.width.equalTo(configuration.theme.longPressLineWidth)
-            make.leading.equalTo(0)
-        }
-        
-        indicatorHorizontalView = OKView()
-        indicatorHorizontalView.isHidden = true
-        indicatorHorizontalView.okBackgroundColor = configuration.theme.longPressLineColor
-        addSubview(indicatorHorizontalView)
-        indicatorHorizontalView.snp.makeConstraints { (make) in
-            make.leading.equalTo(drawValueViewWidth)
-            make.trailing.equalTo(0)
-            make.height.equalTo(configuration.theme.longPressLineWidth)
-            make.top.equalTo(0)
-        }
+        setupSubviews()
         
     }
 
@@ -240,13 +140,131 @@ class OKKLineDrawView: OKView {
         
         let loc = drawStartIndex! > 0 ? drawStartIndex! : 0
         
-        configuration.dataSource.drawKLineModels = Array(configuration.dataSource.klineModels[loc...loc+drawCount])
+        configuration.dataSource.drawKLineModels = Array(configuration.dataSource.klineModels[loc..<loc+drawCount])
         // as NSArray).subarray(with: range) as! [OKKLineModel]
         configuration.dataSource.drawRange = NSMakeRange(loc, drawCount)
         
     }
     
     
+}
+
+// MARK: - 子视图
+extension OKKLineDrawView {
+    fileprivate func setupSubviews() {
+        
+        setupMainView()
+        setupVolumeView()
+        setupAccessoryView()
+        
+        /// 指示器
+        indicatorVerticalView = OKView()
+        indicatorVerticalView.isHidden = true
+        indicatorVerticalView.okBackgroundColor = configuration.theme.longPressLineColor
+        addSubview(indicatorVerticalView)
+        indicatorVerticalView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.top.equalTo(configuration.main.topAssistViewHeight)
+            make.width.equalTo(configuration.theme.longPressLineWidth)
+            make.leading.equalTo(0)
+        }
+        
+        indicatorHorizontalView = OKView()
+        indicatorHorizontalView.isHidden = true
+        indicatorHorizontalView.okBackgroundColor = configuration.theme.longPressLineColor
+        addSubview(indicatorHorizontalView)
+        indicatorHorizontalView.snp.makeConstraints { (make) in
+            make.leading.equalTo(drawValueViewWidth)
+            make.trailing.equalTo(0)
+            make.height.equalTo(configuration.theme.longPressLineWidth)
+            make.top.equalTo(0)
+        }
+        
+    }
+    
+    private func setupMainView() {
+        /// Main View
+        mainView = OKKLineMainView(configuration: configuration)
+        mainView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
+            if let limitValue = limitValue {
+                self?.mainValueView.limitValue = limitValue
+            }
+        }
+        addSubview(mainView)
+        mainView.snp.makeConstraints { (make) in
+            make.top.trailing.equalToSuperview()
+            make.leading.equalTo(drawValueViewWidth)
+            make.height.equalToSuperview().multipliedBy(configuration.main.scale)
+        }
+        
+        /// Main Value View
+        let mainEdge = OKEdgeInsets(top: configuration.main.topAssistViewHeight,
+                                    left: 0,
+                                    bottom: configuration.main.bottomAssistViewHeight,
+                                    right: 0)
+        mainValueView = OKValueView(configuration: configuration, drawEdgeInsets: mainEdge)
+        addSubview(mainValueView)
+        mainValueView.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(self.mainView.snp.leading)
+            make.top.equalTo(self.mainView.snp.top)
+            make.bottom.equalTo(self.mainView.snp.bottom)
+        }
+    }
+    
+    private func setupVolumeView() {
+        /// Volume View
+        volumeView = OKKLineVolumeView(configuration: configuration)
+        volumeView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
+            if let limitValue = limitValue {
+                self?.volumeValueView.limitValue = limitValue
+            }
+        }
+        addSubview(volumeView)
+        volumeView.snp.makeConstraints { (make) in
+            make.leading.trailing.equalTo(self.mainView)
+            make.top.equalTo(self.mainView.snp.bottom)
+            make.height.equalToSuperview().multipliedBy(configuration.volume.scale)
+        }
+        
+        /// Volume Value View
+        let volumeEdge = OKEdgeInsets(top: configuration.volume.topViewHeight, left: 0, bottom: 0, right: 0)
+        volumeValueView = OKValueView(configuration: configuration, drawEdgeInsets: volumeEdge)
+        addSubview(volumeValueView)
+        volumeValueView.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(self.volumeView.snp.leading)
+            make.top.equalTo(self.volumeView.snp.top)
+            make.bottom.equalTo(self.volumeView.snp.bottom)
+        }
+    }
+    
+    private func setupAccessoryView() {
+        /// Accessory View
+        accessoryView = OKKLineAccessoryView(configuration: configuration)
+        accessoryView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
+            if let limitValue = limitValue {
+                self?.accessoryValueView.limitValue = limitValue
+            }
+        }
+        addSubview(accessoryView)
+        accessoryView.snp.makeConstraints { (make) in
+            make.leading.trailing.equalTo(self.mainView)
+            make.top.equalTo(self.volumeView.snp.bottom)
+            make.height.equalToSuperview().multipliedBy(configuration.accessory.scale)
+        }
+        
+        /// Accessory Value View
+        let asscessoryEdge = OKEdgeInsets(top: configuration.accessory.topViewHeight, left: 0, bottom: 0, right: 0)
+        accessoryValueView = OKValueView(configuration: configuration, drawEdgeInsets: asscessoryEdge)
+        addSubview(accessoryValueView)
+        accessoryValueView.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(self.accessoryView.snp.leading)
+            make.top.equalTo(self.accessoryView.snp.top)
+            make.bottom.equalTo(self.accessoryView.snp.bottom)
+        }
+    }
 }
 
 #if os(iOS) || os(tvOS)
@@ -257,7 +275,7 @@ class OKKLineDrawView: OKView {
         /// 右 -> 左 : x递减, x < 0
         /// - Parameter recognizer: UIPanGestureRecognizer
         @objc
-        private func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
+        fileprivate func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
             
             switch recognizer.state {
             case .began:
@@ -293,7 +311,7 @@ class OKKLineDrawView: OKView {
         /// 外 -> 内: recognizer.scale 递减, 且recognizer.scale < 1.0
         /// - Parameter recognizer: UIPinchGestureRecognizer
         @objc
-        private func pinchAction(_ recognizer: UIPinchGestureRecognizer) {
+        fileprivate func pinchAction(_ recognizer: UIPinchGestureRecognizer) {
             
             let difValue = recognizer.scale - lastScale
             
@@ -332,7 +350,7 @@ class OKKLineDrawView: OKView {
         
         // MARK: 长按手势
         @objc
-        private func longPressAction(_ recognizer: UILongPressGestureRecognizer) {
+        fileprivate func longPressAction(_ recognizer: UILongPressGestureRecognizer) {
             
             if recognizer.state == .began || recognizer.state == .changed {
                 
@@ -414,13 +432,21 @@ class OKKLineDrawView: OKView {
         
         // MARK: 双击手势
         @objc
-        private func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
+        fileprivate func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
             doubleTapHandle?()
         }
     }
 #else
     // MARK: - macOS手势
     extension OKKLineDrawView {
+        
+        override func updateTrackingAreas() {
+            super.updateTrackingAreas()
+            
+            let trackingArea = NSTrackingArea(rect: bounds, options: [.mouseMoved, .mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil)
+            addTrackingArea(trackingArea)
+        }
+        
         override func mouseDown(with event: NSEvent) {
             
             OKPrint("=====mouseDown")
@@ -445,6 +471,7 @@ class OKKLineDrawView: OKView {
             OKPrint("=====mouseDragged")
             NSCursor.openHand().set()
             
+            
             let location = convert(event.locationInWindow, from: nil)
             let klineUnit = configuration.theme.klineWidth + configuration.theme.klineSpace
             
@@ -458,6 +485,7 @@ class OKKLineDrawView: OKView {
             // 记录上次点
             lastPanPoint = location
             
+            layoutIndicatorView(with: event)
         }
         
         override func mouseUp(with event: NSEvent) {
@@ -471,6 +499,29 @@ class OKKLineDrawView: OKView {
         }
         
         override func mouseMoved(with event: NSEvent) {
+            layoutIndicatorView(with: event)
+        }
+        
+        override func mouseExited(with event: NSEvent) {
+            
+            // 隐藏十字线
+            indicatorVerticalView.isHidden = true
+            indicatorHorizontalView.isHidden = true
+            
+            mainValueView.currentValueDrawPoint = nil
+            volumeValueView.currentValueDrawPoint = nil
+            accessoryValueView.currentValueDrawPoint = nil
+            
+            mainView.drawAssistView(model: nil)
+            volumeView.drawVolumeAssistView(model: nil)
+            accessoryView.drawAssistView(model: nil)
+            
+        }
+        
+        /// 布局十字线视图
+        ///
+        /// - Parameter event: 鼠标事件
+        private func layoutIndicatorView(with event: NSEvent) {
             
             // 鼠标在当前视图上的位置
             let location: CGPoint = convert(event.locationInWindow, from: nil)
@@ -532,22 +583,9 @@ class OKKLineDrawView: OKView {
             mainView.drawAssistView(model: drawModel)
             volumeView.drawVolumeAssistView(model: drawModel)
             accessoryView.drawAssistView(model: drawModel)
+            
         }
         
-        override func mouseExited(with event: NSEvent) {
-            
-            // 隐藏十字线
-            indicatorVerticalView.isHidden = true
-            indicatorHorizontalView.isHidden = true
-            
-            mainValueView.currentValueDrawPoint = nil
-            volumeValueView.currentValueDrawPoint = nil
-            accessoryValueView.currentValueDrawPoint = nil
-            
-            mainView.drawAssistView(model: nil)
-            volumeView.drawVolumeAssistView(model: nil)
-            accessoryView.drawAssistView(model: nil)
-            
-        }
+
     }
 #endif
