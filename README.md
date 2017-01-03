@@ -12,7 +12,7 @@
 
 Support
 ===
-Swift 3.0 & iOS 8+
+Swift 3.0 & iOS 8+ & macOS 10.10+
 
 Installation
 ===
