@@ -159,7 +159,6 @@
 		F6296D9D1E099CA700ED1176 /* OKMACDModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7E1E099CA700ED1176 /* OKMACDModel.swift */; };
 		F6296D9E1E099CA700ED1176 /* OKMAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7F1E099CA700ED1176 /* OKMAModel.swift */; };
 		F6296D9F1E099CA700ED1176 /* OKMAVOLUMEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D801E099CA700ED1176 /* OKMAVOLUMEModel.swift */; };
-		F6296DA01E099CA700ED1176 /* OKDescriptable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D811E099CA700ED1176 /* OKDescriptable.swift */; };
 		F6296DA11E099CA700ED1176 /* OKKLineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D821E099CA700ED1176 /* OKKLineModel.swift */; };
 		F6296DA21E099CA700ED1176 /* OKLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D841E099CA700ED1176 /* OKLineBrush.swift */; };
 		F6296DA31E099CA700ED1176 /* OKMALineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D851E099CA700ED1176 /* OKMALineBrush.swift */; };
@@ -170,11 +169,9 @@
 		F6296DA91E099CA700ED1176 /* OKValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D8E1E099CA700ED1176 /* OKValueView.swift */; };
 		F6296DAB1E099CA700ED1176 /* OKSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D911E099CA700ED1176 /* OKSegmentView.swift */; };
 		F6296DAC1E099CA700ED1176 /* OKKLineVolumeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D931E099CA700ED1176 /* OKKLineVolumeView.swift */; };
-		F6296DC71E0F9ACD00ED1176 /* String+OKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */; };
 		F62C53A01E1A67D9009BFBCB /* OKPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = F62F1EE91E1A21BD00D3DBCB /* OKPlatform.swift */; };
 		F62C53A11E1AB3A8009BFBCB /* OKSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D911E099CA700ED1176 /* OKSegmentView.swift */; };
 		F62F1ED11E1A208700D3DBCB /* OKConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D721E099CA700ED1176 /* OKConfiguration.swift */; };
-		F62F1ED51E1A209100D3DBCB /* String+OKExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */; };
 		F62F1ED61E1A209900D3DBCB /* OKBOLLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7A1E099CA700ED1176 /* OKBOLLModel.swift */; };
 		F62F1ED71E1A209900D3DBCB /* OKEMAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7B1E099CA700ED1176 /* OKEMAModel.swift */; };
 		F62F1ED81E1A209900D3DBCB /* OKEMAVOLUMEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7C1E099CA700ED1176 /* OKEMAVOLUMEModel.swift */; };
@@ -182,7 +179,6 @@
 		F62F1EDA1E1A209900D3DBCB /* OKMACDModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7E1E099CA700ED1176 /* OKMACDModel.swift */; };
 		F62F1EDB1E1A209900D3DBCB /* OKMAModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D7F1E099CA700ED1176 /* OKMAModel.swift */; };
 		F62F1EDC1E1A209900D3DBCB /* OKMAVOLUMEModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D801E099CA700ED1176 /* OKMAVOLUMEModel.swift */; };
-		F62F1EDD1E1A209C00D3DBCB /* OKDescriptable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D811E099CA700ED1176 /* OKDescriptable.swift */; };
 		F62F1EDE1E1A209C00D3DBCB /* OKKLineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D821E099CA700ED1176 /* OKKLineModel.swift */; };
 		F62F1EDF1E1A20A100D3DBCB /* OKLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D841E099CA700ED1176 /* OKLineBrush.swift */; };
 		F62F1EE01E1A20A100D3DBCB /* OKMALineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6296D851E099CA700ED1176 /* OKMALineBrush.swift */; };
@@ -275,7 +271,6 @@
 		F6296D7E1E099CA700ED1176 /* OKMACDModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMACDModel.swift; sourceTree = "<group>"; };
 		F6296D7F1E099CA700ED1176 /* OKMAModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMAModel.swift; sourceTree = "<group>"; };
 		F6296D801E099CA700ED1176 /* OKMAVOLUMEModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMAVOLUMEModel.swift; sourceTree = "<group>"; };
-		F6296D811E099CA700ED1176 /* OKDescriptable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKDescriptable.swift; sourceTree = "<group>"; };
 		F6296D821E099CA700ED1176 /* OKKLineModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineModel.swift; sourceTree = "<group>"; };
 		F6296D841E099CA700ED1176 /* OKLineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKLineBrush.swift; sourceTree = "<group>"; };
 		F6296D851E099CA700ED1176 /* OKMALineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKMALineBrush.swift; sourceTree = "<group>"; };
@@ -286,7 +281,6 @@
 		F6296D8E1E099CA700ED1176 /* OKValueView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKValueView.swift; sourceTree = "<group>"; };
 		F6296D911E099CA700ED1176 /* OKSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKSegmentView.swift; sourceTree = "<group>"; };
 		F6296D931E099CA700ED1176 /* OKKLineVolumeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineVolumeView.swift; sourceTree = "<group>"; };
-		F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+OKExtension.swift"; sourceTree = "<group>"; };
 		F62F1EE91E1A21BD00D3DBCB /* OKPlatform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKPlatform.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -451,7 +445,6 @@
 			isa = PBXGroup;
 			children = (
 				F6296D711E099CA700ED1176 /* Configuration */,
-				F6296D731E099CA700ED1176 /* Extensions */,
 				F6296D781E099CA700ED1176 /* Models */,
 				F6296D831E099CA700ED1176 /* Tools */,
 				F6296D861E099CA700ED1176 /* Views */,
@@ -468,19 +461,10 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
-		F6296D731E099CA700ED1176 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				F6296DC61E0F9ACD00ED1176 /* String+OKExtension.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		F6296D781E099CA700ED1176 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				F6296D791E099CA700ED1176 /* Indicators */,
-				F6296D811E099CA700ED1176 /* OKDescriptable.swift */,
 				F6296D821E099CA700ED1176 /* OKKLineModel.swift */,
 			);
 			path = Models;
@@ -757,7 +741,6 @@
 				F600A5FA1DF1245800CF1C8A /* ConstraintLayoutGuideDSL.swift in Sources */,
 				F600A6261DF1245800CF1C8A /* ConstraintPriorityTarget.swift in Sources */,
 				F600A6161DF1245800CF1C8A /* ConstraintMakerPriortizable.swift in Sources */,
-				F6296DC71E0F9ACD00ED1176 /* String+OKExtension.swift in Sources */,
 				F600A6121DF1245800CF1C8A /* ConstraintMakerFinalizable.swift in Sources */,
 				F600A5FE1DF1245800CF1C8A /* ConstraintLayoutSupport.swift in Sources */,
 				F6296DA11E099CA700ED1176 /* OKKLineModel.swift in Sources */,
@@ -776,7 +759,6 @@
 				F600A5EE1DF1245800CF1C8A /* ConstraintItem.swift in Sources */,
 				F6296DA61E099CA700ED1176 /* OKKLineDrawView.swift in Sources */,
 				F62F1EEA1E1A21BD00D3DBCB /* OKPlatform.swift in Sources */,
-				F6296DA01E099CA700ED1176 /* OKDescriptable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -866,7 +848,6 @@
 				F600A6441DF1245800CF1C8A /* LayoutConstraint.swift in Sources */,
 				F600A5D81DF1245800CF1C8A /* ConstraintConfig.swift in Sources */,
 				F62F1EE31E1A20A500D3DBCB /* OKValueView.swift in Sources */,
-				F62F1ED51E1A209100D3DBCB /* String+OKExtension.swift in Sources */,
 				F600A6481DF1245800CF1C8A /* LayoutConstraintItem.swift in Sources */,
 				F600A6081DF1245800CF1C8A /* ConstraintMaker.swift in Sources */,
 				F600A55D1DF1213700CF1C8A /* AppDelegate.swift in Sources */,
@@ -876,7 +857,6 @@
 				F62F1EDF1E1A20A100D3DBCB /* OKLineBrush.swift in Sources */,
 				F600A5E01DF1245800CF1C8A /* ConstraintDescription.swift in Sources */,
 				F62F1ED81E1A209900D3DBCB /* OKEMAVOLUMEModel.swift in Sources */,
-				F62F1EDD1E1A209C00D3DBCB /* OKDescriptable.swift in Sources */,
 				F600A60C1DF1245800CF1C8A /* ConstraintMakerEditable.swift in Sources */,
 				F600A5F01DF1245800CF1C8A /* ConstraintItem.swift in Sources */,
 				F62C53A11E1AB3A8009BFBCB /* OKSegmentView.swift in Sources */,
