@@ -1,15 +1,15 @@
 //
-//  OKKLineSwift_iOS_DemoTests.swift
-//  OKKLineSwift-iOS-DemoTests
+//  OKKLineSwift_macOS_DemoTests.swift
+//  OKKLineSwift-macOS-DemoTests
 //
 //  Copyright © 2016年 Herb - https://github.com/Herb-Sun/OKKLineSwift
 //
 //
 
 import XCTest
-@testable import OKKLineSwift_iOS_Demo
+@testable import OKKLineSwift_macOS_Demo
 
-class OKKLineSwift_iOS_DemoTests: XCTestCase {
+class OKKLineSwift_macOS_DemoTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

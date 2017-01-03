@@ -21,10 +21,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 import CoreGraphics
 
-class OKKLineMainView: UIView {
+class OKKLineMainView: OKView {
     
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
@@ -70,8 +74,8 @@ class OKKLineMainView: UIView {
     public func drawMainView() {
         
         fetchMainDrawKLineModels()
-        
-        setNeedsDisplay()
+
+        okSetNeedsDisplay()
     }
     
     /// 绘制辅助说明视图
@@ -86,14 +90,13 @@ class OKKLineMainView: UIView {
                                  width: bounds.width,
                                  height: configuration.main.topAssistViewHeight)
 
-        setNeedsDisplay(displayRect)
-        
+        okSetNeedsDisplay(displayRect)
     }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         // 背景色
@@ -304,12 +307,6 @@ extension OKKLineMainView {
                 }
             }
         case .BOLL(_):
-            
-            //            let attrs: [String : Any] = [
-            //                NSForegroundColorAttributeName : configuration.assistTextColor,
-            //                NSFontAttributeName : configuration.assistTextFont
-            //            ]
-            //            drawAttrsString.append(NSAttributedString(string: "BOLL(\(day),2) ", attributes: attrs))
             
             if let value = drawModel.BOLL_UP {
                 let upAttrs: [String : Any] = [

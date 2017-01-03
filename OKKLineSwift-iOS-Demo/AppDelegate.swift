@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  OKKLineSwift-iOS-Demo
 //
-//  Created by Herb on 2016/12/2.
+//  Copyright © 2016年 Herb - https://github.com/Herb-Sun/OKKLineSwift
 //
 //
 

@@ -21,29 +21,33 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 
-class OKValueView: UIView {
+class OKValueView: OKView {
     
     public var limitValue: (minValue: Double, maxValue: Double)? {
         didSet {
-            setNeedsDisplay()
+            okSetNeedsDisplay()
         }
     }
     
     public var currentValueDrawPoint: CGPoint? {
         didSet {
-            setNeedsDisplay()
+            okSetNeedsDisplay()
         }
     }
 
     private var configuration: OKConfiguration!
-    private var drawEdgeInsets: UIEdgeInsets!
+    private var drawEdgeInsets: OKEdgeInsets!
     private var limitValueAttrs: [String : Any]!
     private var currentValueAttrs: [String : Any]!
     private let separate: CGFloat = 20.0
     
-    convenience init(configuration: OKConfiguration, drawEdgeInsets: UIEdgeInsets) {
+    convenience init(configuration: OKConfiguration, drawEdgeInsets: OKEdgeInsets) {
         self.init()
         self.configuration = configuration
         self.drawEdgeInsets = drawEdgeInsets
@@ -76,7 +80,7 @@ class OKValueView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         // 背景色
@@ -131,7 +135,7 @@ class OKValueView: UIView {
             context.fill(drawRect)
             
             // 画指示框
-            context.setStrokeColor(UIColor.white.cgColor)
+            context.setStrokeColor(OKColor.white.cgColor)
             context.stroke(drawRect)
 
             currentValueAttrStr.draw(in: drawRect)

@@ -21,10 +21,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 import CoreGraphics
 
-class OKKLineVolumeView: UIView {
+class OKKLineVolumeView: OKView {
 
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
@@ -65,7 +69,7 @@ class OKKLineVolumeView: UIView {
     
     public func drawVolumeView() {
         fetchVolumeDrawKLineModels()
-        setNeedsDisplay()
+        okSetNeedsDisplay()
     }
     
     public func drawVolumeAssistView(model: OKKLineModel?) {
@@ -74,14 +78,14 @@ class OKKLineVolumeView: UIView {
                                  y: 0,
                                  width: bounds.width,
                                  height: configuration.volume.topViewHeight)
-
-        setNeedsDisplay(displayRect)
+        
+        okSetNeedsDisplay(displayRect)
     }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         // 背景色

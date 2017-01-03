@@ -2,8 +2,7 @@
 //  OKKLineViewController.swift
 //  OKKLineSwift
 //
-//  Created by Herb on 2016/11/21.
-//  Copyright © 2016年 Herb. All rights reserved.
+//  Copyright © 2016年 Herb - https://github.com/Herb-Sun/OKKLineSwift
 //
 
 import UIKit
@@ -20,13 +19,18 @@ class OKKLineViewController: UIViewController {
         }
         view.addSubview(self.klineView)
         klineView.snp.makeConstraints { (make) in
-            make.edges.equalTo(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+            make.edges.equalTo(OKEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         }
 //        let timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fetchData), userInfo: nil, repeats: true)
         
         fetchData()
         
 //        timer.fire()
+        
+        //let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
+        //let drawValue = Double(drawMaxY - drawY) * unitValue + limitValue.minValue
+        //let drawY: CGFloat = abs(self.drawMaxY - CGFloat((drawValue - limitValue.minValue) / unitValue))
+
     }
 
     override func viewWillAppear(_ animated: Bool) {

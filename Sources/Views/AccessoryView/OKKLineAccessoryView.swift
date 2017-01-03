@@ -21,9 +21,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 
-class OKKLineAccessoryView: UIView {
+class OKKLineAccessoryView: OKView {
     
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
@@ -69,7 +73,7 @@ class OKKLineAccessoryView: UIView {
     public func drawAccessoryView() {
         
         fetchAccessoryDrawKLineModels()
-        setNeedsDisplay()
+        okSetNeedsDisplay()
     }
     
     public func drawAssistView(model: OKKLineModel?) {
@@ -80,13 +84,13 @@ class OKKLineAccessoryView: UIView {
                                  width: bounds.width,
                                  height: configuration.accessory.topViewHeight)
         
-        setNeedsDisplay(displayRect)
+        okSetNeedsDisplay(displayRect)
     }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
-        guard let context = UIGraphicsGetCurrentContext() else {
+        guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
         

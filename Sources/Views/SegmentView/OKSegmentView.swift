@@ -21,7 +21,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 
 enum OKSegmentDirection {
     case horizontal
@@ -34,8 +38,7 @@ protocol OKSegmentViewDelegate: NSObjectProtocol {
     optional func didSelectedSegment(segmentView: OKSegmentView, index: Int, title: String)
 }
 
-
-class OKSegmentView: UIView {
+class OKSegmentView: OKView {
 
     /// 展示文本数组
     public var titles: [String] = [String]()
@@ -43,86 +46,171 @@ class OKSegmentView: UIView {
     public weak var delegate: OKSegmentViewDelegate?
     public var didSelectedSegment: ((_ segmentView: OKSegmentView, _ result: (index: Int, title: String)) -> Void)?
     
-    private var scrollView: UIScrollView!
-    private var btns = [UIButton]()
     private var configuration: OKConfiguration!
- 
+    private var scrollView: OKScrollView!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
     convenience init(direction: OKSegmentDirection, titles: [String], configuration: OKConfiguration) {
         self.init()
-        self.direction = direction
+        
         self.titles = titles
+        self.direction = direction
         self.configuration = configuration
         
-        backgroundColor = configuration.main.backgroundColor
         
-        scrollView = UIScrollView()
+        scrollView = OKScrollView()
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.backgroundColor = configuration.main.backgroundColor
         addSubview(scrollView)
-        
-        for (index, title) in titles.enumerated() {
-            let btn = UIButton(type: .custom)
-            btn.setTitle(title, for: .normal)
-            btn.setTitleColor(UIColor.white, for: .normal)
-            btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-            btn.tag = index
-            btn.addTarget(self, action: #selector(selectedAction(_:)), for: .touchUpInside)
-            scrollView.addSubview(btn)
-            btns.append(btn)
+        scrollView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
         }
+
+        #if os(iOS) || os(tvOS)
+
+            var lastBtn: OKButton?
+            for (index, title) in titles.enumerated() {
+                let btn = OKButton(type: .custom)
+                btn.tag = index
+                btn.setTitle(title, for: .normal)
+                btn.setTitleColor(OKColor.white, for: .normal)
+                btn.titleLabel?.font = OKFont.systemFont(size: 12)
+                btn.addTarget(self, action: #selector(selectedAction(_:)), for: .touchUpInside)
+                scrollView.addSubview(btn)
+                
+                switch direction {
+                case .horizontal:
+                    
+                    btn.snp.makeConstraints({ (make) in
+                        make.top.bottom.equalToSuperview()
+                        make.size.equalTo(CGSize(width: 60, height: 44))
+                        // 处理第一个button
+                        if let lastBtn = lastBtn {
+                            make.leading.equalTo(lastBtn.snp.trailing)
+                        } else {
+                            make.leading.equalToSuperview()
+                        }
+                        // 处理最后一个btn
+                        if index == titles.count - 1 {
+                            make.trailing.equalToSuperview()
+                        }
+                    })
+                    
+                case .vertical:
+                    btn.snp.makeConstraints({ (make) in
+                        make.leading.trailing.equalToSuperview()
+                        make.size.equalTo(CGSize(width: 50, height: 44))
+                        // 处理第一个button
+                        if let lastBtn = lastBtn {
+                            make.top.equalTo(lastBtn.snp.bottom)
+                        } else {
+                            make.top.equalToSuperview()
+                        }
+                        // 处理最后一个btn
+                        if index == titles.count - 1 {
+                            make.bottom.equalToSuperview()
+                        }
+                    })
+                }
+                lastBtn = btn
+            }
+            
+        #else
+            
+            let containerView = OKView()
+            
+            var lastBtn: OKButton?
+            for (index, title) in titles.enumerated() {
+
+                let btn = OKButton()
+                btn.tag = index
+                btn.setButtonType(.pushOnPushOff)
+                btn.bezelStyle = .rounded
+                btn.target = self
+                btn.action = #selector(selectedAction(_:))
+                btn.okBackgroundColor = configuration.main.backgroundColor
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.alignment = .center
+                let attr: [String : Any] = [NSFontAttributeName : OKFont.systemFont(size: 12),
+                                            NSForegroundColorAttributeName : OKColor.white,
+                                            NSParagraphStyleAttributeName : paragraph]
+                btn.attributedTitle = NSAttributedString(string: title, attributes: attr)
+
+                containerView.addSubview(btn)
+
+                switch direction {
+
+                case .horizontal:
+                    btn.snp.makeConstraints({ (make) in
+                        make.top.bottom.equalToSuperview()
+                        make.width.equalTo(100)
+                        if let lastBtn = lastBtn {
+                            make.leading.equalTo(lastBtn.snp.trailing)
+                        } else {
+                            make.leading.equalToSuperview()
+                        }
+                    })
+
+                case .vertical:
+
+                    btn.snp.makeConstraints({ (make) in
+                        make.leading.trailing.equalToSuperview()
+                        make.height.equalTo(44.0)
+                        if let lastBtn = lastBtn {
+                            make.top.equalTo(lastBtn.snp.bottom)
+                        } else {
+                            make.top.equalToSuperview()
+                        }
+                    })
+                }
+                lastBtn = btn
+            }
+            
+            scrollView.documentView = containerView
+
+        #endif
+
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        scrollView.frame = bounds
-        
-        var lastBtn: UIButton?
-
-        for (index, btn) in btns.enumerated() {
+    #if os(OSX)
+        override func layout() {
+            super.layout()
             switch direction {
             case .horizontal:
-                
-                let x = lastBtn == nil ? 0 : lastBtn!.frame.maxX
-                
-                let textWidth = titles[index].stringSize(maxSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: bounds.height), fontSize: 12).width + 10
-
-                let width = textWidth < 60 ? 60 : textWidth
-                
-                btn.frame = CGRect(x: x, y: 0, width: width, height: bounds.height)
-
-                lastBtn = btn
-                scrollView.contentSize = CGSize(width: lastBtn!.frame.maxX, height: bounds.height)
-                
+                if let contentView = scrollView.documentView {
+                    contentView.snp.makeConstraints({ (make) in
+                        make.top.leading.bottom.equalToSuperview()
+                        let width = CGFloat(100 * titles.count) > bounds.width ? CGFloat(100 * titles.count) : bounds.width
+                        make.size.equalTo(CGSize(width: width, height: 44.0))
+                    })
+                }
             case .vertical:
-                
-                let y = lastBtn == nil ? 0 : lastBtn!.frame.maxY
-                btn.frame = CGRect(x: 0, y: y, width: bounds.width, height: 44.0)
-                lastBtn = btn
-                scrollView.contentSize = CGSize(width: bounds.width, height: lastBtn!.frame.maxY)
+                if let contentView = scrollView.documentView {
+                    contentView.snp.makeConstraints({ (make) in
+                        make.top.leading.bottom.equalToSuperview()
+                        let height = CGFloat(44 * titles.count) > bounds.height ? CGFloat(44 * titles.count) : bounds.height
+                        make.size.equalTo(CGSize(width: 50, height: height))
+                    })
+                }
             }
         }
-    }
+    
+    #endif
+    
     
     @objc
-    private func selectedAction(_ sender: UIButton) {
+    private func selectedAction(_ sender: OKButton) {
+
         delegate?.didSelectedSegment?(segmentView: self, index: sender.tag, title: titles[sender.tag])
         didSelectedSegment?(self, (sender.tag, titles[sender.tag]))
     }
-    
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }

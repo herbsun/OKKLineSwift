@@ -21,9 +21,13 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#else
+    import Cocoa
+#endif
 
-class OKKLineView: UIView {
+class OKKLineView: OKView {
     
     public var doubleTapHandle: (() -> Void)?
     private var klineDrawView: OKKLineDrawView!
@@ -42,13 +46,14 @@ class OKKLineView: UIView {
         }
         addSubview(klineDrawView)
         klineDrawView.snp.makeConstraints { (make) in
-            make.edges.equalTo(UIEdgeInsets(top: 0, left: 0, bottom: 44, right: 50))
+            make.edges.equalTo(OKEdgeInsets(top: 0, left: 0, bottom: 44, right: 50))
         }
         
         setupTimeSegment()
         setupMainViewSegment()
         setupVolumeViewSegment()
         setupAccessoryViewSegment()
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -59,7 +64,6 @@ class OKKLineView: UIView {
         configuration.dataSource.klineModels = klineModels
         klineDrawView.drawKLineView(true)
     }
-    
     
     /// 设置时间分割视图
     private func setupTimeSegment() {
@@ -95,7 +99,7 @@ class OKKLineView: UIView {
             if result.index == 0 {
                 self?.configuration.main.indicatorType = .MA([12, 26])
             } else if result.index == 1 {
-                self?.configuration.main.indicatorType = .EMA([5, 12, 26])
+                self?.configuration.main.indicatorType = .EMA([12, 26])
             } else if result.index == 2 {
                 self?.configuration.main.indicatorType = .BOLL(20)
             }
@@ -121,9 +125,9 @@ class OKKLineView: UIView {
         
         volumeViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
-                self?.configuration.volume.indicatorType = .MA_VOLUME([5, 12, 26])
+                self?.configuration.volume.indicatorType = .MA_VOLUME([12, 26])
             } else if result.index == 1 {
-                self?.configuration.volume.indicatorType = .EMA_VOLUME([5, 12, 26])
+                self?.configuration.volume.indicatorType = .EMA_VOLUME([12, 26])
             }
             self?.klineDrawView.drawKLineView(false)
         }
@@ -165,4 +169,5 @@ class OKKLineView: UIView {
             make.height.equalTo(klineDrawView.snp.height).multipliedBy(configuration.accessory.scale)
         }
     }
+
 }

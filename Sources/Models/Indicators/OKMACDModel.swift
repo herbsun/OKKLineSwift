@@ -55,7 +55,7 @@ struct OKMACDModel {
         }
         
         if let range = drawRange {
-            return Array(datas[range.location...range.location+range.length])
+            return Array(datas[range.location..<range.location+range.length])
         } else {
             return datas
         }
