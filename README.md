@@ -36,7 +36,7 @@ Installation
 - [ ] 支持更多指标类型
 
 ## Licenses
-本项目所有OK-开头的源码遵守MIT license. 
+本项目所有OK-开头的源码遵守![MIT license](https://github.com/Herb-Sun/OKKLineSwift/blob/master/LICENSE). 
 
 ## Contributions
 欢迎各位贡献你们的思路和代码! 您可以在这里pull requests和issues我! :clap:
