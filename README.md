@@ -8,6 +8,8 @@
 
 ![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-iOS.gif)
 
+![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-macOS.gif)
+
 Support
 ===
 Swift 3.0 & iOS 8+
