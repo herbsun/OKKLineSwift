@@ -440,37 +440,25 @@ extension OKKLineDrawView {
     // MARK: - macOS手势
     extension OKKLineDrawView {
         
+        override func cursorUpdate(with event: NSEvent) {
+            
+        }
+        
         override func updateTrackingAreas() {
             super.updateTrackingAreas()
             
-            let trackingArea = NSTrackingArea(rect: bounds, options: [.mouseMoved, .mouseEnteredAndExited, .activeAlways], owner: self, userInfo: nil)
+            let trackingArea = NSTrackingArea(rect: bounds, options: [.mouseMoved, .mouseEnteredAndExited, .activeAlways, .cursorUpdate], owner: self, userInfo: nil)
             addTrackingArea(trackingArea)
         }
         
         override func mouseDown(with event: NSEvent) {
             
-            OKPrint("=====mouseDown")
-            NSCursor.openHand().set()
             lastPanPoint = convert(event.locationInWindow, from: nil)
-            // 隐藏十字线
-            //        indicatorVerticalView.isHidden = true
-            //        indicatorHorizontalView.isHidden = true
-            
-            //        mainValueView.currentValueDrawPoint = nil
-            //        volumeValueView.currentValueDrawPoint = nil
-            //        accessoryValueView.currentValueDrawPoint = nil
-            
-            //        mainView.drawAssistView(model: nil)
-            //        volumeView.drawVolumeAssistView(model: nil)
-            //        accessoryView.drawAssistView(model: nil)
-            
         }
         
         override func mouseDragged(with event: NSEvent) {
             
-            OKPrint("=====mouseDragged")
             NSCursor.openHand().set()
-            
             
             let location = convert(event.locationInWindow, from: nil)
             let klineUnit = configuration.theme.klineWidth + configuration.theme.klineSpace
@@ -489,16 +477,14 @@ extension OKKLineDrawView {
         }
         
         override func mouseUp(with event: NSEvent) {
-            OKPrint("=====mouseUp")
             
             lastOffsetIndex = nil
             lastPanPoint = nil
         }
-        override func mouseEntered(with event: NSEvent) {
-            
-        }
-        
+
         override func mouseMoved(with event: NSEvent) {
+            
+            NSCursor.crosshair().set()
             layoutIndicatorView(with: event)
         }
         
@@ -536,13 +522,13 @@ extension OKKLineDrawView {
             /// 显示十字线
             indicatorVerticalView.isHidden = false
             indicatorHorizontalView.isHidden = false
-            
+
             var drawModel: OKKLineModel?
             
             mainValueView.currentValueDrawPoint = nil
             volumeValueView.currentValueDrawPoint = nil
             accessoryValueView.currentValueDrawPoint = nil
-            
+
             if mouse(convert(location, to: mainView), in: mainView.bounds) {
                 
                 mainValueView.currentValueDrawPoint = convert(location, to: mainView)
@@ -559,7 +545,7 @@ extension OKKLineDrawView {
             indicatorHorizontalView.snp.updateConstraints({ (make) in
                 make.top.equalTo(location.y)
             })
-            
+
             if abs(previousOffset - location.x) < abs(nextOffset - location.x) {
                 
                 indicatorVerticalView.snp.updateConstraints({ (make) in
@@ -579,7 +565,7 @@ extension OKKLineDrawView {
                     drawModel = configuration.dataSource.drawKLineModels[offsetCount + 1]
                 }
             }
-            
+
             mainView.drawAssistView(model: drawModel)
             volumeView.drawVolumeAssistView(model: drawModel)
             accessoryView.drawAssistView(model: drawModel)
