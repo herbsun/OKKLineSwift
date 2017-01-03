@@ -6,13 +6,21 @@
 
 ## Screenshot
 
-![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-iOS.gif) iOS Screenshot
-![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-macOS.gif) macOS Screenshot
+![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-iOS.gif) 
+
+iOS Screenshot
+
+
+![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-macOS.gif) 
+
+macOS Screenshot
 
 Support
 ===
 Swift 3.0 
-iOS 8+ 
+
+iOS 8+
+
 macOS 10.10+
 
 Installation
