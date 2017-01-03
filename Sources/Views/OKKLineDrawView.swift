@@ -451,8 +451,40 @@ extension OKKLineDrawView {
             addTrackingArea(trackingArea)
         }
         
-        override func mouseDown(with event: NSEvent) {
+        /// magic mouse 滚动事件
+        /// 上 -> 下 : 放大 event.scrollingDeltaY > 0
+        /// 下 -> 上 : 缩小 event.scrollingDeltaY < 0
+        /// - Parameter event: 事件
+        override func scrollWheel(with event: NSEvent) {
             
+            let location = convert(event.locationInWindow, from: nil)
+            // 不在k线的界面
+            if location.x < drawValueViewWidth { return }
+            
+            let lastKLineWidth: CGFloat = configuration.theme.klineWidth
+            let newKLineWidth: CGFloat = configuration.theme.klineWidth * (event.scrollingDeltaY > 0 ?
+                (1 + configuration.theme.klineScaleFactor) : (1 - configuration.theme.klineScaleFactor))
+            
+            // 超过限制 不在绘制
+            if newKLineWidth > configuration.theme.klineMaxWidth
+                || newKLineWidth < configuration.theme.klineMinWidth {
+                return
+            }
+            
+            configuration.theme.klineWidth = newKLineWidth
+            
+            let lastOffsetCount = Int(location.x / (configuration.theme.klineSpace + lastKLineWidth))
+            let newOffsetCount = Int(location.x / (configuration.theme.klineSpace + configuration.theme.klineWidth))
+            
+            lastOffsetIndex = newOffsetCount - lastOffsetCount
+            
+            drawKLineView(false)
+            lastOffsetIndex = nil
+        }
+        
+        // MARK: 鼠标按住拖拽事件
+        
+        override func mouseDown(with event: NSEvent) {
             lastPanPoint = convert(event.locationInWindow, from: nil)
         }
         
@@ -482,6 +514,8 @@ extension OKKLineDrawView {
             lastPanPoint = nil
         }
 
+        // MARK: 鼠标移动事件
+        
         override func mouseMoved(with event: NSEvent) {
             
             NSCursor.crosshair().set()
@@ -542,6 +576,7 @@ extension OKKLineDrawView {
                 accessoryValueView.currentValueDrawPoint = convert(location, to: accessoryView)
             }
             
+            // 调整十字线位置
             indicatorHorizontalView.snp.updateConstraints({ (make) in
                 make.top.equalTo(location.y)
             })
