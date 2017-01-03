@@ -32,7 +32,7 @@ Installation
 | Tools | 工具类目录,例如:OKLineBrush.swift - 负责画线的类, OKMALineBrush.swift - 负责画均线的类|
 
 ## TODO
-- [ ] 支持 macOS 系统
+- [x] 支持 macOS 系统                                                                                                                                                                                                                                                 
 - [ ] 支持更多指标类型
 
 ## Licenses
