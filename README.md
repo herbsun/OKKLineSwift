@@ -6,14 +6,13 @@
 
 ## Screenshot
 
-![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-iOS.gif) 
-
 iOS Screenshot
 
-
-![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-macOS.gif) 
+![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-iOS.gif) 
 
 macOS Screenshot
+
+![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-macOS.gif) 
 
 Support
 ===
