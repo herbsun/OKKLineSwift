@@ -76,9 +76,11 @@ class OKKLineDrawView: OKView {
         
         #if os(iOS) || os(tvOS)
 
-            // 捏合手势
-            let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
-            addGestureRecognizer(pinchGesture)
+            #if os(iOS)
+                // 捏合手势
+                let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchAction(_:)))
+                addGestureRecognizer(pinchGesture)
+            #endif
             // 长按手势
             let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressAction(_:)))
             addGestureRecognizer(longPressGesture)
@@ -296,6 +298,8 @@ extension OKKLineDrawView {
             }
         }
         
+        #if os(iOS)
+
         // MARK: 捏合手势
         
         /// 捏合手势
@@ -339,6 +343,8 @@ extension OKKLineDrawView {
                 lastOffsetIndex = nil
             }
         }
+        
+        #endif
         
         // MARK: 长按手势
         @objc
