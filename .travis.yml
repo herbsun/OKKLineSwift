@@ -1,0 +1,5 @@
+language: objective-c
+osx_image: xcode8
+xcode_project: OKKLineSwift.xcodeproj
+xcode_scheme: OKKLineSwift-iOS-Demo
+xcode_sdk: iphonesimulator10.2
