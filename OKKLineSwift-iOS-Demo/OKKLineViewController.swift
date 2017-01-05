@@ -13,6 +13,9 @@ class OKKLineViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        UIApplication.shared.setStatusBarHidden(true, with: .fade)
+        
         klineView = OKKLineView()
         klineView.doubleTapHandle = { () -> Void in
             self.dismiss(animated: true, completion: nil)
@@ -30,7 +33,7 @@ class OKKLineViewController: UIViewController {
         //let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         //let drawValue = Double(drawMaxY - drawY) * unitValue + limitValue.minValue
         //let drawY: CGFloat = abs(self.drawMaxY - CGFloat((drawValue - limitValue.minValue) / unitValue))
-
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
