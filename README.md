@@ -7,10 +7,12 @@
 ## Screenshot
 
 iOS Screenshot
+[支持拖动手势, 长按手势(查看详情), 捏合手势(放大缩小)]
 
 ![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-iOS.gif) 
 
 macOS Screenshot
+[支持拖动事件,十字线跟随,鼠标滚动事件(放大缩小)]
 
 ![OKKLineSwift](https://github.com/Herb-Sun/OKKLineSwift/blob/master/Screenshot/OKKLineSwift-macOS.gif) 
 
