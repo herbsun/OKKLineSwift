@@ -30,7 +30,7 @@ Installation
 因为绘制K线大部分工作都是在UI层,而UI层又是最易变的,目前不打算以Cocoapods方式提供
 
 1. Download the full file.
-2. Drag the Source folder to your project.
+2. Drag the OKKLineSwift folder to your project.
 
 ## 源码目录(所有源码均放在Source文件夹下)
 
