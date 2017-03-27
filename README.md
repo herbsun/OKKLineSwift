@@ -2,7 +2,7 @@
 
 ### [中文介绍](README_CN.md)
 
-:smile: **OKKLineSwift** is I draw stock K line written in Swift3
+:smile: **OKKLineSwift** is written in Swift3 to draw the stock K-line library
 
 ## Screenshot
 
