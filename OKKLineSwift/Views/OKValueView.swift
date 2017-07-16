@@ -41,15 +41,14 @@ class OKValueView: OKView {
         }
     }
 
-    private var configuration: OKConfiguration!
+    private let configuration = OKConfiguration.sharedConfiguration
     private var drawEdgeInsets: OKEdgeInsets!
     private var limitValueAttrs: [String : Any]!
     private var currentValueAttrs: [String : Any]!
     private let separate: CGFloat = 20.0
     
-    convenience init(configuration: OKConfiguration, drawEdgeInsets: OKEdgeInsets) {
+    convenience init(drawEdgeInsets: OKEdgeInsets) {
         self.init()
-        self.configuration = configuration
         self.drawEdgeInsets = drawEdgeInsets
         
         let textStyle = NSMutableParagraphStyle()

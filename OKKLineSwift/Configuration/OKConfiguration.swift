@@ -63,10 +63,12 @@ enum OKTimeLineType: Int {
 
 public final class OKConfiguration {
     
-    init() {
+    private init() {
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
     }
+    
+    static let sharedConfiguration = OKConfiguration()
     
     // MARK: - Common
     var dateFormatter: DateFormatter

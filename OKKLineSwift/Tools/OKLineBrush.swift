@@ -31,16 +31,15 @@ import CoreGraphics
 class OKLineBrush {
     
     public var indicatorType: OKIndicatorType
-    private var configuration: OKConfiguration
     private var context: CGContext
     private var firstValueIndex: Int?
+    private let configuration = OKConfiguration.sharedConfiguration
     
     public var calFormula: ((Int, OKKLineModel) -> CGPoint?)?
     
-    init(indicatorType: OKIndicatorType, context: CGContext, configuration: OKConfiguration) {
+    init(indicatorType: OKIndicatorType, context: CGContext) {
         self.indicatorType = indicatorType
         self.context = context
-        self.configuration = configuration
         
         context.setLineWidth(configuration.theme.indicatorLineWidth)
         context.setLineCap(.round)

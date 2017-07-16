@@ -35,12 +35,12 @@ class OKKLineView: OKView {
     private var mainViewIndicatorSegmentView: OKSegmentView!
     private var volumeViewIndicatorSegmentView: OKSegmentView!
     private var accessoryViewIndicatorSegmentView: OKSegmentView!
-    private let configuration = OKConfiguration()
+    private let configuration = OKConfiguration.sharedConfiguration
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        klineDrawView = OKKLineDrawView(configuration: configuration)
+        klineDrawView = OKKLineDrawView()
         klineDrawView.doubleTapHandle = {
             self.doubleTapHandle?()
         }
@@ -69,7 +69,7 @@ class OKKLineView: OKView {
     private func setupTimeSegment() {
         
         let timeTitles = ["分时", "1分", "5分", "15分", "30分", "60分", "日K", "周K", "月K", "季K", "年K"]
-        timeSegmentView = OKSegmentView(direction: .horizontal, titles: timeTitles, configuration: configuration)
+        timeSegmentView = OKSegmentView(direction: .horizontal, titles: timeTitles)
         timeSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
                 self?.configuration.main.klineType = .timeLine
@@ -92,8 +92,7 @@ class OKKLineView: OKView {
         
         let mainViewIndicatorTitles = ["MA", "EMA", "BOLL"]
         mainViewIndicatorSegmentView = OKSegmentView(direction: .vertical,
-                                                     titles: mainViewIndicatorTitles,
-                                                     configuration: configuration)
+                                                     titles: mainViewIndicatorTitles)
         
         mainViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
@@ -120,8 +119,7 @@ class OKKLineView: OKView {
     private func setupVolumeViewSegment() {
         let volumeViewIndicatorTitles = ["MA", "EMA"]
         volumeViewIndicatorSegmentView = OKSegmentView(direction: .vertical,
-                                                       titles: volumeViewIndicatorTitles,
-                                                       configuration: configuration)
+                                                       titles: volumeViewIndicatorTitles)
         
         volumeViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {
@@ -147,8 +145,7 @@ class OKKLineView: OKView {
         
         let accessoryViewIndicatorTitles = ["MACD", "KDJ"]
         accessoryViewIndicatorSegmentView = OKSegmentView(direction: .vertical,
-                                                          titles: accessoryViewIndicatorTitles,
-                                                          configuration: configuration)
+                                                          titles: accessoryViewIndicatorTitles)
         
         accessoryViewIndicatorSegmentView.didSelectedSegment = { [weak self] (segmentView, result) -> Void in
             if result.index == 0 {

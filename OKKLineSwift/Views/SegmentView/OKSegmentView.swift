@@ -46,19 +46,18 @@ class OKSegmentView: OKView {
     public weak var delegate: OKSegmentViewDelegate?
     public var didSelectedSegment: ((_ segmentView: OKSegmentView, _ result: (index: Int, title: String)) -> Void)?
     
-    private var configuration: OKConfiguration!
+    private let configuration = OKConfiguration.sharedConfiguration
     private var scrollView: OKScrollView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    convenience init(direction: OKSegmentDirection, titles: [String], configuration: OKConfiguration) {
+    convenience init(direction: OKSegmentDirection, titles: [String]) {
         self.init()
         
         self.titles = titles
         self.direction = direction
-        self.configuration = configuration
         
         
         scrollView = OKScrollView()

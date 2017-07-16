@@ -39,15 +39,14 @@ class OKMALineBrush {
     
     public var calFormula: ((Int, OKKLineModel) -> CGPoint?)?
     public var brushType: OKBrushType
-    private var configuration: OKConfiguration
     private var context: CGContext
     private var firstValueIndex: Int?
+    private let configuration = OKConfiguration.sharedConfiguration
     
 
-    init(brushType: OKBrushType, context: CGContext, configuration: OKConfiguration) {
+    init(brushType: OKBrushType, context: CGContext) {
         self.brushType = brushType
         self.context = context
-        self.configuration = configuration
         
         context.setLineWidth(configuration.theme.indicatorLineWidth)
         context.setLineCap(.round)

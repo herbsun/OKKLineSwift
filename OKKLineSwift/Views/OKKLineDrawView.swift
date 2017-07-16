@@ -32,7 +32,7 @@ class OKKLineDrawView: OKView {
     // MARK: - Property
     public var doubleTapHandle: (() -> Void)?
     
-    fileprivate var configuration: OKConfiguration!
+    fileprivate let configuration = OKConfiguration.sharedConfiguration
     
     fileprivate let drawValueViewWidth: CGFloat = 50.0
     
@@ -66,11 +66,6 @@ class OKKLineDrawView: OKView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-    }
-    convenience init(configuration: OKConfiguration) {
-        self.init()
-        self.configuration = configuration
         
         okBackgroundColor = configuration.main.backgroundColor
         
@@ -176,7 +171,7 @@ extension OKKLineDrawView {
     
     private func setupMainView() {
         /// Main View
-        mainView = OKKLineMainView(configuration: configuration)
+        mainView = OKKLineMainView()
         mainView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
             if let limitValue = limitValue {
                 self?.mainValueView.limitValue = limitValue
@@ -194,7 +189,7 @@ extension OKKLineDrawView {
                                     left: 0,
                                     bottom: configuration.main.bottomAssistViewHeight,
                                     right: 0)
-        mainValueView = OKValueView(configuration: configuration, drawEdgeInsets: mainEdge)
+        mainValueView = OKValueView(drawEdgeInsets: mainEdge)
         addSubview(mainValueView)
         mainValueView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()
@@ -206,7 +201,7 @@ extension OKKLineDrawView {
     
     private func setupVolumeView() {
         /// Volume View
-        volumeView = OKKLineVolumeView(configuration: configuration)
+        volumeView = OKKLineVolumeView()
         volumeView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
             if let limitValue = limitValue {
                 self?.volumeValueView.limitValue = limitValue
@@ -221,7 +216,7 @@ extension OKKLineDrawView {
         
         /// Volume Value View
         let volumeEdge = OKEdgeInsets(top: configuration.volume.topViewHeight, left: 0, bottom: 0, right: 0)
-        volumeValueView = OKValueView(configuration: configuration, drawEdgeInsets: volumeEdge)
+        volumeValueView = OKValueView(drawEdgeInsets: volumeEdge)
         addSubview(volumeValueView)
         volumeValueView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()
@@ -233,7 +228,7 @@ extension OKKLineDrawView {
     
     private func setupAccessoryView() {
         /// Accessory View
-        accessoryView = OKKLineAccessoryView(configuration: configuration)
+        accessoryView = OKKLineAccessoryView()
         accessoryView.limitValueChanged = { [weak self] (_ limitValue: (minValue: Double, maxValue: Double)?) -> Void in
             if let limitValue = limitValue {
                 self?.accessoryValueView.limitValue = limitValue
@@ -248,7 +243,7 @@ extension OKKLineDrawView {
         
         /// Accessory Value View
         let asscessoryEdge = OKEdgeInsets(top: configuration.accessory.topViewHeight, left: 0, bottom: 0, right: 0)
-        accessoryValueView = OKValueView(configuration: configuration, drawEdgeInsets: asscessoryEdge)
+        accessoryValueView = OKValueView(drawEdgeInsets: asscessoryEdge)
         addSubview(accessoryValueView)
         accessoryValueView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview()

@@ -33,7 +33,7 @@ class OKKLineVolumeView: OKView {
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
 
-    fileprivate var configuration: OKConfiguration!
+    fileprivate let configuration = OKConfiguration.sharedConfiguration
     fileprivate var volumeDrawKLineModels: [OKKLineModel]?
     
     fileprivate var drawAssistString: NSAttributedString?
@@ -53,11 +53,6 @@ class OKKLineVolumeView: OKView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-    }
-    
-    convenience init(configuration: OKConfiguration) {
-        self.init()
-        self.configuration = configuration
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -219,8 +214,7 @@ extension OKKLineVolumeView {
             for (idx, day) in days.enumerated() {
                 
                 let maLineBrush = OKMALineBrush(brushType: .MA_VOLUME(day),
-                                                context: context,
-                                                configuration: configuration)
+                                                context: context)
                 
                 maLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
                     
@@ -255,8 +249,7 @@ extension OKKLineVolumeView {
             for (idx, day) in days.enumerated() {
                 
                 let emaLineBrush = OKMALineBrush(brushType: .EMA_VOLUME(day),
-                                                 context: context,
-                                                 configuration: configuration)
+                                                 context: context)
                 
                 emaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
                     

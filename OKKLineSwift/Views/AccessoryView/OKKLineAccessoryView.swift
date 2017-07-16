@@ -32,7 +32,7 @@ class OKKLineAccessoryView: OKView {
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
 
-    fileprivate var configuration: OKConfiguration!
+    fileprivate let configuration = OKConfiguration.sharedConfiguration
     fileprivate var accessoryDrawKLineModels: [OKKLineModel]?
     fileprivate var drawAssistString: NSAttributedString?
     
@@ -55,10 +55,10 @@ class OKKLineAccessoryView: OKView {
         }
     }
 
-    convenience init(configuration: OKConfiguration) {
-        self.init()
-        self.configuration = configuration
-    }
+//    convenience init(configuration: OKConfiguration) {
+//        self.init()
+//        self.configuration = configuration
+//    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -259,8 +259,7 @@ extension OKKLineAccessoryView {
         
         // 画DIF线
         let difLineBrush = OKLineBrush(indicatorType: .DIF,
-                                       context: context,
-                                       configuration: configuration)
+                                       context: context)
         difLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
@@ -275,8 +274,7 @@ extension OKKLineAccessoryView {
         
         // 画DEA线
         let deaLineBrush = OKLineBrush(indicatorType: .DEA,
-                                       context: context,
-                                       configuration: configuration)
+                                       context: context)
         deaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.DEA {
@@ -297,7 +295,7 @@ extension OKKLineAccessoryView {
         
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        let KDJ_KLineBrush = OKLineBrush(indicatorType: .KDJ_K, context: context, configuration: configuration)
+        let KDJ_KLineBrush = OKLineBrush(indicatorType: .KDJ_K, context: context)
         KDJ_KLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_K {
@@ -310,7 +308,7 @@ extension OKKLineAccessoryView {
         }
         KDJ_KLineBrush.draw(drawModels: drawModels)
         
-        let KDJ_DLineBrush = OKLineBrush(indicatorType: .KDJ_D, context: context, configuration: configuration)
+        let KDJ_DLineBrush = OKLineBrush(indicatorType: .KDJ_D, context: context)
         KDJ_DLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_D {
@@ -323,7 +321,7 @@ extension OKKLineAccessoryView {
         }
         KDJ_DLineBrush.draw(drawModels: drawModels)
         
-        let KDJ_JLineBrush = OKLineBrush(indicatorType: .KDJ_J, context: context, configuration: configuration)
+        let KDJ_JLineBrush = OKLineBrush(indicatorType: .KDJ_J, context: context)
         KDJ_JLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.KDJ_J {

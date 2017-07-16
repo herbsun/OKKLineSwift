@@ -33,7 +33,7 @@ class OKKLineMainView: OKView {
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
     
-    fileprivate var configuration: OKConfiguration!
+    fileprivate let configuration = OKConfiguration.sharedConfiguration
     
     fileprivate var lastDrawDatePoint: CGPoint = CGPoint.zero
     // 辅助视图的显示内容
@@ -59,10 +59,10 @@ class OKKLineMainView: OKView {
         super.init(frame: frame)
     }
     
-    convenience init(configuration: OKConfiguration) {
-        self.init()
-        self.configuration = configuration
-    }
+//    convenience init(configuration: OKConfiguration) {
+//        self.init()
+//        self.configuration = configuration
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -361,8 +361,7 @@ extension OKKLineMainView {
             for (idx, day) in days.enumerated() {
                 
                 let maLineBrush = OKMALineBrush(brushType: .MA(day),
-                                                context: context,
-                                                configuration: configuration)
+                                                context: context)
                 
                 maLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
                     
@@ -398,8 +397,7 @@ extension OKKLineMainView {
             for (idx, day) in days.enumerated() {
                 
                 let emaLineBrush = OKMALineBrush(brushType: .EMA(day),
-                                                 context: context,
-                                                 configuration: configuration)
+                                                 context: context)
                 
                 emaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
                     
@@ -428,7 +426,7 @@ extension OKKLineMainView {
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         
-        let MBLineBrush = OKLineBrush(indicatorType: .BOLL_MB, context: context, configuration: configuration)
+        let MBLineBrush = OKLineBrush(indicatorType: .BOLL_MB, context: context)
         MBLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.BOLL_MB {
@@ -441,7 +439,7 @@ extension OKKLineMainView {
         }
         MBLineBrush.draw(drawModels: drawModels)
         
-        let UPLineBrush = OKLineBrush(indicatorType: .BOLL_UP, context: context, configuration: configuration)
+        let UPLineBrush = OKLineBrush(indicatorType: .BOLL_UP, context: context)
         UPLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.BOLL_UP {
@@ -454,7 +452,7 @@ extension OKKLineMainView {
         }
         UPLineBrush.draw(drawModels: drawModels)
         
-        let DNLineBrush = OKLineBrush(indicatorType: .BOLL_DN, context: context, configuration: configuration)
+        let DNLineBrush = OKLineBrush(indicatorType: .BOLL_DN, context: context)
         DNLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
             
             if let value = model.BOLL_DN {
