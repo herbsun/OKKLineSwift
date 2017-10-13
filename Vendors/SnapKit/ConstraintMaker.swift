@@ -144,7 +144,7 @@ public class ConstraintMaker {
     }
     
     private let item: LayoutConstraintItem
-    private var descriptions = [ConstraintDescription]()
+    private var descriptions : [ConstraintDescription] = []
     
     internal init(item: LayoutConstraintItem) {
         self.item = item

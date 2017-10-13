@@ -41,7 +41,7 @@ protocol OKSegmentViewDelegate: NSObjectProtocol {
 class OKSegmentView: OKView {
 
     /// 展示文本数组
-    public var titles: [String] = [String]()
+    public var titles: [String] = []
     public var direction: OKSegmentDirection = .horizontal
     public weak var delegate: OKSegmentViewDelegate?
     public var didSelectedSegment: ((_ segmentView: OKSegmentView, _ result: (index: Int, title: String)) -> Void)?
