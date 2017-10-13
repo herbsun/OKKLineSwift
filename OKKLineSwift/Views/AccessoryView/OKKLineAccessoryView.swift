@@ -73,7 +73,7 @@ class OKKLineAccessoryView: OKView {
     public func drawAccessoryView() {
 
         fetchAccessoryDrawKLineModels()
-        okSetNeedsDisplay()
+        setNeedsDisplay()
     }
 
     public func drawAssistView(model: OKKLineModel?) {
@@ -84,7 +84,7 @@ class OKKLineAccessoryView: OKView {
                                  width: bounds.width,
                                  height: configuration.accessory.topViewHeight)
 
-        okSetNeedsDisplay(displayRect)
+        setNeedsDisplay(displayRect)
     }
 
     override func draw(_ rect: CGRect) {

@@ -35,7 +35,7 @@ class OKKLineMainView: OKView {
 
     fileprivate let configuration = OKConfiguration.sharedConfiguration
 
-    fileprivate var lastDrawDatePoint: CGPoint = CGPoint.zero
+    fileprivate var lastDrawDatePoint: CGPoint = .zero
     // 辅助视图的显示内容
     fileprivate var drawAssistString: NSAttributedString?
     // 主图绘制K线模型数组
@@ -75,7 +75,7 @@ class OKKLineMainView: OKView {
 
         fetchMainDrawKLineModels()
 
-        okSetNeedsDisplay()
+        setNeedsDisplay()
     }
 
     /// 绘制辅助说明视图
@@ -90,7 +90,7 @@ class OKKLineMainView: OKView {
                                  width: bounds.width,
                                  height: configuration.main.topAssistViewHeight)
 
-        okSetNeedsDisplay(displayRect)
+        setNeedsDisplay(displayRect)
     }
 
     override func draw(_ rect: CGRect) {

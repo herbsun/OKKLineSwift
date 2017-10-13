@@ -64,7 +64,7 @@ class OKKLineVolumeView: OKView {
 
     public func drawVolumeView() {
         fetchVolumeDrawKLineModels()
-        okSetNeedsDisplay()
+        setNeedsDisplay()
     }
 
     public func drawVolumeAssistView(model: OKKLineModel?) {
@@ -74,7 +74,7 @@ class OKKLineVolumeView: OKView {
                                  width: bounds.width,
                                  height: configuration.volume.topViewHeight)
 
-        okSetNeedsDisplay(displayRect)
+        setNeedsDisplay(displayRect)
     }
 
     override func draw(_ rect: CGRect) {
