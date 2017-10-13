@@ -28,14 +28,14 @@
 #endif
 
 class OKKLineAccessoryView: OKView {
-    
+
     // MARK: - Property
     public var limitValueChanged: ((_ limitValue: (minValue: Double, maxValue: Double)?) -> Void)?
 
     fileprivate let configuration = OKConfiguration.sharedConfiguration
     fileprivate var accessoryDrawKLineModels: [OKKLineModel]?
     fileprivate var drawAssistString: NSAttributedString?
-    
+
     fileprivate var drawMaxY: CGFloat {
         get {
             return bounds.height
@@ -46,8 +46,8 @@ class OKKLineAccessoryView: OKView {
             return bounds.height - configuration.accessory.topViewHeight
         }
     }
-    
-    
+
+
     fileprivate var drawIndicationModels: [OKKLineModel] {
         get {
             let kdjModel = OKKDJModel(klineModels: configuration.dataSource.klineModels)
@@ -55,73 +55,70 @@ class OKKLineAccessoryView: OKView {
         }
     }
 
-//    convenience init(configuration: OKConfiguration) {
-//        self.init()
-//        self.configuration = configuration
-//    }
-    
+    //    convenience init(configuration: OKConfiguration) {
+    //        self.init()
+    //        self.configuration = configuration
+    //    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Public
-    
+
     public func drawAccessoryView() {
-        
+
         fetchAccessoryDrawKLineModels()
         okSetNeedsDisplay()
     }
-    
+
     public func drawAssistView(model: OKKLineModel?) {
-        
+
         fetchAssistString(model: model)
         let displayRect = CGRect(x: 0,
                                  y: 0,
                                  width: bounds.width,
                                  height: configuration.accessory.topViewHeight)
-        
+
         okSetNeedsDisplay(displayRect)
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
+
         guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
-        
+
         // 背景色
         context.clear(rect)
         context.setFillColor(configuration.accessory.backgroundColor.cgColor)
         context.fill(rect)
-        
+
         // 没有数据 不绘制
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
             return
         }
-        
-        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
-            __CGSizeEqualToSize(rect.size, bounds.size)
-            else {
-                
-                drawAssistString?.draw(in: rect)
-                return
+
+        guard rect.origin == bounds.origin && rect.size == bounds.size else {
+            drawAssistString?.draw(in: rect)
+            return
         }
-        
+
         fetchAssistString(model: accessoryDrawKLineModels.last!)
         drawAssistString?.draw(in: rect)
-        
+
         switch configuration.accessory.indicatorType {
         case .MACD:
             drawMACD(context: context, drawModels: accessoryDrawKLineModels)
-            
+
         case .KDJ:
             drawKDJ(context: context, drawModels: accessoryDrawKLineModels)
-            
+
         default:
             break
         }
@@ -130,13 +127,13 @@ class OKKLineAccessoryView: OKView {
 
 // MARK: - 辅助视图相关
 extension OKKLineAccessoryView {
-    
+
     fileprivate func fetchAssistString(model: OKKLineModel?) {
-        
+
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else { return }
-        
+
         var drawModel = accessoryDrawKLineModels.last!
-        
+
         if let model = model {
             for accessoryModel in accessoryDrawKLineModels {
                 if model.date == accessoryModel.date {
@@ -145,7 +142,7 @@ extension OKKLineAccessoryView {
                 }
             }
         }
-        
+
         let drawAttrsString = NSMutableAttributedString()
         switch configuration.accessory.indicatorType {
         case .MACD:
@@ -154,8 +151,8 @@ extension OKKLineAccessoryView {
                 NSFontAttributeName : configuration.main.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: "MACD(12,26,9) ", attributes: attrs))
-            
-            
+
+
             if let dif = drawModel.DIF {
                 let difAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.DIFColor,
@@ -173,7 +170,7 @@ extension OKKLineAccessoryView {
                 drawAttrsString.append(deaAttrsStr)
             }
             if let macd = drawModel.MACD {
-                
+
                 let macdAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.MACDColor,
                     NSFontAttributeName : configuration.main.assistTextFont
@@ -181,15 +178,15 @@ extension OKKLineAccessoryView {
                 let macdAttrsStr = NSAttributedString(string: String(format: "MACD: %.2f ", macd), attributes: macdAttrs)
                 drawAttrsString.append(macdAttrsStr)
             }
-            
+
         case .KDJ:
-            
+
             let attrs: [String : Any] = [
                 NSForegroundColorAttributeName : configuration.main.assistTextColor,
                 NSFontAttributeName : configuration.main.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: "KDJ(9,3,3) ", attributes: attrs))
-            
+
             if let value = drawModel.KDJ_K {
                 let kAttrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.KDJ_KColor,
@@ -214,7 +211,7 @@ extension OKKLineAccessoryView {
                 let jAttrsStr = NSAttributedString(string: String(format: "J: %.2f ", value), attributes: jAttrs)
                 drawAttrsString.append(jAttrsStr)
             }
-            
+
         default:
             break
         }
@@ -224,44 +221,44 @@ extension OKKLineAccessoryView {
 
 // MARK: - 绘制指标
 extension OKKLineAccessoryView {
-    
+
     // MARK: 绘制MACD
     fileprivate func drawMACD(context: CGContext, drawModels: [OKKLineModel]) {
-        
+
         guard let limitValue = fetchLimitValue() else {
             return
         }
-        
+
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
         let middleY = drawMaxY - CGFloat(abs(limitValue.minValue) / unitValue)
-        
+
         // 画柱状图
         for (index, model) in drawModels.enumerated() {
-            
+
             let xPosition = CGFloat(index) * (configuration.theme.klineWidth + configuration.theme.klineSpace) +
                 configuration.theme.klineWidth * 0.5 + configuration.theme.klineSpace
-            
+
             var startPoint = CGPoint(x: xPosition, y: middleY)
             var endPoint = CGPoint(x: xPosition, y: middleY)
             if let macd = model.MACD {
-                
+
                 let offsetValue = CGFloat(abs(macd) / unitValue)
-                
+
                 startPoint.y = macd > 0 ? middleY - offsetValue : middleY
                 endPoint.y = macd > 0 ? middleY : middleY + offsetValue
-                
+
                 context.setStrokeColor(macd > 0 ? configuration.theme.increaseColor.cgColor : configuration.theme.decreaseColor.cgColor)
                 context.setLineWidth(configuration.theme.klineWidth)
                 context.strokeLineSegments(between: [startPoint, endPoint])
             }
         }
         context.strokePath()
-        
+
         // 画DIF线
         let difLineBrush = OKLineBrush(indicatorType: .DIF,
                                        context: context)
         difLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-            
+
             let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                 self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
             if let value = model.DIF {
@@ -271,12 +268,12 @@ extension OKKLineAccessoryView {
             return nil
         }
         difLineBrush.draw(drawModels: drawModels)
-        
+
         // 画DEA线
         let deaLineBrush = OKLineBrush(indicatorType: .DEA,
                                        context: context)
         deaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-            
+
             if let value = model.DEA {
                 let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                     self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
@@ -287,17 +284,17 @@ extension OKKLineAccessoryView {
         }
         deaLineBrush.draw(drawModels: drawModels)
     }
-    
+
     // MARK: 绘制KDJ
     fileprivate func drawKDJ(context: CGContext, drawModels: [OKKLineModel]) {
-        
+
         guard let limitValue = fetchLimitValue() else { return }
-        
+
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        
+
         let KDJ_KLineBrush = OKLineBrush(indicatorType: .KDJ_K, context: context)
         KDJ_KLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-            
+
             if let value = model.KDJ_K {
                 let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                     self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
@@ -307,10 +304,10 @@ extension OKKLineAccessoryView {
             return nil
         }
         KDJ_KLineBrush.draw(drawModels: drawModels)
-        
+
         let KDJ_DLineBrush = OKLineBrush(indicatorType: .KDJ_D, context: context)
         KDJ_DLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-            
+
             if let value = model.KDJ_D {
                 let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                     self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
@@ -320,10 +317,10 @@ extension OKKLineAccessoryView {
             return nil
         }
         KDJ_DLineBrush.draw(drawModels: drawModels)
-        
+
         let KDJ_JLineBrush = OKLineBrush(indicatorType: .KDJ_J, context: context)
         KDJ_JLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-            
+
             if let value = model.KDJ_J {
                 let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                     self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
@@ -338,38 +335,38 @@ extension OKKLineAccessoryView {
 
 // MARK: - 获取相关数据
 extension OKKLineAccessoryView {
-    
+
     fileprivate func fetchAccessoryDrawKLineModels() {
-        
+
         guard configuration.dataSource.klineModels.count > 0 else {
             accessoryDrawKLineModels = nil
             return
         }
-        
+
         switch configuration.accessory.indicatorType {
         case .MACD:
             let macdModel = OKMACDModel(klineModels: configuration.dataSource.klineModels)
             accessoryDrawKLineModels = macdModel.fetchDrawMACDData(drawRange: configuration.dataSource.drawRange)
-            
+
         case .KDJ:
             let kdjModel = OKKDJModel(klineModels: configuration.dataSource.klineModels)
             accessoryDrawKLineModels = kdjModel.fetchDrawKDJData(drawRange: configuration.dataSource.drawRange)
-            
+
         default:
             break
         }
     }
-    
+
     // MARK: - 获取指标数据最大最小值
     fileprivate func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
-        
+
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
             return nil
         }
-        
+
         var minValue = 0.0
         var maxValue = 0.0
-        
+
         switch configuration.accessory.indicatorType {
         case .MACD:
             for model in accessoryDrawKLineModels {
@@ -386,16 +383,16 @@ extension OKKLineAccessoryView {
                     maxValue = value > maxValue ? value : maxValue
                 }
             }
-            
+
         case .KDJ:
-            
+
             for model in accessoryDrawKLineModels {
-                
+
                 if let value = model.KDJ_K {
                     minValue = value < minValue ? value : minValue
                     maxValue = value > maxValue ? value : maxValue
                 }
-                
+
                 if let value = model.KDJ_D {
                     minValue = value < minValue ? value : minValue
                     maxValue = value > maxValue ? value : maxValue
@@ -405,7 +402,7 @@ extension OKKLineAccessoryView {
                     maxValue = value > maxValue ? value : maxValue
                 }
             }
-            
+
         default:
             break
         }
@@ -413,3 +410,4 @@ extension OKKLineAccessoryView {
         return (minValue, maxValue)
     }
 }
+
