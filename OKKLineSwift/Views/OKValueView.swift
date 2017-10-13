@@ -31,13 +31,13 @@ class OKValueView: OKView {
     
     public var limitValue: (minValue: Double, maxValue: Double)? {
         didSet {
-            okSetNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     
     public var currentValueDrawPoint: CGPoint? {
         didSet {
-            okSetNeedsDisplay()
+            setNeedsDisplay()
         }
     }
 

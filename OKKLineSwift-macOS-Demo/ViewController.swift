@@ -36,7 +36,7 @@ class ViewController: NSViewController {
                     let resultData = result.json as! [String : Any]
                     let datas = resultData["datas"] as! [[Double]]
                     
-                    var dataArray = [OKKLineModel]()
+                    var dataArray : [OKKLineModel] = []
                     for data in datas {
                         
                         let model = OKKLineModel(date: data[0], open: data[1], close: data[4], high: data[2], low: data[3], volume: data[5])

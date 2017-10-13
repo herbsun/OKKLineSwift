@@ -35,9 +35,9 @@ class OKKLineVolumeView: OKView {
 
     fileprivate let configuration = OKConfiguration.sharedConfiguration
     fileprivate var volumeDrawKLineModels: [OKKLineModel]?
-    
+
     fileprivate var drawAssistString: NSAttributedString?
-    
+
     fileprivate var drawMaxY: CGFloat {
         get {
             return bounds.height
@@ -48,38 +48,38 @@ class OKKLineVolumeView: OKView {
             return bounds.height - configuration.volume.topViewHeight
         }
     }
-    
+
     // MARK: - LifeCycle
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
+
     // MARK: - Public
-    
+
     public func drawVolumeView() {
         fetchVolumeDrawKLineModels()
-        okSetNeedsDisplay()
+        setNeedsDisplay()
     }
-    
+
     public func drawVolumeAssistView(model: OKKLineModel?) {
         fetchAssistString(model: model)
         let displayRect = CGRect(x: 0,
                                  y: 0,
                                  width: bounds.width,
                                  height: configuration.volume.topViewHeight)
-        
-        okSetNeedsDisplay(displayRect)
+
+        setNeedsDisplay(displayRect)
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
+
         guard let context = OKGraphicsGetCurrentContext() else {
             return
         }
@@ -87,36 +87,33 @@ class OKKLineVolumeView: OKView {
         context.clear(rect)
         context.setFillColor(configuration.volume.backgroundColor.cgColor)
         context.fill(rect)
-        
+
         // 没有数据 不绘制
         guard let volumeDrawKLineModels = volumeDrawKLineModels,
             let limitValue = fetchLimitValue() else {
-            return
-        }
-        
-        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
-            __CGSizeEqualToSize(rect.size, bounds.size)
-            else {
-                
-                drawAssistString?.draw(in: rect)
                 return
         }
-        
+
+        guard rect.origin == bounds.origin && rect.size == bounds.size else {
+            drawAssistString?.draw(in: rect)
+            return
+        }
+
         // 绘制指标数据
         fetchAssistString(model: volumeDrawKLineModels.last!)
         drawAssistString?.draw(in: rect)
 
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        
+
         for (index, klineModel) in volumeDrawKLineModels.enumerated() {
-            
+
             let xPosition = CGFloat(index) * (configuration.theme.klineWidth + configuration.theme.klineSpace) +
                 configuration.theme.klineWidth * 0.5 + configuration.theme.klineSpace
-            
+
             let yPosition = abs(drawMaxY - CGFloat((klineModel.volume - limitValue.minValue) / unitValue))
             let startPoint = CGPoint(x: xPosition, y: yPosition)
             let endPoint = CGPoint(x: xPosition, y: bounds.height)
-            
+
             let strokeColor = klineModel.open < klineModel.close ?
                 configuration.theme.increaseColor : configuration.theme.decreaseColor
             context.setStrokeColor(strokeColor.cgColor)
@@ -124,7 +121,7 @@ class OKKLineVolumeView: OKView {
             context.strokeLineSegments(between: [startPoint, endPoint])
         }
         context.strokePath()
-        
+
         // 画指标线
         switch configuration.volume.indicatorType {
         case .MA_VOLUME(_):
@@ -139,13 +136,13 @@ class OKKLineVolumeView: OKView {
 
 // MARK: - 辅助视图相关
 extension OKKLineVolumeView {
-    
+
     fileprivate func fetchAssistString(model: OKKLineModel?) {
-        
+
         guard let volumeDrawKLineModels = volumeDrawKLineModels else { return }
-        
+
         var drawModel = volumeDrawKLineModels.last!
-        
+
         if let model = model {
             for volumeModel in volumeDrawKLineModels {
                 if model.date == volumeModel.date {
@@ -156,18 +153,18 @@ extension OKKLineVolumeView {
         }
         let drawAttrsString = NSMutableAttributedString()
         let volumeStr = String(format: "VOLUME %.2f  ", drawModel.volume)
-        
+
         let volumeAttrs: [String : Any] = [
             NSForegroundColorAttributeName : configuration.main.assistTextColor,
             NSFontAttributeName : configuration.main.assistTextFont
         ]
         drawAttrsString.append(NSAttributedString(string: volumeStr, attributes: volumeAttrs))
-        
+
         switch configuration.volume.indicatorType {
         case .MA_VOLUME(let days):
-            
+
             for (idx, day) in days.enumerated() {
-                
+
                 let attrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.MAColor(day: day),
                     NSFontAttributeName : configuration.main.assistTextFont
@@ -177,10 +174,10 @@ extension OKKLineVolumeView {
                     drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
                 }
             }
-            
+
         case .EMA_VOLUME(let days):
             for (idx, day) in days.enumerated() {
-                
+
                 let attrs: [String : Any] = [
                     NSForegroundColorAttributeName : configuration.theme.EMAColor(day: day),
                     NSFontAttributeName : configuration.main.assistTextFont
@@ -190,83 +187,83 @@ extension OKKLineVolumeView {
                     drawAttrsString.append(NSAttributedString(string: maStr, attributes: attrs))
                 }
             }
-            
+
         default:
             break
         }
-        
+
         drawAssistString = drawAttrsString
     }
 }
 
 // MARK: - 绘制指标
 extension OKKLineVolumeView {
-    
+
     fileprivate func drawMA_VOLUME(context: CGContext,
                                    limitValue: (minValue: Double, maxValue: Double),
                                    drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        
+
         switch configuration.volume.indicatorType {
         case .MA_VOLUME(let days):
-            
+
             for (idx, day) in days.enumerated() {
-                
+
                 let maLineBrush = OKMALineBrush(brushType: .MA_VOLUME(day),
                                                 context: context)
-                
+
                 maLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-                    
+
                     if let value = model.MA_VOLUMEs?[idx] {
-                        
+
                         let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                             self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
-                        
+
                         let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
-                        
+
                         return CGPoint(x: xPosition, y: yPosition)
                     }
                     return nil
                 }
                 maLineBrush.draw(drawModels: drawModels)
             }
-            
+
         default:
             break
         }
     }
-    
+
     fileprivate func drawEMA_VOLUME(context: CGContext,
                                     limitValue: (minValue: Double, maxValue: Double),
                                     drawModels: [OKKLineModel])
     {
         let unitValue = (limitValue.maxValue - limitValue.minValue) / Double(drawHeight)
-        
+
         switch configuration.volume.indicatorType {
         case .EMA_VOLUME(let days):
-            
+
             for (idx, day) in days.enumerated() {
-                
+
                 let emaLineBrush = OKMALineBrush(brushType: .EMA_VOLUME(day),
                                                  context: context)
-                
+
                 emaLineBrush.calFormula = { (index: Int, model: OKKLineModel) -> CGPoint? in
-                    
+
                     if let value = model.EMA_VOLUMEs?[idx] {
-                        
+
                         let xPosition = CGFloat(index) * (self.configuration.theme.klineWidth + self.configuration.theme.klineSpace) +
                             self.configuration.theme.klineWidth * 0.5 + self.configuration.theme.klineSpace
-                        
+
                         let yPosition = abs(self.drawMaxY - CGFloat((value - limitValue.minValue) / unitValue))
-                        
+
                         return CGPoint(x: xPosition, y: yPosition)
                     }
                     return nil
                 }
                 emaLineBrush.draw(drawModels: drawModels)
             }
-            
+
         default:
             break
         }
@@ -275,41 +272,41 @@ extension OKKLineVolumeView {
 
 // MARK: - 获取相关数据
 extension OKKLineVolumeView {
-    
+
     /// 获取视图绘制模型数据
     fileprivate func fetchVolumeDrawKLineModels() {
-        
+
         guard configuration.dataSource.klineModels.count > 0 else {
             volumeDrawKLineModels = nil
             return
         }
-        
+
         switch configuration.volume.indicatorType {
         case .MA_VOLUME(_):
             let maModel = OKMAVOLUMEModel(indicatorType: configuration.volume.indicatorType,
                                           klineModels: configuration.dataSource.klineModels)
             volumeDrawKLineModels = maModel.fetchDrawMAVOLUMEData(drawRange: configuration.dataSource.drawRange)
-            
+
         case .EMA_VOLUME(_):
             let emaModel = OKEMAVOLUMEModel(indicatorType: configuration.volume.indicatorType,
                                             klineModels: configuration.dataSource.klineModels)
             volumeDrawKLineModels = emaModel.fetchDrawEMAVOLUMEData(drawRange: configuration.dataSource.drawRange)
-            
+
         default:
             volumeDrawKLineModels = configuration.dataSource.drawKLineModels
         }
     }
-    
+
     /// 获取极限值
     fileprivate func fetchLimitValue() -> (minValue: Double, maxValue: Double)? {
-        
+
         guard let volumeDrawKLineModels = volumeDrawKLineModels else {
             return nil
         }
-        
+
         var minValue = 0.0//volumeDrawKLineModels[0].volume
         var maxValue = volumeDrawKLineModels[0].volume
-        
+
         // 先求K线数据的最大最小
         for model in volumeDrawKLineModels {
             if model.volume < minValue {
@@ -318,7 +315,7 @@ extension OKKLineVolumeView {
             if model.volume > maxValue {
                 maxValue = model.volume
             }
-            
+
             // 求指标数据的最大最小
             switch configuration.volume.indicatorType {
             case .MA_VOLUME(_):
@@ -347,3 +344,4 @@ extension OKKLineVolumeView {
         return (minValue, maxValue)
     }
 }
+
