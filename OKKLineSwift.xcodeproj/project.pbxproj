@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0072201B2015EF0B007B4D4E /* CCSQLiteData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0072201A2015EF0B007B4D4E /* CCSQLiteData.m */; };
+		0072201C2015EF0B007B4D4E /* CCSQLiteData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0072201A2015EF0B007B4D4E /* CCSQLiteData.m */; };
+		0072201E2015EFA9007B4D4E /* CCSQLiteData.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 0072201D2015EFA9007B4D4E /* CCSQLiteData.sqlite */; };
+		0072201F2015EFA9007B4D4E /* CCSQLiteData.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 0072201D2015EFA9007B4D4E /* CCSQLiteData.sqlite */; };
+		4BB02C530BF0307BBDE34805 /* Pods_OKKLineSwift_macOS_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 599CBE614CAA4BE66EADB6F1 /* Pods_OKKLineSwift_macOS_Demo.framework */; };
+		521F1C125A62DB6715355B51 /* Pods_OKKLineSwift_iOS_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DAA8775B15EF764C5D5D840 /* Pods_OKKLineSwift_iOS_Demo.framework */; };
+		5EBD045ECA033217D5E7CFF7 /* Pods_OKKLineSwift_macOS_DemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF4FADE911893203D8F86CA9 /* Pods_OKKLineSwift_macOS_DemoTests.framework */; };
+		8477EE52249F6283BDDDD801 /* Pods_OKKLineSwift_iOS_DemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 454FE06DC28DA30491EE4FE0 /* Pods_OKKLineSwift_iOS_DemoTests.framework */; };
 		F600A5391DF1212300CF1C8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F600A5381DF1212300CF1C8A /* AppDelegate.swift */; };
 		F600A53B1DF1212300CF1C8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F600A53A1DF1212300CF1C8A /* ViewController.swift */; };
 		F600A53E1DF1212300CF1C8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F600A53C1DF1212300CF1C8A /* Main.storyboard */; };
@@ -190,6 +198,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0044D87FAA62827744B36782 /* Pods-OKKLineSwift-iOS-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-iOS-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-iOS-Demo/Pods-OKKLineSwift-iOS-Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		007220172015EF0B007B4D4E /* OKKLineSwift-iOS-Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OKKLineSwift-iOS-Demo-Bridging-Header.h"; sourceTree = "<group>"; };
+		007220182015EF0B007B4D4E /* OKKLineSwift-macOS-Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OKKLineSwift-macOS-Demo-Bridging-Header.h"; sourceTree = "<group>"; };
+		007220192015EF0B007B4D4E /* CCSQLiteData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CCSQLiteData.h; sourceTree = "<group>"; };
+		0072201A2015EF0B007B4D4E /* CCSQLiteData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CCSQLiteData.m; sourceTree = "<group>"; };
+		0072201D2015EFA9007B4D4E /* CCSQLiteData.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = CCSQLiteData.sqlite; sourceTree = "<group>"; };
+		0A542221C919B523B28DED39 /* Pods-OKKLineSwift-macOS-DemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-macOS-DemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-macOS-DemoTests/Pods-OKKLineSwift-macOS-DemoTests.debug.xcconfig"; sourceTree = "<group>"; };
+		454FE06DC28DA30491EE4FE0 /* Pods_OKKLineSwift_iOS_DemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OKKLineSwift_iOS_DemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DAA8775B15EF764C5D5D840 /* Pods_OKKLineSwift_iOS_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OKKLineSwift_iOS_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5158272995543A99C8B000E2 /* Pods-OKKLineSwift-macOS-DemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-macOS-DemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-macOS-DemoTests/Pods-OKKLineSwift-macOS-DemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		599CBE614CAA4BE66EADB6F1 /* Pods_OKKLineSwift_macOS_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OKKLineSwift_macOS_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B6AB36415C40199B747CA58 /* Pods-OKKLineSwift-macOS-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-macOS-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-macOS-Demo/Pods-OKKLineSwift-macOS-Demo.release.xcconfig"; sourceTree = "<group>"; };
+		AD3D7AC34A0DBDEFE35B2AC9 /* Pods-OKKLineSwift-iOS-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-iOS-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-iOS-Demo/Pods-OKKLineSwift-iOS-Demo.release.xcconfig"; sourceTree = "<group>"; };
+		AF4FADE911893203D8F86CA9 /* Pods_OKKLineSwift_macOS_DemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OKKLineSwift_macOS_DemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B02DC7BDD214D7F8D0E10D93 /* Pods-OKKLineSwift-macOS-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-macOS-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-macOS-Demo/Pods-OKKLineSwift-macOS-Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		DA7BAAD57ED3EDDA30FAE80E /* Pods-OKKLineSwift-iOS-DemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-iOS-DemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-iOS-DemoTests/Pods-OKKLineSwift-iOS-DemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		F600A5351DF1212300CF1C8A /* OKKLineSwift-iOS-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OKKLineSwift-iOS-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F600A5381DF1212300CF1C8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F600A53A1DF1212300CF1C8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -263,6 +287,7 @@
 		F6E1F59B1E2DC26300E12D90 /* OKValueView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKValueView.swift; sourceTree = "<group>"; };
 		F6E1F59D1E2DC26300E12D90 /* OKSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKSegmentView.swift; sourceTree = "<group>"; };
 		F6E1F59F1E2DC26300E12D90 /* OKKLineVolumeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OKKLineVolumeView.swift; sourceTree = "<group>"; };
+		F7F1C7F9FE4D3DD80C05667E /* Pods-OKKLineSwift-iOS-DemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OKKLineSwift-iOS-DemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OKKLineSwift-iOS-DemoTests/Pods-OKKLineSwift-iOS-DemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +295,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				521F1C125A62DB6715355B51 /* Pods_OKKLineSwift_iOS_Demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +303,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8477EE52249F6283BDDDD801 /* Pods_OKKLineSwift_iOS_DemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BB02C530BF0307BBDE34805 /* Pods_OKKLineSwift_macOS_Demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,15 +319,55 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EBD045ECA033217D5E7CFF7 /* Pods_OKKLineSwift_macOS_DemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		007220162015EE64007B4D4E /* CCSQLiteData */ = {
+			isa = PBXGroup;
+			children = (
+				007220192015EF0B007B4D4E /* CCSQLiteData.h */,
+				0072201A2015EF0B007B4D4E /* CCSQLiteData.m */,
+				0072201D2015EFA9007B4D4E /* CCSQLiteData.sqlite */,
+				007220172015EF0B007B4D4E /* OKKLineSwift-iOS-Demo-Bridging-Header.h */,
+				007220182015EF0B007B4D4E /* OKKLineSwift-macOS-Demo-Bridging-Header.h */,
+			);
+			path = CCSQLiteData;
+			sourceTree = "<group>";
+		};
+		71A42470CE46967F09B25CAF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4DAA8775B15EF764C5D5D840 /* Pods_OKKLineSwift_iOS_Demo.framework */,
+				454FE06DC28DA30491EE4FE0 /* Pods_OKKLineSwift_iOS_DemoTests.framework */,
+				599CBE614CAA4BE66EADB6F1 /* Pods_OKKLineSwift_macOS_Demo.framework */,
+				AF4FADE911893203D8F86CA9 /* Pods_OKKLineSwift_macOS_DemoTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A0E04D69A7583C1D180AA650 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0044D87FAA62827744B36782 /* Pods-OKKLineSwift-iOS-Demo.debug.xcconfig */,
+				AD3D7AC34A0DBDEFE35B2AC9 /* Pods-OKKLineSwift-iOS-Demo.release.xcconfig */,
+				F7F1C7F9FE4D3DD80C05667E /* Pods-OKKLineSwift-iOS-DemoTests.debug.xcconfig */,
+				DA7BAAD57ED3EDDA30FAE80E /* Pods-OKKLineSwift-iOS-DemoTests.release.xcconfig */,
+				B02DC7BDD214D7F8D0E10D93 /* Pods-OKKLineSwift-macOS-Demo.debug.xcconfig */,
+				6B6AB36415C40199B747CA58 /* Pods-OKKLineSwift-macOS-Demo.release.xcconfig */,
+				0A542221C919B523B28DED39 /* Pods-OKKLineSwift-macOS-DemoTests.debug.xcconfig */,
+				5158272995543A99C8B000E2 /* Pods-OKKLineSwift-macOS-DemoTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		F600A52A1DF1211000CF1C8A = {
 			isa = PBXGroup;
 			children = (
+				007220162015EE64007B4D4E /* CCSQLiteData */,
 				F600A5A51DF121F800CF1C8A /* Vendors */,
 				F6E1F5831E2DC26300E12D90 /* OKKLineSwift */,
 				F600A5371DF1212300CF1C8A /* OKKLineSwift-iOS-Demo */,
@@ -307,6 +375,8 @@
 				F6AB1B601E1BCC6600B5260D /* OKKLineSwift-macOS-Demo */,
 				F6AB1B721E1BCC6600B5260D /* OKKLineSwift-macOS-DemoTests */,
 				F600A5361DF1212300CF1C8A /* Products */,
+				A0E04D69A7583C1D180AA650 /* Pods */,
+				71A42470CE46967F09B25CAF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -527,9 +597,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F600A5501DF1212400CF1C8A /* Build configuration list for PBXNativeTarget "OKKLineSwift-iOS-Demo" */;
 			buildPhases = (
+				649C7ED460F8C5C9B4AE2B84 /* [CP] Check Pods Manifest.lock */,
 				F600A5311DF1212300CF1C8A /* Sources */,
 				F600A5321DF1212300CF1C8A /* Frameworks */,
 				F600A5331DF1212300CF1C8A /* Resources */,
+				46F5F36AB424E15636BF6145 /* [CP] Embed Pods Frameworks */,
+				8229076D74473F219480689C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -544,9 +617,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F600A5531DF1212400CF1C8A /* Build configuration list for PBXNativeTarget "OKKLineSwift-iOS-DemoTests" */;
 			buildPhases = (
+				C9600FE92D186D8C3F36F3EE /* [CP] Check Pods Manifest.lock */,
 				F600A5451DF1212400CF1C8A /* Sources */,
 				F600A5461DF1212400CF1C8A /* Frameworks */,
 				F600A5471DF1212400CF1C8A /* Resources */,
+				85748B52E0328340FCF2ECD7 /* [CP] Embed Pods Frameworks */,
+				1BF92CADD7A67038486D7A17 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -562,9 +638,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F6AB1B761E1BCC6600B5260D /* Build configuration list for PBXNativeTarget "OKKLineSwift-macOS-Demo" */;
 			buildPhases = (
+				E02C926D556205129C9CDAB5 /* [CP] Check Pods Manifest.lock */,
 				F6AB1B5B1E1BCC6600B5260D /* Sources */,
 				F6AB1B5C1E1BCC6600B5260D /* Frameworks */,
 				F6AB1B5D1E1BCC6600B5260D /* Resources */,
+				860F3EF88C1C2F6E02914DF1 /* [CP] Embed Pods Frameworks */,
+				03133ECEC88D8DC9A9AC9AD0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -579,9 +658,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F6AB1B791E1BCC6600B5260D /* Build configuration list for PBXNativeTarget "OKKLineSwift-macOS-DemoTests" */;
 			buildPhases = (
+				5A25966332C4932A29BA7063 /* [CP] Check Pods Manifest.lock */,
 				F6AB1B6B1E1BCC6600B5260D /* Sources */,
 				F6AB1B6C1E1BCC6600B5260D /* Frameworks */,
 				F6AB1B6D1E1BCC6600B5260D /* Resources */,
+				B8C1A3B70F6B94D3A29D5439 /* [CP] Embed Pods Frameworks */,
+				A10138EE633D11F3EFC2DA51 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -605,6 +687,7 @@
 					F600A5341DF1212300CF1C8A = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = GQNQ7XRR23;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					F600A5481DF1212400CF1C8A = {
@@ -614,6 +697,7 @@
 					};
 					F6AB1B5E1E1BCC6600B5260D = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					F6AB1B6E1E1BCC6600B5260D = {
@@ -650,6 +734,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F600A5431DF1212300CF1C8A /* LaunchScreen.storyboard in Resources */,
+				0072201E2015EFA9007B4D4E /* CCSQLiteData.sqlite in Resources */,
 				F600A5401DF1212300CF1C8A /* Assets.xcassets in Resources */,
 				F600A53E1DF1212300CF1C8A /* Main.storyboard in Resources */,
 			);
@@ -668,6 +753,7 @@
 			files = (
 				F6AB1B661E1BCC6600B5260D /* Assets.xcassets in Resources */,
 				F6AB1B691E1BCC6600B5260D /* Main.storyboard in Resources */,
+				0072201F2015EFA9007B4D4E /* CCSQLiteData.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +765,207 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		03133ECEC88D8DC9A9AC9AD0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-macOS-Demo/Pods-OKKLineSwift-macOS-Demo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1BF92CADD7A67038486D7A17 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-iOS-DemoTests/Pods-OKKLineSwift-iOS-DemoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		46F5F36AB424E15636BF6145 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-iOS-Demo/Pods-OKKLineSwift-iOS-Demo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CCSQLite-iOS/CCSQLite.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CCSQLite.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-iOS-Demo/Pods-OKKLineSwift-iOS-Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5A25966332C4932A29BA7063 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OKKLineSwift-macOS-DemoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		649C7ED460F8C5C9B4AE2B84 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OKKLineSwift-iOS-Demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8229076D74473F219480689C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-iOS-Demo/Pods-OKKLineSwift-iOS-Demo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85748B52E0328340FCF2ECD7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-iOS-DemoTests/Pods-OKKLineSwift-iOS-DemoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		860F3EF88C1C2F6E02914DF1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-macOS-Demo/Pods-OKKLineSwift-macOS-Demo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CCSQLite-macOS/CCSQLite.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CCSQLite.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-macOS-Demo/Pods-OKKLineSwift-macOS-Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A10138EE633D11F3EFC2DA51 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-macOS-DemoTests/Pods-OKKLineSwift-macOS-DemoTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8C1A3B70F6B94D3A29D5439 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OKKLineSwift-macOS-DemoTests/Pods-OKKLineSwift-macOS-DemoTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C9600FE92D186D8C3F36F3EE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OKKLineSwift-iOS-DemoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E02C926D556205129C9CDAB5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OKKLineSwift-macOS-Demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F600A5311DF1212300CF1C8A /* Sources */ = {
@@ -728,6 +1015,7 @@
 				F600A5FE1DF1245800CF1C8A /* ConstraintLayoutSupport.swift in Sources */,
 				F6E1F5B01E2DC26300E12D90 /* OKValueView.swift in Sources */,
 				F600A5DA1DF1245800CF1C8A /* ConstraintConstantTarget.swift in Sources */,
+				0072201B2015EF0B007B4D4E /* CCSQLiteData.m in Sources */,
 				F600A6061DF1245800CF1C8A /* ConstraintMaker.swift in Sources */,
 				F6E1F5A11E2DC26300E12D90 /* OKPlatform.swift in Sources */,
 				F600A63E1DF1245800CF1C8A /* Debugging.swift in Sources */,
@@ -803,6 +1091,7 @@
 				F6AB1BCD1E1BCD9600B5260D /* ConstraintMakerPriortizable.swift in Sources */,
 				F6AB1BD51E1BCD9600B5260D /* ConstraintViewDSL.swift in Sources */,
 				F6AB1BB91E1BCD8100B5260D /* ConstraintOffsetTarget.swift in Sources */,
+				0072201C2015EF0B007B4D4E /* CCSQLiteData.m in Sources */,
 				F6AB1BCA1E1BCD9600B5260D /* ConstraintMakerEditable.swift in Sources */,
 				F6AB1B7C1E1BCC9400B5260D /* Constraint.swift in Sources */,
 				F6AB1B641E1BCC6600B5260D /* ViewController.swift in Sources */,
@@ -960,6 +1249,7 @@
 		};
 		F600A5511DF1212400CF1C8A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0044D87FAA62827744B36782 /* Pods-OKKLineSwift-iOS-Demo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1009,6 +1299,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "CCSQLiteData/OKKLineSwift-iOS-Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1016,6 +1307,7 @@
 		};
 		F600A5521DF1212400CF1C8A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AD3D7AC34A0DBDEFE35B2AC9 /* Pods-OKKLineSwift-iOS-Demo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1057,6 +1349,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Herb.OKKLineSwift-iOS-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "CCSQLiteData/OKKLineSwift-iOS-Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
@@ -1065,6 +1358,7 @@
 		};
 		F600A5541DF1212400CF1C8A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7F1C7F9FE4D3DD80C05667E /* Pods-OKKLineSwift-iOS-DemoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1122,6 +1416,7 @@
 		};
 		F600A5551DF1212400CF1C8A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA7BAAD57ED3EDDA30FAE80E /* Pods-OKKLineSwift-iOS-DemoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1172,6 +1467,7 @@
 		};
 		F6AB1B771E1BCC6600B5260D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B02DC7BDD214D7F8D0E10D93 /* Pods-OKKLineSwift-macOS-Demo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1204,6 +1500,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "CCSQLiteData/OKKLineSwift-macOS-Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1211,6 +1508,7 @@
 		};
 		F6AB1B781E1BCC6600B5260D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B6AB36415C40199B747CA58 /* Pods-OKKLineSwift-macOS-Demo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1237,6 +1535,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Herb.OKKLineSwift-macOS-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "CCSQLiteData/OKKLineSwift-macOS-Demo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1244,6 +1543,7 @@
 		};
 		F6AB1B7A1E1BCC6600B5260D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A542221C919B523B28DED39 /* Pods-OKKLineSwift-macOS-DemoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1285,6 +1585,7 @@
 		};
 		F6AB1B7B1E1BCC6600B5260D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5158272995543A99C8B000E2 /* Pods-OKKLineSwift-macOS-DemoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
