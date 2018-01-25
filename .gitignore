@@ -2,6 +2,11 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+Pods
+Podfile.lock
+.DS_Store
+Pods/
+
 ## Build generated
 build/
 DerivedData/

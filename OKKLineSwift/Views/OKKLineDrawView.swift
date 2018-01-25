@@ -58,6 +58,12 @@ class OKKLineDrawView: OKView {
     fileprivate var drawCount: Int {
         get {
             let count = Int((bounds.width - drawValueViewWidth) / (configuration.theme.klineSpace + configuration.theme.klineWidth))
+            
+            if count <= 0 {
+//                return 200;
+                return 100;
+            }
+            
             return count > configuration.dataSource.klineModels.count ? configuration.dataSource.klineModels.count : count
         }
     }
