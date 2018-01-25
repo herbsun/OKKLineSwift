@@ -134,9 +134,9 @@ class OKSegmentView: OKView {
                 btn.okBackgroundColor = configuration.main.backgroundColor
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.alignment = .center
-                let attr: [String : Any] = [NSFontAttributeName : OKFont.systemFont(size: 12),
-                                            NSForegroundColorAttributeName : OKColor.white,
-                                            NSParagraphStyleAttributeName : paragraph]
+                let attr: [NSAttributedStringKey : Any]? = [NSAttributedStringKey.font : OKFont.systemFont(size: 12),
+                                            NSAttributedStringKey.foregroundColor : OKColor.white,
+                                            NSAttributedStringKey.paragraphStyle : paragraph]
                 btn.attributedTitle = NSAttributedString(string: title, attributes: attr)
 
                 containerView.addSubview(btn)

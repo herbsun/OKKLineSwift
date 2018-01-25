@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import SnapKit
+
 #if os(iOS) || os(tvOS)
     
     import UIKit
@@ -37,7 +39,7 @@
     import Cocoa
     public typealias OKFont = NSFont
     public typealias OKColor = NSColor
-    public typealias OKEdgeInsets = EdgeInsets
+    public typealias OKEdgeInsets = NSEdgeInsets
     
     func OKGraphicsGetCurrentContext() -> CGContext? {
         return NSGraphicsContext.current()?.cgContext
@@ -241,7 +243,7 @@ extension OKDescriptable {
         let strings = Mirror(reflecting: self).children.flatMap { "\($0.label!): \($0.value)" }
         var string = ""
         for str in strings {
-            string += str + "\n"
+            string += String(str) + "\n"
         }
         return string
     }

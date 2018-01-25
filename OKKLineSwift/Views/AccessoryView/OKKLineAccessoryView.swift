@@ -103,14 +103,14 @@ class OKKLineAccessoryView: OKView {
         guard let accessoryDrawKLineModels = accessoryDrawKLineModels else {
             return
         }
-        
-        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
-            __CGSizeEqualToSize(rect.size, bounds.size)
-            else {
-                
-                drawAssistString?.draw(in: rect)
-                return
-        }
+
+//        guard __CGPointEqualToPoint(rect.origin, bounds.origin) &&
+//            __CGSizeEqualToSize(rect.size, bounds.size)
+//            else {
+//
+//                drawAssistString?.draw(in: rect)
+//                return
+//        }
         
         fetchAssistString(model: accessoryDrawKLineModels.last!)
         drawAssistString?.draw(in: rect)
@@ -145,38 +145,38 @@ extension OKKLineAccessoryView {
                 }
             }
         }
-        
+       
         let drawAttrsString = NSMutableAttributedString()
         switch configuration.accessory.indicatorType {
         case .MACD:
-            let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : configuration.main.assistTextColor,
-                NSFontAttributeName : configuration.main.assistTextFont
+            let attrs: [NSAttributedStringKey : Any]? = [
+                NSAttributedStringKey.foregroundColor : configuration.main.assistTextColor,
+                NSAttributedStringKey.font : configuration.main.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: "MACD(12,26,9) ", attributes: attrs))
             
             
             if let dif = drawModel.DIF {
-                let difAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.DIFColor,
-                    NSFontAttributeName : configuration.main.assistTextFont
+                let difAttrs: [NSAttributedStringKey : Any]? = [
+                    NSAttributedStringKey.foregroundColor : configuration.theme.DIFColor,
+                    NSAttributedStringKey.font : configuration.main.assistTextFont
                 ]
                 let difAttrsStr = NSAttributedString(string: String(format: "DIF: %.2f ", dif), attributes: difAttrs)
                 drawAttrsString.append(difAttrsStr)
             }
             if let dea = drawModel.DEA {
-                let deaAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.DEAColor,
-                    NSFontAttributeName : configuration.main.assistTextFont
+                let deaAttrs: [NSAttributedStringKey : Any]? = [
+                    NSAttributedStringKey.foregroundColor : configuration.theme.DEAColor,
+                    NSAttributedStringKey.font : configuration.main.assistTextFont
                 ]
                 let deaAttrsStr = NSAttributedString(string: String(format: "DEA: %.2f ", dea), attributes: deaAttrs)
                 drawAttrsString.append(deaAttrsStr)
             }
             if let macd = drawModel.MACD {
                 
-                let macdAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.MACDColor,
-                    NSFontAttributeName : configuration.main.assistTextFont
+                let macdAttrs: [NSAttributedStringKey : Any]? = [
+                    NSAttributedStringKey.foregroundColor : configuration.theme.MACDColor,
+                    NSAttributedStringKey.font : configuration.main.assistTextFont
                 ]
                 let macdAttrsStr = NSAttributedString(string: String(format: "MACD: %.2f ", macd), attributes: macdAttrs)
                 drawAttrsString.append(macdAttrsStr)
@@ -184,32 +184,32 @@ extension OKKLineAccessoryView {
             
         case .KDJ:
             
-            let attrs: [String : Any] = [
-                NSForegroundColorAttributeName : configuration.main.assistTextColor,
-                NSFontAttributeName : configuration.main.assistTextFont
+            let attrs: [NSAttributedStringKey : Any]? = [
+                NSAttributedStringKey.foregroundColor : configuration.main.assistTextColor,
+                NSAttributedStringKey.font : configuration.main.assistTextFont
             ]
             drawAttrsString.append(NSAttributedString(string: "KDJ(9,3,3) ", attributes: attrs))
             
             if let value = drawModel.KDJ_K {
-                let kAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.KDJ_KColor,
-                    NSFontAttributeName : configuration.main.assistTextFont
+                let kAttrs: [NSAttributedStringKey : Any]? = [
+                    NSAttributedStringKey.foregroundColor : configuration.theme.KDJ_KColor,
+                    NSAttributedStringKey.font : configuration.main.assistTextFont
                 ]
                 let kAttrsStr = NSAttributedString(string: String(format: "K: %.2f ", value), attributes: kAttrs)
                 drawAttrsString.append(kAttrsStr)
             }
             if let value = drawModel.KDJ_D {
-                let dAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.KDJ_DColor,
-                    NSFontAttributeName : configuration.main.assistTextFont
+                let dAttrs: [NSAttributedStringKey : Any]? = [
+                    NSAttributedStringKey.foregroundColor : configuration.theme.KDJ_DColor,
+                    NSAttributedStringKey.font : configuration.main.assistTextFont
                 ]
                 let dAttrsStr = NSAttributedString(string: String(format: "D: %.2f ", value), attributes: dAttrs)
                 drawAttrsString.append(dAttrsStr)
             }
             if let value = drawModel.KDJ_J {
-                let jAttrs: [String : Any] = [
-                    NSForegroundColorAttributeName : configuration.theme.KDJ_JColor,
-                    NSFontAttributeName : configuration.main.assistTextFont
+                let jAttrs: [NSAttributedStringKey : Any]? = [
+                    NSAttributedStringKey.foregroundColor : configuration.theme.KDJ_JColor,
+                    NSAttributedStringKey.font : configuration.main.assistTextFont
                 ]
                 let jAttrsStr = NSAttributedString(string: String(format: "J: %.2f ", value), attributes: jAttrs)
                 drawAttrsString.append(jAttrsStr)
